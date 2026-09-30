@@ -4,7 +4,8 @@
 #   scripts/release.sh               # build, sign, notarize, staple, zip
 #   NOTARIZE=0 scripts/release.sh    # build and sign only
 #
-# Notarization uses a keychain profile created once with:
+# Notarization uses APPLE_ID / APPLE_PASSWORD (app-specific) / APPLE_TEAM_ID from the environment if set,
+# otherwise a keychain profile created once with:
 #   xcrun notarytool store-credentials faulix-notary --apple-id <apple id> --team-id CT5KSA99W8
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -34,8 +35,14 @@ codesign -dv --verbose=2 "$APP" 2>&1 | grep -E "Authority=Developer ID|TeamIdent
 ditto -c -k --keepParent "$APP" "$ZIP"
 
 if [ "${NOTARIZE:-1}" = "1" ]; then
-  echo "==> Notarizing ($PROFILE)"
-  xcrun notarytool submit "$ZIP" --keychain-profile "$PROFILE" --wait
+  if [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_PASSWORD:-}" ] && [ -n "${APPLE_TEAM_ID:-}" ]; then
+    echo "==> Notarizing (APPLE_ID from environment)"
+    AUTH=(--apple-id "$APPLE_ID" --password "$APPLE_PASSWORD" --team-id "$APPLE_TEAM_ID")
+  else
+    echo "==> Notarizing (keychain profile $PROFILE)"
+    AUTH=(--keychain-profile "$PROFILE")
+  fi
+  xcrun notarytool submit "$ZIP" "${AUTH[@]}" --wait
   xcrun stapler staple "$APP"
   rm "$ZIP"
   ditto -c -k --keepParent "$APP" "$ZIP"
