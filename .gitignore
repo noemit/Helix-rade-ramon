@@ -1,0 +1,14 @@
+# Build products
+.build/
+build/
+dist/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# Private sample collection (personal data) — keep local only
+Libros

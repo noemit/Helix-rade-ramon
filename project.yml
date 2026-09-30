@@ -1,0 +1,50 @@
+name: NotHelix
+options:
+  bundleIdPrefix: com.nothelix
+  deploymentTarget:
+    macOS: "14.0"
+packages:
+  HelixKit:
+    path: .
+targets:
+  NotHelix:
+    type: application
+    platform: macOS
+    sources:
+      - App/NotHelix
+    dependencies:
+      - package: HelixKit
+        product: HelixKit
+    info:
+      path: App/NotHelix/Info.plist
+      properties:
+        CFBundleDisplayName: Faulix
+        CFBundleName: Faulix
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.productivity
+        NSHumanReadableCopyright: ""
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Helix Collection
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - public.data
+    settings:
+      base:
+        PRODUCT_NAME: Faulix
+        PRODUCT_BUNDLE_IDENTIFIER: com.nothelix.NotHelix
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: NO
+        GENERATE_INFOPLIST_FILE: NO
+      configs:
+        Release:
+          CODE_SIGN_IDENTITY: "Developer ID Application"
+          DEVELOPMENT_TEAM: CT5KSA99W8
+          ENABLE_HARDENED_RUNTIME: YES
+          OTHER_CODE_SIGN_FLAGS: "--timestamp"
+          CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO

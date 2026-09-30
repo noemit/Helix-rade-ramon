@@ -1,0 +1,380 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		296CEC73A2812E97C4B2286B /* HelixKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38339582EC57AF9E1308AF8E /* HelixKit */; };
+		2BA2653144CBCA5C1EC6BE22 /* ExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820DFEF7AC11D219E5D961E1 /* ExportSheet.swift */; };
+		37D5880D0FA37FAFA691E214 /* DetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C659ABDDBB901311BA5CDE /* DetailViews.swift */; };
+		3D81B72A5B5AC6971D4552AF /* TemplateRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CB2DAA18875A26A99344AD /* TemplateRendering.swift */; };
+		4C8E1BCC70CD1484D8848AB0 /* NotHelixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8439B0AF2D6CACF1033C81 /* NotHelixApp.swift */; };
+		5301BB3F8C9D59E05575EC89 /* CollectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F937B1F644F8C75CAAD2575 /* CollectionModel.swift */; };
+		AFFA2A219CA1AE23212863AF /* DesignDesktop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01492DD257DA1E4C4DF9D206 /* DesignDesktop.swift */; };
+		B2F789B096B6AC4363F5EEB7 /* RecordTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED174154E5F7992B0D12893 /* RecordTable.swift */; };
+		CC8CB37EC2A42F58346897CA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A043E8A3E27AA88977927E /* CollectionView.swift */; };
+		DE883FDCB327B573AE1A7436 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416C435E1158F6550B11469D /* HistoryView.swift */; };
+		F77B4C785CE6FB7B7CF78FD2 /* ViewForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D23AC2A193A5CC22657F2 /* ViewForms.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		01492DD257DA1E4C4DF9D206 /* DesignDesktop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignDesktop.swift; sourceTree = "<group>"; };
+		0DEA8D326E82B896025D789F /* NotHelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotHelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35F379CCBC2E97B8026F267D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		416C435E1158F6550B11469D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		64C659ABDDBB901311BA5CDE /* DetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViews.swift; sourceTree = "<group>"; };
+		6F937B1F644F8C75CAAD2575 /* CollectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionModel.swift; sourceTree = "<group>"; };
+		7A7A70AE344E62104682DEB3 /* Helix-rade-ramon */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Helix-rade-ramon"; path = .; sourceTree = SOURCE_ROOT; };
+		820DFEF7AC11D219E5D961E1 /* ExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSheet.swift; sourceTree = "<group>"; };
+		83CB2DAA18875A26A99344AD /* TemplateRendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRendering.swift; sourceTree = "<group>"; };
+		8B8439B0AF2D6CACF1033C81 /* NotHelixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotHelixApp.swift; sourceTree = "<group>"; };
+		CED174154E5F7992B0D12893 /* RecordTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTable.swift; sourceTree = "<group>"; };
+		D47D23AC2A193A5CC22657F2 /* ViewForms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewForms.swift; sourceTree = "<group>"; };
+		D6A043E8A3E27AA88977927E /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3AC677031D1E05327B939097 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				296CEC73A2812E97C4B2286B /* HelixKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		154B22196D0DB56688206089 = {
+			isa = PBXGroup;
+			children = (
+				81DF0C7193DE9A36F1430FC6 /* NotHelix */,
+				C6EBB4CF5E3020235E265A08 /* Packages */,
+				B32320A03C5449BE4ACE6870 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81DF0C7193DE9A36F1430FC6 /* NotHelix */ = {
+			isa = PBXGroup;
+			children = (
+				6F937B1F644F8C75CAAD2575 /* CollectionModel.swift */,
+				D6A043E8A3E27AA88977927E /* CollectionView.swift */,
+				01492DD257DA1E4C4DF9D206 /* DesignDesktop.swift */,
+				64C659ABDDBB901311BA5CDE /* DetailViews.swift */,
+				820DFEF7AC11D219E5D961E1 /* ExportSheet.swift */,
+				416C435E1158F6550B11469D /* HistoryView.swift */,
+				35F379CCBC2E97B8026F267D /* Info.plist */,
+				8B8439B0AF2D6CACF1033C81 /* NotHelixApp.swift */,
+				CED174154E5F7992B0D12893 /* RecordTable.swift */,
+				83CB2DAA18875A26A99344AD /* TemplateRendering.swift */,
+				D47D23AC2A193A5CC22657F2 /* ViewForms.swift */,
+			);
+			name = NotHelix;
+			path = App/NotHelix;
+			sourceTree = "<group>";
+		};
+		B32320A03C5449BE4ACE6870 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0DEA8D326E82B896025D789F /* NotHelix.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6EBB4CF5E3020235E265A08 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7A7A70AE344E62104682DEB3 /* Helix-rade-ramon */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C1AD0A6EA29FC4E7763AED39 /* NotHelix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AE0F2A3B9D526E232BCABCD /* Build configuration list for PBXNativeTarget "NotHelix" */;
+			buildPhases = (
+				73358E1045AEED5ED0F07547 /* Sources */,
+				3AC677031D1E05327B939097 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotHelix;
+			packageProductDependencies = (
+				38339582EC57AF9E1308AF8E /* HelixKit */,
+			);
+			productName = NotHelix;
+			productReference = 0DEA8D326E82B896025D789F /* NotHelix.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2CA1E2FAE5761C2338801991 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					C1AD0A6EA29FC4E7763AED39 = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 877C9FE5CA17E1A2217287B0 /* Build configuration list for PBXProject "NotHelix" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 154B22196D0DB56688206089;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D22978A2DEFB1CE80C8F85EC /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B32320A03C5449BE4ACE6870 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C1AD0A6EA29FC4E7763AED39 /* NotHelix */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		73358E1045AEED5ED0F07547 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5301BB3F8C9D59E05575EC89 /* CollectionModel.swift in Sources */,
+				CC8CB37EC2A42F58346897CA /* CollectionView.swift in Sources */,
+				AFFA2A219CA1AE23212863AF /* DesignDesktop.swift in Sources */,
+				37D5880D0FA37FAFA691E214 /* DetailViews.swift in Sources */,
+				2BA2653144CBCA5C1EC6BE22 /* ExportSheet.swift in Sources */,
+				DE883FDCB327B573AE1A7436 /* HistoryView.swift in Sources */,
+				4C8E1BCC70CD1484D8848AB0 /* NotHelixApp.swift in Sources */,
+				B2F789B096B6AC4363F5EEB7 /* RecordTable.swift in Sources */,
+				3D81B72A5B5AC6971D4552AF /* TemplateRendering.swift in Sources */,
+				F77B4C785CE6FB7B7CF78FD2 /* ViewForms.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4F8B9FF806E9F3F4701B2BA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AC69CBAD113CA1ED5FB51A47 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DEF43DDA1BC122EA51E0DC7D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CT5KSA99W8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/NotHelix/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nothelix.NotHelix;
+				PRODUCT_NAME = Faulix;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		ED580228ECC5AAA07E491029 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/NotHelix/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nothelix.NotHelix;
+				PRODUCT_NAME = Faulix;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1AE0F2A3B9D526E232BCABCD /* Build configuration list for PBXNativeTarget "NotHelix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED580228ECC5AAA07E491029 /* Debug */,
+				DEF43DDA1BC122EA51E0DC7D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		877C9FE5CA17E1A2217287B0 /* Build configuration list for PBXProject "NotHelix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC69CBAD113CA1ED5FB51A47 /* Debug */,
+				4F8B9FF806E9F3F4701B2BA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		D22978A2DEFB1CE80C8F85EC /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		38339582EC57AF9E1308AF8E /* HelixKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HelixKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 2CA1E2FAE5761C2338801991 /* Project object */;
+}
