@@ -15,8 +15,13 @@ struct NotHelixApp: App {
             CommandGroup(replacing: .undoRedo) { UndoCommands() }
             CommandGroup(replacing: .help) { HelpMenuItems() }
             CommandGroup(replacing: .printItem) { PrintCommands() }
+            CommandGroup(after: .appInfo) { UpdateCommands() }
         }
         Settings { SettingsView() }
+        WindowGroup("View", id: "view", for: ViewWindowRef.self) { $ref in
+            if let ref { ViewWindow(ref: ref) }
+        }
+        .defaultSize(width: 1000, height: 760)
         Window("Faulix Quickstart", id: "quickstart") { QuickstartWindow() }
             .defaultSize(width: 820, height: 560)
     }

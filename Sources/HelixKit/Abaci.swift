@@ -29,6 +29,11 @@ public enum Opcode: Hashable, Codable, CustomStringConvertible {
     case flagValue
     case currentDate, dayOf, monthOf, yearOf
     case total, maximum, count, previous
+    // Added by Faulix (not in the sample collection; codes 0x1000+ are Faulix's own).
+    case and, or, not, endsWith
+    case length, upper, lower, trim, left, right, mid
+    case round, abs, int, min, max
+    case average, minimum, weekday, makeDate
     case unknown(UInt16)
 
     init(code: UInt16) {
@@ -63,7 +68,11 @@ public enum Opcode: Hashable, Codable, CustomStringConvertible {
         case 0x5B: self = .maximum
         case 0x62: self = .count
         case 0x6C: self = .previous // (?)
-        default: self = .unknown(code)
+        default:
+            let extra: [Opcode] = [.and, .or, .not, .endsWith, .length, .upper, .lower, .trim, .left, .right, .mid,
+                                   .round, .abs, .int, .min, .max, .average, .minimum, .weekday, .makeDate]
+            let i = Int(code) - 0x1000
+            self = extra.indices.contains(i) ? extra[i] : .unknown(code)
         }
     }
 
@@ -99,11 +108,31 @@ public enum Opcode: Hashable, Codable, CustomStringConvertible {
         case .maximum: "maximum"
         case .count: "count"
         case .previous: "previous"
+        case .and: "and"
+        case .or: "or"
+        case .not: "not"
+        case .endsWith: "ends with"
+        case .length: "length"
+        case .upper: "upper"
+        case .lower: "lower"
+        case .trim: "trim"
+        case .left: "left"
+        case .right: "right"
+        case .mid: "mid"
+        case .round: "round"
+        case .abs: "abs"
+        case .int: "int"
+        case .min: "min"
+        case .max: "max"
+        case .average: "average"
+        case .minimum: "minimum"
+        case .weekday: "weekday"
+        case .makeDate: "makedate"
         case .unknown(let c): "op\(String(c, radix: 16))"
         }
     }
 
-    var isAggregate: Bool { [.total, .maximum, .count].contains(self) }
+    var isAggregate: Bool { [.total, .maximum, .count, .average, .minimum].contains(self) }
 }
 
 public struct Abacus: Identifiable, Hashable, Codable {
@@ -249,6 +278,8 @@ public final class AbacusEvaluator {
         switch op {
         case .total: return .number(nums.reduce(0, +))
         case .maximum: return nums.max().map(Value.number)
+        case .minimum: return nums.min().map(Value.number)
+        case .average: return nums.isEmpty ? nil : .number(nums.reduce(0, +) / Double(nums.count))
         default: return nil
         }
     }
@@ -310,6 +341,44 @@ public final class AbacusEvaluator {
         case .isDefined: return .flag(a != nil)
         case .isUndefined: return .flag(a == nil)
         case .flagValue: return a
+        case .and, .or:
+            guard case .flag(let x)? = a, case .flag(let y)? = b else { return nil }
+            return .flag(op == .and ? x && y : x || y)
+        case .not:
+            guard case .flag(let x)? = a else { return nil }
+            return .flag(!x)
+        case .endsWith:
+            guard a != nil, b != nil else { return nil }
+            return .flag(text(a).range(of: text(b), options: [.caseInsensitive, .anchored, .backwards]) != nil)
+        case .length: return a.map { .number(Double(Self.text($0).count)) }
+        case .upper: return a.map { .text(Self.text($0).uppercased()) }
+        case .lower: return a.map { .text(Self.text($0).lowercased()) }
+        case .trim: return a.map { .text(Self.text($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+        case .left, .right:
+            guard let n = num(b), a != nil else { return nil }
+            let t = text(a), k = Swift.max(0, Swift.min(Int(n), t.count))
+            return .text(op == .left ? String(t.prefix(k)) : String(t.suffix(k)))
+        case .mid:
+            guard a != nil, let start = num(b), let len = num(v.count > 2 ? v[2] : nil) else { return nil }
+            let chars = Array(text(a)), from = Swift.max(0, Int(start) - 1)
+            guard from < chars.count else { return .text("") }
+            return .text(String(chars[from..<Swift.min(chars.count, from + Swift.max(0, Int(len)))]))
+        case .round:
+            guard let x = num(a) else { return nil }
+            let p = pow(10, num(b) ?? 0)
+            return .number((x * p).rounded() / p)
+        case .abs: return num(a).map { .number(Swift.abs($0)) }
+        case .int: return num(a).map { .number($0.rounded(.towardZero)) }
+        case .min, .max:
+            if let x = num(a), let y = num(b) { return .number(op == .min ? Swift.min(x, y) : Swift.max(x, y)) }
+            return compare(a, b).map { ($0 == .orderedAscending) == (op == .min) ? a! : b! }
+        case .weekday:
+            // 1 = Monday … 7 = Sunday.
+            guard case .date(let d)? = a else { return nil }
+            return .number(Double((d.julianDay % 7) + 1))
+        case .makeDate:
+            guard let dd = num(a), let mm = num(b), let yy = num(v.count > 2 ? v[2] : nil) else { return nil }
+            return .date(HelixDate(year: Int(yy), month: Int(mm), day: Int(dd)))
         case .currentDate:
             let c = calendar.dateComponents([.year, .month, .day], from: today)
             return .date(HelixDate(year: c.year!, month: c.month!, day: c.day!))

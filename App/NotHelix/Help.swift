@@ -87,6 +87,7 @@ enum HelpTopic: String, CaseIterable, Identifiable {
             "Choose File ▸ Open… and pick your Helix collection.",
             "User mode (top left): pick a form or list in the sidebar to work with your data.",
             "Design mode: double-click icons to change fields, layouts, formulas, views, queries and indexes.",
+            "Right-click a view in the sidebar ▸ Open in New Window to keep several views open side by side.",
             "Press the ? button on any page for help with that page.",
         ]
         case .form: [
@@ -97,6 +98,7 @@ enum HelpTopic: String, CaseIterable, Identifiable {
             "Change the sort order from the ⇅ menu at the bottom right.",
             "Find (top right) narrows the records to those containing your words — accents, commas and word order don’t matter.",
             "Opened from a list? Back (⌘[) returns to it.",
+            "Find (⇧⌘F) blanks the form so you can type what to look for in any fields — e.g. Vigo in Lugar and > 1990 in Data — then press Find. Use = for exact, ≠ for “not”, < > ≤ ≥ for ranges; = alone finds empty fields. Clear with the × on the chip.",
         ]
         case .list: [
             "Click any value to see only the records that share it — e.g. click an author to list all their books. Clear the filter with the × on its chip.",
@@ -156,8 +158,9 @@ enum HelpTopic: String, CaseIterable, Identifiable {
         case .abacus: [
             "Type the formula; Faulix checks it as you type and shows the result for the first records.",
             "[Field name] uses a field, {Abacus name} another abacus, \"text\" a text, numbers as 166.386.",
-            "Operators: & joins text; + − × ÷; = ≠ < ≤ > ≥; contains; starts with.",
-            "if … then … else … chooses; functions: text() number() date() day() month() year() defined() undefined() default(a, b) total() maximum() previous(), and today, return, count.",
+            "Operators: & joins text; + − × ÷; = ≠ < ≤ > ≥; contains, starts with, ends with; and, or, not().",
+            "if … then … else … chooses. Text: text() length() upper() lower() trim() left(t, n) right(t, n) mid(t, start, n). Numbers: number() round(x, decimals) abs() int() min(a, b) max(a, b).",
+            "Dates: date() day() month() year() weekday() makedate(d, m, y), today. Others: defined() undefined() default(a, b) previous(); totals over the records shown: total() average() minimum() maximum() count.",
             "Use the Insert menus to add fields, abaci, functions and operators. Apply (⌘S) saves.",
         ]
         case .query: [

@@ -15,6 +15,9 @@ struct TemplateContext {
     var onActivate: ((TemplateElement) -> Void)?
     /// Rendering for print/PDF: no scroll views (they cannot be drawn off screen).
     var forPrint = false
+    /// Form keyboard focus: which element is being typed in, and Tab / ⇧Tab to move in tab order.
+    var focus: FocusState<Int?>.Binding?
+    var tab: ((Int, Bool) -> Void)?
 
     func editableField(for element: TemplateElement) -> Field? {
         guard editor != nil, record != nil, case .data(let fid?, _) = element.content,
@@ -45,6 +48,19 @@ struct TemplateContext {
         guard let record, case .data(let fid, let aid) = element.content else { return nil }
         if let fid, let field = relation.field(objectID: fid) { return record[field] }
         return aid.flatMap { evaluator?.value(ofAbacus: $0, for: record) }
+    }
+}
+
+extension Color {
+    /// "#RRGGBB" → Color.
+    init?(hex: String?) {
+        guard let hex, hex.hasPrefix("#"), hex.count == 7, let v = UInt32(hex.dropFirst(), radix: 16) else { return nil }
+        self.init(red: Double(v >> 16 & 0xFF) / 255, green: Double(v >> 8 & 0xFF) / 255, blue: Double(v & 0xFF) / 255)
+    }
+
+    var hex: String? {
+        guard let c = NSColor(self).usingColorSpace(.sRGB) else { return nil }
+        return String(format: "#%02X%02X%02X", Int(c.redComponent * 255), Int(c.greenComponent * 255), Int(c.blueComponent * 255))
     }
 }
 
@@ -144,17 +160,32 @@ struct EditableText: View {
     let font: HelixFont
     let alignment: HelixAlignment
     var changed = false
+    var elementID = 0
+    var focus: FocusState<Int?>.Binding?
+    var tab: ((Int, Bool) -> Void)?
     let onChange: (String) -> Void
     @State private var text = ""
-    @FocusState private var focused: Bool
+    @FocusState private var ownFocus: Bool
+
+    private var focused: Bool { focus.map { $0.wrappedValue == elementID } ?? ownFocus }
 
     var body: some View {
-        TextField("", text: $text, axis: .vertical)
+        let input = TextField("", text: $text, axis: .vertical)
             .textFieldStyle(.plain)
             .font(HelixFonts.font(font))
             .foregroundStyle(Color.black)
             .multilineTextAlignment(alignment.textAlignment)
-            .focused($focused)
+        Group {
+            if let focus {
+                input.focused(focus, equals: elementID)
+                    .onKeyPress(.tab, phases: .down) { press in
+                        tab?(elementID, press.modifiers.contains(.shift))
+                        return tab == nil ? .ignored : .handled
+                    }
+            } else {
+                input.focused($ownFocus)
+            }
+        }
             .onAppear { text = initial }
             .onChange(of: text) { onChange(text) }
             .help(field.displayName)
@@ -211,6 +242,10 @@ struct TemplateElementView: View {
     }
 
     @ViewBuilder private var content: some View {
+        inner.background(Color(hex: element.backgroundColor) ?? .clear)
+    }
+
+    @ViewBuilder private var inner: some View {
         switch element.content {
         case .label(let text):
             styled(Text(text)).padding(.horizontal, 2)
@@ -245,7 +280,7 @@ struct TemplateElementView: View {
                 PictureWell(image: editor.picture(field), changed: editor.changed(field)) { editor.setPicture(field, $0) }
             } else {
                 EditableText(field: field, initial: editor.text(field), font: element.font, alignment: element.alignment,
-                             changed: editor.changed(field)) {
+                             changed: editor.changed(field), elementID: element.id, focus: context.focus, tab: context.tab) {
                     editor.setText(field, $0)
                 }
             }
@@ -281,7 +316,7 @@ struct TemplateElementView: View {
     private func styled(_ text: Text, color: Color = .black) -> some View {
         text.font(HelixFonts.font(element.font))
             .underline(element.font.underline)
-            .foregroundStyle(color)
+            .foregroundStyle(color == .black ? Color(hex: element.textColor) ?? color : color)
             .multilineTextAlignment(element.alignment.textAlignment)
             .fixedSize(horizontal: false, vertical: true)
     }

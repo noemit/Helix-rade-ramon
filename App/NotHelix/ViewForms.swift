@@ -23,6 +23,8 @@ struct ListNavigation {
     /// Clicked a value: element, record, column title.
     let activate: (TemplateElement, Record, String?) -> Void
     let open: (Record) -> Void
+    /// Find by form: field object id → criterion.
+    var find: (([Int: String]) -> Void)?
 }
 
 /// A removable chip showing the active drill-down filter.
@@ -280,37 +282,95 @@ struct SingleForm: View {
     @Binding var currentIndex: Int
 
     @StateObject private var drafts = Drafts()
+    @StateObject private var findDrafts = Drafts()
     @State private var errorMessage: String?
     @State private var confirmDelete = false
+    /// Find by form: the form is blank and what you type are search criteria.
+    @State private var findMode = false
+    @FocusState private var focusedElement: Int?
 
+    /// Editable text rectangles in Helix tab order (tab order within each group, then position).
+    private var tabOrder: [Int] {
+        func walk(_ els: [TemplateElement]) -> [TemplateElement] {
+            els.sorted { ($0.tabOrder, $0.rect.top, $0.rect.left) < ($1.tabOrder, $1.rect.top, $1.rect.left) }.flatMap { e -> [TemplateElement] in
+                switch e.content {
+                case .group(let c), .repeatGroup(let c): walk(c)
+                case .data(let f?, _): relation.field(objectID: f).map { [.flag, .picture].contains($0.type) } == false ? [e] : []
+                default: []
+                }
+            }
+        }
+        return walk(template.elements).map(\.id)
+    }
+
+    private func tab(from id: Int, backwards: Bool) {
+        let order = tabOrder
+        guard let i = order.firstIndex(of: id), !order.isEmpty else { return }
+        focusedElement = order[(i + (backwards ? order.count - 1 : 1)) % order.count]
+    }
+
+    private func formContext(_ base: Record) -> TemplateContext {
+        var c = TemplateContext(design: design, relation: relation, record: base, evaluator: findMode ? nil : evaluator,
+                                editor: findMode ? findDrafts.editing(for: base) : actions == nil ? nil : drafts.editing(for: base))
+        if c.editor != nil {
+            c.focus = $focusedElement
+            c.tab = { tab(from: $0, backwards: $1) }
+        }
+        return c
+    }
+
+    private static let findRecord = Record(id: 0, values: [:])
     private var current: Record? { records.indices.contains(currentIndex) ? records[currentIndex] : nil }
-    private var base: Record? { drafts.newRecords.first ?? current }
+    private var base: Record? { findMode ? Self.findRecord : drafts.newRecords.first ?? current }
 
     var body: some View {
         let b = template.contentBounds
         VStack(spacing: 0) {
             if let base {
                 Paper(width: CGFloat(b.right + 16)) {
-                    TemplateCanvas(elements: template.elements,
-                                   context: TemplateContext(design: design, relation: relation, record: base,
-                                                            evaluator: evaluator,
-                                                            editor: actions == nil ? nil : drafts.editing(for: base)))
+                    TemplateCanvas(elements: template.elements, context: formContext(base))
                         .frame(width: CGFloat(b.right + 16), height: CGFloat(b.bottom + 16), alignment: .topLeading)
                         .padding(4)
-                        .id("\(base.id)-\(drafts.revision)")
+                        .id("\(base.id)-\(findMode ? -1 : drafts.revision)")
+                        .overlay(alignment: .top) {
+                            if findMode {
+                                Label("Find by form: type what to look for in any fields, then press Find. Use = < > ≤ ≥ ≠ for exact or ranges (e.g. > 1990).",
+                                      systemImage: "magnifyingglass")
+                                    .font(.callout).padding(8)
+                                    .background(RoundedRectangle(cornerRadius: 6).fill(Color.yellow.opacity(0.25)))
+                                    .padding(.top, 4)
+                            }
+                        }
                 }
             } else {
                 ContentUnavailableView("No Records", systemImage: "doc", description: Text("No records match."))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(white: 0.92))
             }
+            if findMode {
+                HStack {
+                    Button("Cancel") { findMode = false; findDrafts.reset() }.keyboardShortcut(.escape, modifiers: [])
+                    Spacer()
+                    Text("Find by form").font(.callout.bold())
+                    Spacer()
+                    Button("Find") { runFind() }.keyboardShortcut(.return, modifiers: []).buttonStyle(.borderedProminent)
+                }
+                .padding(.horizontal, 12).frame(height: 38).background(.bar).overlay(alignment: .top) { Divider() }
+            } else {
             StatusBar(actions: actions, sort: sort, dirty: drafts.isDirty, canDelete: base != nil && drafts.newRecords.isEmpty,
                       commitTitle: drafts.newRecords.isEmpty ? "Replace" : "Enter",
                       onNew: startNew, onDelete: { confirmDelete = true }, onRevert: drafts.reset, onCommit: commit) {
                 HStack(spacing: 12) {
+                    if navigation?.find != nil {
+                        Button { findMode = true } label: { Label("Find", systemImage: "doc.text.magnifyingglass") }
+                            .disabled(drafts.isDirty)
+                            .keyboardShortcut("f", modifiers: [.command, .shift])
+                            .help("Find by form: type criteria into the fields (⇧⌘F)")
+                    }
                     if let f = navigation?.filterTitle, let nav = navigation { FilterChip(title: f, clear: nav.clearFilter) }
                     recordNavigation
                 }
+            }
             }
         }
         .onChange(of: records.count) { currentIndex = min(currentIndex, max(0, records.count - 1)) }
@@ -347,6 +407,20 @@ struct SingleForm: View {
         .labelStyle(.iconOnly)
         .disabled(records.isEmpty || drafts.isDirty)
         .help(drafts.isDirty ? "Replace or revert your changes first" : "⌘↑ / ⌘↓ to move between records")
+    }
+
+    private func runFind() {
+        var criteria: [Int: String] = [:]
+        for (fid, text) in findDrafts.text[0] ?? [:] {
+            if let f = relation.field(withID: fid) { criteria[f.id] = text }
+        }
+        for (fid, on) in findDrafts.flags[0] ?? [:] {
+            if let f = relation.field(withID: fid) { criteria[f.id] = on ? "yes" : "no" }
+        }
+        findMode = false
+        findDrafts.reset()
+        navigation?.find?(criteria)
+        currentIndex = 0
     }
 
     private func startNew() {

@@ -10,10 +10,11 @@ import Foundation
 /// ```
 /// - `[Field]` a field, `{Abacus}` another abacus (`]]` / `}}` escape a closing bracket)
 /// - `"text"` (`""` for a quote), numbers, `true` / `false`, `#30-9-2026#` dates, `empty`
-/// - infix, loosest first: `= ≠ < ≤ > ≥ contains starts with` · `&` (followed by) · `+ −` · `× ÷`
+/// - infix, loosest first: `or` · `and` · `= ≠ < ≤ > ≥ contains starts with ends with` · `&` · `+ −` · `× ÷`
 ///   (`<> <= >= - * /` are accepted too)
 /// - `if … then … else …`, and functions: `text number date day month year defined undefined
-///   default flag total maximum previous` plus `today`, `return`, `count`
+///   default flag total maximum minimum average previous not length upper lower trim left right mid
+///   round abs int min max weekday makedate` plus `today`, `return`, `count`
 public enum Formula {
     struct Spec { let op: Opcode; let name: String; let arity: Int }
 
@@ -27,13 +28,23 @@ public enum Formula {
         Spec(op: .previous, name: "previous", arity: 1),
         Spec(op: .currentDate, name: "today", arity: 0), Spec(op: .returnCharacter, name: "return", arity: 0),
         Spec(op: .count, name: "count", arity: 0),
+        Spec(op: .not, name: "not", arity: 1), Spec(op: .length, name: "length", arity: 1),
+        Spec(op: .upper, name: "upper", arity: 1), Spec(op: .lower, name: "lower", arity: 1),
+        Spec(op: .trim, name: "trim", arity: 1), Spec(op: .left, name: "left", arity: 2),
+        Spec(op: .right, name: "right", arity: 2), Spec(op: .mid, name: "mid", arity: 3),
+        Spec(op: .round, name: "round", arity: 2), Spec(op: .abs, name: "abs", arity: 1),
+        Spec(op: .int, name: "int", arity: 1), Spec(op: .min, name: "min", arity: 2), Spec(op: .max, name: "max", arity: 2),
+        Spec(op: .average, name: "average", arity: 1), Spec(op: .minimum, name: "minimum", arity: 1),
+        Spec(op: .weekday, name: "weekday", arity: 1), Spec(op: .makeDate, name: "makedate", arity: 3),
     ]
 
     /// Infix operators with precedence (higher binds tighter).
     static let infix: [(op: Opcode, symbol: String, level: Int)] = [
-        (.equal, "=", 1), (.notEqual, "≠", 1), (.lessOrEqual, "≤", 1), (.greaterOrEqual, "≥", 1),
-        (.less, "<", 1), (.greater, ">", 1), (.contains, "contains", 1), (.startsWith, "starts with", 1),
-        (.followedBy, "&", 2), (.add, "+", 3), (.subtract, "−", 3), (.multiply, "×", 4), (.divide, "÷", 4),
+        (.or, "or", 1), (.and, "and", 2),
+        (.equal, "=", 3), (.notEqual, "≠", 3), (.lessOrEqual, "≤", 3), (.greaterOrEqual, "≥", 3),
+        (.less, "<", 3), (.greater, ">", 3), (.contains, "contains", 3), (.startsWith, "starts with", 3),
+        (.endsWith, "ends with", 3),
+        (.followedBy, "&", 4), (.add, "+", 5), (.subtract, "−", 5), (.multiply, "×", 6), (.divide, "÷", 6),
     ]
 
     /// Names users can insert, for editor menus.
@@ -169,7 +180,7 @@ public enum Formula {
         }
 
         mutating func binary(_ level: Int) throws -> Tile {
-            guard level <= 4 else { return try primary() }
+            guard level <= 6 else { return try primary() }
             var lhs = try binary(level + 1)
             while let o = binaryOp(level: level) {
                 let rhs = try binary(level + 1)

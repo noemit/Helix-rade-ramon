@@ -328,6 +328,8 @@ struct TemplateInspector: View {
                     .pickerStyle(.segmented).labelsHidden().fixedSize()
                 }
                 Toggle("Frame", isOn: bind(e, \.framed, "Change Frame"))
+                colorRow("Text colour", e.textColor, default: .black) { hex in set(e, "Change Colour") { $0.textColor = hex } }
+                colorRow("Background", e.backgroundColor, default: .white) { hex in set(e, "Change Colour") { $0.backgroundColor = hex } }
             }
         }
         Section("Position and size") {
@@ -341,6 +343,17 @@ struct TemplateInspector: View {
                 let id = e.id
                 edit("Delete Rectangle") { $0.remove(id) }
                 selected = nil
+            }
+        }
+    }
+
+    private func colorRow(_ title: String, _ hex: String?, default def: Color, commit: @escaping (String?) -> Void) -> some View {
+        HStack {
+            ColorPicker(title, selection: Binding(get: { Color(hex: hex) ?? def }, set: { commit($0.hex) }), supportsOpacity: false)
+            if hex != nil {
+                Button { commit(nil) } label: { Image(systemName: "xmark.circle") }
+                    .buttonStyle(.borderless)
+                    .help("No colour")
             }
         }
     }

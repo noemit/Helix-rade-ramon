@@ -100,6 +100,7 @@ struct ViewEditor: View {
                             model.openViewID = viewID
                             model.mode = .user
                         }
+                        OpenInWindowButton(model: model, viewID: viewID)
                     }
                 }
                 .formStyle(.grouped)
@@ -400,5 +401,15 @@ struct TileView: View {
         .padding(.horizontal, 5).padding(.vertical, 3)
         .background(symbol == nil ? Color.secondary.opacity(0.12) : Color(nsColor: .textBackgroundColor))
         .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(Color.primary.opacity(0.5), lineWidth: 1))
+    }
+}
+
+struct OpenInWindowButton: View {
+    @ObservedObject var model: CollectionModel
+    let viewID: Int
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button("Open in New Window") { openWindow(id: "view", value: ViewWindowRef(modelID: model.id, viewID: viewID)) }
     }
 }

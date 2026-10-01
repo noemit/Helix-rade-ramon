@@ -117,6 +117,9 @@ public struct TemplateElement: Identifiable, Hashable, Codable {
     public var framed = false
     public var scrollsVertically = false
     public var format = NumberFormat.general
+    /// Colours as "#RRGGBB" (set in Faulix's template editor; the sample collection has none).
+    public var textColor: String?
+    public var backgroundColor: String?
 
     public init(id: Int, rect: HelixRect, font: HelixFont, alignment: HelixAlignment, tabOrder: Int, content: Content,
                 framed: Bool = false, scrollsVertically: Bool = false, format: NumberFormat = .general) {

@@ -54,6 +54,7 @@ struct CollectionView: View {
         }
         .sheet(isPresented: $model.showExport) { ExportSheet(model: model) }
         .focusedSceneObject(model)
+        .onAppear { UpdateChecker.checkAutomatically() }
     }
 
     private var userMode: some View {
@@ -124,6 +125,7 @@ struct RecordsPane: View {
 /// User-mode sidebar: each relation's views, split into forms and lists.
 struct ViewSidebar: View {
     @ObservedObject var model: CollectionModel
+    @Environment(\.openWindow) private var openWindow
 
     private struct Group: Identifiable {
         let id: String
@@ -153,6 +155,9 @@ struct ViewSidebar: View {
                         Label(v.name, systemImage: g.symbol)
                             .help(model.iconSummary(v.id))
                             .tag(v.id)
+                            .contextMenu {
+                                Button("Open in New Window") { openWindow(id: "view", value: ViewWindowRef(modelID: model.id, viewID: v.id)) }
+                            }
                     }
                 }
             }

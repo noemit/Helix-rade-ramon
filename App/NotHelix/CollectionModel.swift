@@ -15,6 +15,7 @@ enum AppMode: String, CaseIterable, Identifiable {
 
 @MainActor
 final class CollectionModel: ObservableObject {
+    let id = UUID()
     /// The Helix file (read-only source).
     let collection: HelixCollection
     /// The editable design: imported from the Helix file once, then edited in Design mode.
@@ -64,7 +65,11 @@ final class CollectionModel: ObservableObject {
         var keyID: Int?
         var value: Value?
         var recordID: UInt32?
-        var description: String { "\(keyID ?? 0)|\(value?.description ?? "")|\(recordID ?? 0)" }
+        /// Find-by-form criteria: field object id → criterion text (see `FindCriteria`).
+        var criteria: [Int: String] = [:]
+        var description: String {
+            "\(keyID ?? 0)|\(value?.description ?? "")|\(recordID ?? 0)|" + criteria.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: ";")
+        }
     }
 
     struct BackEntry {
@@ -95,6 +100,7 @@ final class CollectionModel: ObservableObject {
         }
         design = Design(model: model ?? DesignModel(importing: collection), collection: collection)
         try? store?.backupIfNeeded()
+        ModelRegistry.register(self)
         let first = design.relations.max { $0.recordCount < $1.recordCount }
         select(.relation(first?.id ?? 0))
         openViewID = first.flatMap { rel in
@@ -197,6 +203,10 @@ final class CollectionModel: ObservableObject {
             selected = selected.filter { TextSearch.matches(hay[$0.id] ?? "", query: query) }
         }
         if let drill {
+            for (fid, crit) in drill.criteria {
+                guard let f = rel.field(objectID: fid) else { continue }
+                selected = selected.filter { FindCriteria.matches($0[f], crit, type: f.type) }
+            }
             if let rid = drill.recordID {
                 selected = selected.filter { $0.id == rid }
             } else if let keyID = drill.keyID {
@@ -358,7 +368,20 @@ final class CollectionModel: ObservableObject {
             filterTitle: drills[view.id]?.title,
             clearFilter: { [unowned self] in clearDrill(view) },
             activate: { [unowned self] e, r, title in drill(into: e, record: r, in: view, title: title) },
-            open: { [unowned self] r in open(r, from: view) })
+            open: { [unowned self] r in open(r, from: view) },
+            find: { [unowned self] criteria in find(criteria, in: view) })
+    }
+
+    /// Find by form: show only records matching the criteria typed into the form's fields.
+    func find(_ criteria: [Int: String], in view: ViewDefinition) {
+        let crit = criteria.filter { !$0.value.trimmingCharacters(in: .whitespaces).isEmpty }
+        guard !crit.isEmpty else { clearDrill(view); return }
+        pushBack()
+        let title = crit.sorted { $0.key < $1.key }
+            .map { "\(design.name(of: $0.key) ?? "?") \($0.value.first.map { "=≠<>≤≥".contains($0) } == true ? "" : "~ ")\($0.value)" }
+            .joined(separator: ", ")
+        drills[view.id] = Drill(title: "Find: " + title, keyID: nil, value: nil, recordID: nil, criteria: crit)
+        viewRecordIndex[view.id] = 0
     }
 
     func clearDrill(_ view: ViewDefinition) {

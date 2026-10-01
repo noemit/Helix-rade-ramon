@@ -187,6 +187,27 @@ struct LibrosTests {
         #expect(throws: Formula.ParseError.self) { try design.parseFormula("text(1, 2)", in: rel) }
     }
 
+    @Test func extraFormulaFunctions() throws {
+        let d = Design(model: design.model, collection: collection)
+        let rel = libros
+        func eval(_ f: String, _ r: Record = Record(id: 1, values: [3: .text("  Home ao pairo "), 25: .number(1979)])) throws -> Value? {
+            let tile = try d.parseFormula(f, in: rel)
+            let aid = d.update { $0.addAbacus(to: rel.id, name: "t\(UUID().uuidString)", root: tile, showIcon: false)! }
+            return AbacusEvaluator(design: d, relation: d.relation(id: rel.id)!, records: [r]).value(ofAbacus: aid, for: r)
+        }
+        #expect(try eval("upper(trim([Título]))") == .text("HOME AO PAIRO"))
+        #expect(try eval("length(trim([Título]))") == .number(13))
+        #expect(try eval("left(trim([Título]), 4) & mid(trim([Título]), 6, 2)") == .text("Homeao"))
+        #expect(try eval("right(trim([Título]), 5)") == .text("pairo"))
+        #expect(try eval("round(166.386 * 2, 1)") == .number(332.8))
+        #expect(try eval("[Ano merca] > 1970 and not([Ano merca] > 2000)") == .flag(true))
+        #expect(try eval("[Ano merca] < 1900 or trim([Título]) ends with \"pairo\"") == .flag(true))
+        #expect(try eval("max(3, [Ano merca]) − min(3, 4)") == .number(1976))
+        #expect(try eval("weekday(makedate(1, 10, 2026))") == .number(4)) // 1 Oct 2026 is a Thursday
+        let text = d.formulaText(try d.parseFormula("[Ano merca] > 1970 and not([Ano merca] > 2000) or abs(-3) = 3", in: rel))
+        #expect(text == "(([Ano merca] > 1970) and not([Ano merca] > 2000)) or (abs(-3) = 3)")
+    }
+
     @Test func importedDesignMatchesHelix() throws {
         let m = design.model
         let rd = try #require(m.relations.first { $0.name == "Libros" })
@@ -245,6 +266,19 @@ struct LibrosTests {
         #expect(a.count == 3 && a == b && b == c)
         #expect(!find("Cunqueiro taberna Galiana").isEmpty && find("Cunqueiro taberna Galiana").count <= find("Cunqueiro").count)
         #expect(TextSearch.same(.text("Chao Rego, Xosé"), .text("chao rego xose")))
+    }
+
+    @Test func findByForm() throws {
+        let recs = try collection.records(of: libros)
+        let lugar = try #require(libros.fields.first { $0.name == "Lugar" })
+        let data = try #require(libros.fields.first { $0.name == "Data" })
+        let euros = try #require(libros.fields.first { $0.name == "Precio Euros" })
+        let vigo = recs.filter { FindCriteria.matches($0[lugar], "vigo", type: lugar.type) && FindCriteria.matches($0[data], "> 1990", type: data.type) }
+        #expect(vigo.count == 143)
+        #expect(recs.filter { FindCriteria.matches($0[euros], "=", type: euros.type) }.count == 873)
+        #expect(FindCriteria.matches(.number(19.95), "≥ 19,95", type: .number))
+        #expect(!FindCriteria.matches(.text("Santiago de Compostela"), "= Santiago", type: .text))
+        #expect(FindCriteria.matches(.date(HelixDate(year: 2026, month: 9, day: 17)), "< 1-10-2026", type: .date))
     }
 
     @Test func drillDownSeesRepeatedNames() throws {

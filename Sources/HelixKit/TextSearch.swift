@@ -37,3 +37,62 @@ public enum TextSearch {
         }
     }
 }
+
+/// Helix-style "find by form": criteria typed into a form's fields.
+///
+/// - `Vigo` — text containing those words (any order, accents ignored); numbers/dates: equal
+/// - `= Vigo` exactly; `≠ Vigo` / `<> Vigo` not equal
+/// - `< 1990`, `≤ 1990` / `<= 1990`, `> 1990`, `≥ 1990` / `>= 1990` — numbers, dates (d-m-yyyy) or text
+/// - `=` alone — the field is empty; `≠` alone — the field has a value
+public enum FindCriteria {
+    public static func matches(_ value: Value?, _ criterion: String, type: FieldType) -> Bool {
+        let c = criterion.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !c.isEmpty else { return true }
+        let ops = ["<>", "<=", ">=", "≠", "≤", "≥", "=", "<", ">"]
+        let op = ops.first { c.hasPrefix($0) }
+        let rest = op.map { String(c.dropFirst($0.count)).trimmingCharacters(in: .whitespaces) } ?? c
+        let empty: Bool = { if case .text(let s)? = value { s.isEmpty } else { value == nil } }()
+        if rest.isEmpty, let op {
+            return (op == "=") ? empty : (op == "≠" || op == "<>") ? !empty : true
+        }
+        guard op != nil else {
+            switch type {
+            case .number, .date: return compare(value, rest, type) == .orderedSame
+            case .flag:
+                let yes = ["yes", "si", "sí", "true", "1", "x"].contains(rest.lowercased())
+                if case .flag(let b)? = value { return b == yes }
+                return !yes
+            default:
+                let hay = TextSearch.haystack([value?.description ?? ""])
+                return TextSearch.matches(hay, query: TextSearch.words(rest))
+            }
+        }
+        guard let r = compare(value, rest, type) else { return op == "≠" || op == "<>" }
+        switch op! {
+        case "=": return r == .orderedSame
+        case "≠", "<>": return r != .orderedSame
+        case "<": return r == .orderedAscending
+        case "≤", "<=": return r != .orderedDescending
+        case ">": return r == .orderedDescending
+        default: return r != .orderedAscending
+        }
+    }
+
+    private static func compare(_ value: Value?, _ s: String, _ type: FieldType) -> ComparisonResult? {
+        guard let value else { return nil }
+        switch value {
+        case .number(let n):
+            guard let x = AbacusEvaluator.parseNumber(s) else { return nil }
+            return n == x ? .orderedSame : n < x ? .orderedAscending : .orderedDescending
+        case .date(let d):
+            guard let x = AbacusEvaluator.parseDate(s) else { return nil }
+            return d == x ? .orderedSame : d < x ? .orderedAscending : .orderedDescending
+        default:
+            let t = value.description
+            if let a = AbacusEvaluator.parseNumber(t), let b = AbacusEvaluator.parseNumber(s), type != .text || Double(t) != nil {
+                return a == b ? .orderedSame : a < b ? .orderedAscending : .orderedDescending
+            }
+            return TextSearch.words(t).joined(separator: " ").compare(TextSearch.words(s).joined(separator: " "))
+        }
+    }
+}
