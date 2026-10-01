@@ -4,6 +4,8 @@ import UniformTypeIdentifiers
 
 @main
 struct NotHelixApp: App {
+    init() { AppLanguage.apply() }
+
     var body: some Scene {
         DocumentGroup(viewing: HelixDocument.self) { file in
             CollectionView(model: CollectionModel(collection: file.document.collection,
@@ -49,7 +51,7 @@ struct PrintCommands: View {
     @FocusedObject var model: CollectionModel?
 
     var body: some View {
-        Button(model?.printIsForm == true ? "Print This Record…" : "Print…") { model?.printView(allRecords: false) }
+        Button(model?.printIsForm == true ? L("Print This Record…") : L("Print…")) { model?.printView(allRecords: false) }
             .keyboardShortcut("p", modifiers: .command)
             .disabled(model?.exportView == nil)
         if model?.printIsForm == true {
@@ -71,6 +73,8 @@ struct HelpMenuItems: View {
 }
 
 struct SettingsView: View {
+    @AppStorage(AppLanguage.key) private var language = AppLanguage.automatic.rawValue
+    @State private var languageChanged = false
     @AppStorage("numberLocale") private var locale = "es_ES"
     @AppStorage("currencySymbol") private var currency = "Pts"
 
@@ -79,6 +83,19 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            Section {
+                Picker("Language", selection: Binding(get: { language }, set: { language = $0; AppLanguage.apply(); languageChanged = true })) {
+                    ForEach(AppLanguage.allCases) { Text($0.label).tag($0.rawValue) }
+                }
+                if languageChanged {
+                    Text("Quit and reopen Faulix to switch language.").foregroundStyle(.orange)
+                }
+            } header: {
+                Text("Language")
+            } footer: {
+                Text("Automatic uses Galician on Macs set to Galician, Spanish, Portuguese or Catalan, otherwise English.")
+                    .foregroundStyle(.secondary)
+            }
             Section {
                 Picker("Number region", selection: $locale) {
                     ForEach(regions, id: \.0) { Text($0.1).tag($0.0) }

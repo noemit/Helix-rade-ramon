@@ -9,20 +9,32 @@ struct ExportSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     enum Format: String, CaseIterable, Identifiable {
-        case helix = "Helix import text", csv = "CSV"
+        case helix, csv
         var id: String { rawValue }
+        var label: String { self == .helix ? L("Helix import text") : "CSV" }
     }
     enum Scope: String, CaseIterable, Identifiable {
-        case view = "Records in the current view", all = "All records of the relation"
+        case view, all
         var id: String { rawValue }
+        var label: String { self == .view ? L("Records in the current view") : L("All records of the relation") }
     }
     enum FieldSet: String, CaseIterable, Identifiable {
-        case layout = "Fields on the view, in tab order", all = "All fields"
+        case layout, all
         var id: String { rawValue }
+        var label: String { self == .layout ? L("Fields on the view, in tab order") : L("All fields") }
     }
     enum RecordEnd: String, CaseIterable, Identifiable {
-        case cr = "Return", rs = "Record separator (ASCII 30)"
+        case cr, rs
         var id: String { rawValue }
+        var label: String { self == .cr ? L("Return") : L("Record separator (ASCII 30)") }
+    }
+
+    private func label(_ n: Exporter.HelixTextOptions.Newlines) -> String {
+        switch n {
+        case .keep: L("Keep")
+        case .verticalTab: L("Vertical tab")
+        case .space: L("Space")
+        }
     }
 
     @State private var format: Format = .helix
@@ -45,14 +57,14 @@ struct ExportSheet: View {
                 Text("From the view “\(view.name)” of \(rel.name).").foregroundStyle(.secondary)
             }
             Form {
-                Picker("Format", selection: $format) { ForEach(Format.allCases) { Text($0.rawValue).tag($0) } }
+                Picker("Format", selection: $format) { ForEach(Format.allCases) { Text($0.label).tag($0) } }
                 Picker("Records", selection: $scope) { ForEach(Scope.allCases) { Text(label($0)).tag($0) } }
-                Picker("Fields", selection: $fieldSet) { ForEach(FieldSet.allCases) { Text($0.rawValue).tag($0) } }
+                Picker("Fields", selection: $fieldSet) { ForEach(FieldSet.allCases) { Text($0.label).tag($0) } }
                 if format == .helix {
                     Picker("Returns inside text", selection: $newlines) {
-                        ForEach(Exporter.HelixTextOptions.Newlines.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+                        ForEach(Exporter.HelixTextOptions.Newlines.allCases, id: \.self) { Text(label($0)).tag($0) }
                     }
-                    Picker("Record delimiter", selection: $recordEnd) { ForEach(RecordEnd.allCases) { Text($0.rawValue).tag($0) } }
+                    Picker("Record delimiter", selection: $recordEnd) { ForEach(RecordEnd.allCases) { Text($0.label).tag($0) } }
                     Toggle("Mac Roman text encoding (for older Helix versions)", isOn: $macRoman)
                     Toggle("First line lists field names", isOn: $header)
                 }
@@ -76,9 +88,9 @@ struct ExportSheet: View {
     }
 
     private func label(_ s: Scope) -> String {
-        guard let v = model.exportView, let rel = model.relation(ofView: v) else { return s.rawValue }
+        guard let v = model.exportView, let rel = model.relation(ofView: v) else { return s.label }
         let n = s == .view ? model.records(for: v).count : model.baseRecords(rel).records.count
-        return "\(s.rawValue) (\(n))"
+        return "\(s.label) (\(n))"
     }
 
     private func export() {

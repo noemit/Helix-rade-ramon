@@ -60,14 +60,14 @@ struct HistoryRow: View {
             if entry.action == .design {
                 Text("Design change").font(.caption).foregroundStyle(.secondary)
             } else if let rel = relation {
-                Text(model.label(for: entry.after ?? entry.before, in: rel).nilIfEmpty ?? "Record \(entry.recordID)")
+                Text(model.label(for: entry.after ?? entry.before, in: rel).nilIfEmpty ?? L("Record \(entry.recordID)"))
                     .font(.caption).foregroundStyle(.secondary).lineLimit(1)
                 if !entry.note.isEmpty {
                     Text(entry.note).font(.caption2).foregroundStyle(.tertiary)
                 }
                 if expanded {
                     ForEach(entry.changedFields, id: \.self) { fid in
-                        let name = rel.field(withID: fid)?.displayName ?? "Field \(fid)"
+                        let name = rel.field(withID: fid)?.displayName ?? L("Field \(fid)")
                         VStack(alignment: .leading, spacing: 1) {
                             Text(name).font(.caption2.weight(.semibold))
                             Text(short(entry.before?.values[fid])).strikethrough().foregroundStyle(.red.opacity(0.8))
@@ -87,11 +87,11 @@ struct HistoryRow: View {
     }
 
     private var title: String {
-        let rel = relation?.name ?? "Record"
+        let rel = relation?.name ?? L("Record")
         switch entry.action {
-        case .insert: return "New \(rel) record"
-        case .update: return "Changed \(entry.changedFields.count) field\(entry.changedFields.count == 1 ? "" : "s")"
-        case .delete: return "Deleted \(rel) record"
+        case .insert: return L("New \(rel) record")
+        case .update: return L("Changed \(entry.changedFields.count) field(s)")
+        case .delete: return L("Deleted \(rel) record")
         case .design: return entry.note
         }
     }
@@ -115,7 +115,7 @@ struct HistoryRow: View {
     }
 
     private func short(_ v: Value?) -> String {
-        guard let v else { return "(empty)" }
+        guard let v else { return L("(empty)") }
         let s = v.description.replacingOccurrences(of: "\n", with: " ⏎ ")
         return s.count > 120 ? String(s.prefix(120)) + "…" : s
     }
@@ -133,9 +133,9 @@ struct UndoCommands: View {
     var body: some View {
         let um = model?.undoManager
         let _ = model?.revision
-        Button(um?.canUndo == true ? um!.undoMenuItemTitle : "Undo") { perform(#selector(UndoManager.undo), "undo:") }
+        Button(um?.canUndo == true ? um!.undoMenuItemTitle : L("Undo")) { perform(#selector(UndoManager.undo), "undo:") }
             .keyboardShortcut("z", modifiers: .command)
-        Button(um?.canRedo == true ? um!.redoMenuItemTitle : "Redo") { perform(#selector(UndoManager.redo), "redo:") }
+        Button(um?.canRedo == true ? um!.redoMenuItemTitle : L("Redo")) { perform(#selector(UndoManager.redo), "redo:") }
             .keyboardShortcut("z", modifiers: [.command, .shift])
     }
 

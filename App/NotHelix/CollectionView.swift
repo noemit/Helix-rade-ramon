@@ -14,7 +14,7 @@ struct CollectionView: View {
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Picker("Mode", selection: $model.mode) {
-                    ForEach(AppMode.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(AppMode.allCases) { Text($0.label).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .help("User mode shows views as Helix forms; Design mode shows the collection's structure")
@@ -42,7 +42,7 @@ struct CollectionView: View {
             ToolbarItem {
                 Button { model.printView(allRecords: false) } label: { Label("Print", systemImage: "printer") }
                     .disabled(model.exportView == nil)
-                    .help(model.printIsForm ? "Print this record (⌘P) — File ▸ Print All Records for every record" : "Print the list (⌘P)")
+                    .help(model.printIsForm ? L("Print this record (⌘P) — File ▸ Print All Records for every record") : L("Print the list (⌘P)"))
             }
             ToolbarItem {
                 Toggle(isOn: $model.showHistory) { Label("History", systemImage: "clock.arrow.circlepath") }
@@ -75,7 +75,7 @@ struct CollectionView: View {
                             Button(action: model.goBack) { Label("Back", systemImage: "chevron.left") }
                                 .disabled(model.backStack.isEmpty)
                                 .keyboardShortcut("[", modifiers: .command)
-                                .help(model.backStack.last.flatMap { model.design.name(of: $0.viewID) }.map { "Back to \($0) (⌘[)" } ?? "Back")
+                                .help(model.backStack.last.flatMap { model.design.name(of: $0.viewID) }.map { L("Back to \($0) (⌘[)") } ?? L("Back"))
                         }
                         ToolbarItem { HelpButton(topic: template.repeatElement == nil ? .form : .list) }
                     }
@@ -90,10 +90,10 @@ struct CollectionView: View {
     }
 
     private func viewSubtitle(_ view: ViewDefinition, _ rel: Relation) -> String {
-        var parts = ["\(model.records(for: view).count) records"]
+        var parts = [L("\(model.records(for: view).count) records")]
         if let d = model.drills[view.id] { parts.append(d.title) }
-        if let q = view.queryID, let name = model.design.name(of: q) { parts.append("query “\(name)”") }
-        if let i = view.indexID ?? view.defaultIndexID, let name = model.design.name(of: i) { parts.append("sorted by \(name)") }
+        if let q = view.queryID, let name = model.design.name(of: q) { parts.append(L("query “\(name)”")) }
+        if let i = view.indexID ?? view.defaultIndexID, let name = model.design.name(of: i) { parts.append(L("sorted by \(name)")) }
         return parts.joined(separator: " · ")
     }
 
@@ -140,8 +140,8 @@ struct ViewSidebar: View {
             let forms = views.filter { model.template(for: $0)?.repeatElement == nil }
             let lists = views.filter { model.template(for: $0)?.repeatElement != nil }
             return [
-                Group(id: "\(rel.id)-f", title: multi ? "\(rel.name) · Forms" : "Forms", symbol: "doc.text", views: forms),
-                Group(id: "\(rel.id)-l", title: multi ? "\(rel.name) · Lists" : "Lists", symbol: "list.bullet.rectangle", views: lists),
+                Group(id: "\(rel.id)-f", title: multi ? "\(rel.name) · " + L("Forms") : L("Forms"), symbol: "doc.text", views: forms),
+                Group(id: "\(rel.id)-l", title: multi ? "\(rel.name) · " + L("Lists") : L("Lists"), symbol: "list.bullet.rectangle", views: lists),
             ].filter { !$0.views.isEmpty }
         }
     }

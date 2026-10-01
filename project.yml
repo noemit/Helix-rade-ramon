@@ -1,6 +1,7 @@
 name: NotHelix
 options:
   bundleIdPrefix: com.nothelix
+  developmentLanguage: en
   deploymentTarget:
     macOS: "14.0"
 packages:
@@ -19,6 +20,8 @@ targets:
       path: App/NotHelix/Info.plist
       properties:
         CFBundleDisplayName: Faulix
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, gl]
         CFBundleName: Faulix
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
@@ -34,9 +37,11 @@ targets:
       base:
         PRODUCT_NAME: Faulix
         PRODUCT_BUNDLE_IDENTIFIER: com.nothelix.NotHelix
-        MARKETING_VERSION: "0.1"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.2"
+        CURRENT_PROJECT_VERSION: "2"
         SWIFT_VERSION: "5.0"
+        SWIFT_EMIT_LOC_STRINGS: YES
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
         CODE_SIGN_IDENTITY: "-"
         CODE_SIGN_STYLE: Manual
         ENABLE_HARDENED_RUNTIME: NO

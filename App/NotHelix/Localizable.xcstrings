@@ -1,0 +1,4626 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "   ": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "   "
+          }
+        }
+      }
+    },
+    "  ·  %lld changed": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "  ·  %lld cambiados"
+          }
+        }
+      }
+    },
+    " of %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " de %lld"
+          }
+        }
+      }
+    },
+    "%1$@ — %2$@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ — %2$@"
+          }
+        }
+      }
+    },
+    "%1$@ — %2$lld / %3$lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ — %2$lld / %3$lld"
+          }
+        }
+      }
+    },
+    "%1$@ — %2$lld of %3$lld records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ — %2$lld de %3$lld rexistros"
+          }
+        }
+      }
+    },
+    "%1$@: %2$@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: %2$@"
+          }
+        }
+      }
+    },
+    "%1$lld new, %2$lld changed, %3$lld removed, %4$lld unchanged.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld novos, %2$lld cambiados, %3$lld eliminados, %4$lld sen cambios."
+          }
+        }
+      }
+    },
+    "%1$lld of %2$lld records match": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld de %2$lld rexistros coinciden"
+          }
+        }
+      }
+    },
+    "%1$lld records, %2$lld fields": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld rexistros, %2$lld campos"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        }
+      }
+    },
+    "%lld changes": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cambios"
+          }
+        }
+      }
+    },
+    "%lld record(s) were changed both in Helix and in Faulix; the Faulix version was kept.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld rexistro(s) cambiaron tanto en Helix como en Faulix; conservouse a versión de Faulix."
+          }
+        }
+      }
+    },
+    "%lld records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld rexistros"
+          }
+        }
+      }
+    },
+    "%lld.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld."
+          }
+        }
+      }
+    },
+    "(deleted)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(eliminado)"
+          }
+        }
+      }
+    },
+    "(empty)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(baleiro)"
+          }
+        }
+      }
+    },
+    "A backup was made first (Data ▸ Show Backups in Finder).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antes fíxose unha copia de seguranza (Datos ▸ Amosar copias no Finder)."
+          }
+        }
+      }
+    },
+    "A field holds one piece of data in every record: text, a number, a date, a yes/no flag or a picture.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un campo garda un dato en cada rexistro: texto, un número, unha data, unha marca si/non ou unha imaxe."
+          }
+        }
+      }
+    },
+    "A form shows one record at a time, laid out exactly like your Helix template. Type straight into any field.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un formulario amosa un rexistro de cada vez, coa mesma disposición que o modelo de Helix. Escribe directamente en calquera campo."
+          }
+        }
+      }
+    },
+    "A list shows many records, one row each, using the template’s repeat rectangle. Every field in a row can be edited in place.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unha lista amosa moitos rexistros, un por fila, usando o rectángulo de repetición do modelo. Cada campo dunha fila pódese editar no sitio."
+          }
+        }
+      }
+    },
+    "A plain spreadsheet of every record in the relation — handy for checking data. Use views in User mode for everyday work.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unha táboa simple con todos os rexistros da relación — útil para revisar datos. Para o traballo diario usa as vistas no modo usuario."
+          }
+        }
+      }
+    },
+    "A query picks which records a view shows. It is a formula that is true for the records you want.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unha consulta escolle que rexistros amosa unha vista. É unha fórmula que é verdadeira para os rexistros que queres."
+          }
+        }
+      }
+    },
+    "A template is the layout of a form or list: labels, data rectangles (fields and abaci) and, for lists, a repeat rectangle.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un modelo é a disposición dun formulario ou lista: etiquetas, rectángulos de datos (campos e ábacos) e, nas listas, un rectángulo de repetición."
+          }
+        }
+      }
+    },
+    "A view is what you open in User mode: a template, plus an optional query and sort order.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unha vista é o que abres no modo usuario: un modelo, cunha consulta e unha orde opcionais."
+          }
+        }
+      }
+    },
+    "Abaci": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ábacos"
+          }
+        }
+      }
+    },
+    "Abacus": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ábaco"
+          }
+        }
+      }
+    },
+    "Abacus (formula) editor": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editor de ábacos (fórmulas)"
+          }
+        }
+      }
+    },
+    "Abacus “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ábaco “%@”"
+          }
+        }
+      }
+    },
+    "Abacus…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ábaco…"
+          }
+        }
+      }
+    },
+    "Add": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir"
+          }
+        }
+      }
+    },
+    "Add Key": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir clave"
+          }
+        }
+      }
+    },
+    "Add Rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir rectángulo"
+          }
+        }
+      }
+    },
+    "Add a field, abacus, template, view, query or index": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir un campo, ábaco, modelo, vista, consulta ou índice"
+          }
+        }
+      }
+    },
+    "Add a label, field, abacus or repeat rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir unha etiqueta, campo, ábaco ou rectángulo de repetición"
+          }
+        }
+      }
+    },
+    "Add a relation": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir unha relación"
+          }
+        }
+      }
+    },
+    "Add keys with Add Key; the first key sorts first, the next breaks ties, and so on.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engade claves con Engadir clave; a primeira ordena primeiro, a seguinte desempata, e así sucesivamente."
+          }
+        }
+      }
+    },
+    "Add ▸ Label, Field or Abacus places a new rectangle; Delete (⌫) removes the selection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engadir ▸ Etiqueta, Campo ou Ábaco coloca un rectángulo novo; Eliminar (⌫) borra a selección."
+          }
+        }
+      }
+    },
+    "All fields": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os campos"
+          }
+        }
+      }
+    },
+    "All records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os rexistros"
+          }
+        }
+      }
+    },
+    "All records of the relation": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os rexistros da relación"
+          }
+        }
+      }
+    },
+    "An abacus calculates a value from fields and other abaci — like a spreadsheet formula. Helix built them from tiles; in Faulix you type them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un ábaco calcula un valor a partir de campos e doutros ábacos — como unha fórmula de folla de cálculo. En Helix construíanse con pezas; en Faulix escríbense."
+          }
+        }
+      }
+    },
+    "An index is a sort order: records are ordered by its first key, then the second, and so on.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un índice é unha orde: os rexistros ordénanse pola súa primeira clave, despois pola segunda, e así sucesivamente."
+          }
+        }
+      }
+    },
+    "Apply": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplicar"
+          }
+        }
+      }
+    },
+    "Automatic": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático"
+          }
+        }
+      }
+    },
+    "Automatic uses Galician on Macs set to Galician, Spanish, Portuguese or Catalan, otherwise English.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automático usa o galego nos Mac configurados en galego, castelán, portugués ou catalán; se non, o inglés."
+          }
+        }
+      }
+    },
+    "Back": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atrás"
+          }
+        }
+      }
+    },
+    "Back Up Now": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facer copia agora"
+          }
+        }
+      }
+    },
+    "Back to %@ (⌘[)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volver a %@ (⌘[)"
+          }
+        }
+      }
+    },
+    "Blank": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En branco"
+          }
+        }
+      }
+    },
+    "Browse Records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver rexistros"
+          }
+        }
+      }
+    },
+    "Browse Records shows all records of the relation in a table.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver rexistros amosa todos os rexistros da relación nunha táboa."
+          }
+        }
+      }
+    },
+    "Browse all records of this relation in a table": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver todos os rexistros desta relación nunha táboa"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
+        }
+      }
+    },
+    "Cannot Save": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non se pode gardar"
+          }
+        }
+      }
+    },
+    "Change Abacus": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar ábaco"
+          }
+        }
+      }
+    },
+    "Change Alignment": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar aliñamento"
+          }
+        }
+      }
+    },
+    "Change Colour": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar cor"
+          }
+        }
+      }
+    },
+    "Change Field": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar campo"
+          }
+        }
+      }
+    },
+    "Change Field Type": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar tipo de campo"
+          }
+        }
+      }
+    },
+    "Change Font": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar tipo de letra"
+          }
+        }
+      }
+    },
+    "Change Format": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar formato"
+          }
+        }
+      }
+    },
+    "Change Frame": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar marco"
+          }
+        }
+      }
+    },
+    "Change Index": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar índice"
+          }
+        }
+      }
+    },
+    "Change Scroll Bar": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar barra de desprazamento"
+          }
+        }
+      }
+    },
+    "Change Size": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar tamaño"
+          }
+        }
+      }
+    },
+    "Change Style": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar estilo"
+          }
+        }
+      }
+    },
+    "Change View": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar vista"
+          }
+        }
+      }
+    },
+    "Change the name or the type and it is saved at once (undo with ⌘Z).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia o nome ou o tipo e gárdase ao momento (desfai con ⌘Z)."
+          }
+        }
+      }
+    },
+    "Change the sort order from the ⇅ menu at the bottom right.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia a orde co menú ⇅ abaixo á dereita."
+          }
+        }
+      }
+    },
+    "Changed %lld field(s)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld campo(s) cambiado(s)"
+          }
+        }
+      }
+    },
+    "Changes are saved as you go; ⌘Z undoes them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os cambios gárdanse sobre a marcha; ⌘Z desfaios."
+          }
+        }
+      }
+    },
+    "Changing the type does not convert existing values; check them in Browse Records.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar o tipo non converte os valores existentes; revísaos en Ver rexistros."
+          }
+        }
+      }
+    },
+    "Changing the type does not convert values already entered.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar o tipo non converte os valores xa introducidos."
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar actualizacións…"
+          }
+        }
+      }
+    },
+    "Choose File ▸ Open… and pick your Helix collection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolle Ficheiro ▸ Abrir… e selecciona a túa colección de Helix."
+          }
+        }
+      }
+    },
+    "Choose Picture…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escoller imaxe…"
+          }
+        }
+      }
+    },
+    "Choose a view from the list, or create one in Design mode.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolle unha vista da lista ou crea unha no modo deseño."
+          }
+        }
+      }
+    },
+    "Choose the newer copy of “%@” exported from Helix.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolle a copia máis recente de “%@” exportada de Helix."
+          }
+        }
+      }
+    },
+    "Choose the query in a view’s settings to make that view show only those records.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolle a consulta na configuración dunha vista para que esa vista amose só eses rexistros."
+          }
+        }
+      }
+    },
+    "Choose…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escoller…"
+          }
+        }
+      }
+    },
+    "Click a column header to sort; use Search to filter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme na cabeceira dunha columna para ordenar; usa Buscar para filtrar."
+          }
+        }
+      }
+    },
+    "Click a field and type. Changed fields turn orange.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme nun campo e escribe. Os campos cambiados vólvense laranxa."
+          }
+        }
+      }
+    },
+    "Click a rectangle to edit it. Use Add in the toolbar for labels, fields and abaci.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme nun rectángulo para editalo. Usa Engadir na barra para etiquetas, campos e ábacos."
+          }
+        }
+      }
+    },
+    "Click a rectangle to select it; drag to move, drag the corner handle to resize. Arrow keys nudge (⇧ for 10).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme nun rectángulo para seleccionalo; arrastra para movelo e arrastra a esquina para cambiar o tamaño. As frechas móveno pouco a pouco (⇧ para 10)."
+          }
+        }
+      }
+    },
+    "Click any value to see only the records that share it — e.g. click an author to list all their books. Clear the filter with the × on its chip.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme en calquera valor para ver só os rexistros que o comparten — p. ex. preme nun autor para listar todos os seus libros. Quita o filtro co × da súa etiqueta."
+          }
+        }
+      }
+    },
+    "Click to show records with this value": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme para amosar os rexistros con este valor"
+          }
+        }
+      }
+    },
+    "Clicking a value only one record has (usually a title), double-clicking a row, or its › button opens that record on a form. Back (⌘[) returns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premer nun valor que só ten un rexistro (normalmente un título), facer dobre clic nunha fila ou o seu botón › abre ese rexistro nun formulario. Atrás (⌘[) volve."
+          }
+        }
+      }
+    },
+    "Collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colección"
+          }
+        }
+      }
+    },
+    "Collection Closed": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colección pechada"
+          }
+        }
+      }
+    },
+    "Collection window (Design mode)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xanela da colección (modo deseño)"
+          }
+        }
+      }
+    },
+    "Content": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contido"
+          }
+        }
+      }
+    },
+    "Content size": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamaño do contido"
+          }
+        }
+      }
+    },
+    "Could Not Read Records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non se puideron ler os rexistros"
+          }
+        }
+      }
+    },
+    "Could not check for updates": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non se puido comprobar se hai actualizacións"
+          }
+        }
+      }
+    },
+    "Create": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crear"
+          }
+        }
+      }
+    },
+    "Created in Faulix": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creado en Faulix"
+          }
+        }
+      }
+    },
+    "Created in Helix": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creado en Helix"
+          }
+        }
+      }
+    },
+    "Currency (e.g. 3.319Pts)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moeda (p. ex. 3.319Pts)"
+          }
+        }
+      }
+    },
+    "Currency symbol": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Símbolo da moeda"
+          }
+        }
+      }
+    },
+    "Data": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos"
+          }
+        }
+      }
+    },
+    "Data rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectángulo de datos"
+          }
+        }
+      }
+    },
+    "Data ▸ Export Records… writes the current view as Helix import text or CSV.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos ▸ Exportar rexistros… escribe a vista actual como texto de importación de Helix ou CSV."
+          }
+        }
+      }
+    },
+    "Data ▸ Update from Newer Helix File… brings in records added or changed in Helix since. Records you changed in Faulix are kept; a backup is made first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datos ▸ Actualizar desde un ficheiro de Helix máis recente… trae os rexistros engadidos ou cambiados en Helix desde entón. Consérvanse os rexistros que cambiaches en Faulix; antes faise unha copia de seguranza."
+          }
+        }
+      }
+    },
+    "Date": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data"
+          }
+        }
+      }
+    },
+    "Dates: date() day() month() year() weekday() makedate(d, m, y), today. Others: defined() undefined() default(a, b) previous(); totals over the records shown: total() average() minimum() maximum() count.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datas: date() day() month() year() weekday() makedate(d, m, a), today. Outras: defined() undefined() default(a, b) previous(); totais dos rexistros amosados: total() average() minimum() maximum() count."
+          }
+        }
+      }
+    },
+    "Decimals: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decimais: %@"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar"
+          }
+        }
+      }
+    },
+    "Delete %1$@ “%2$@”?": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar %1$@ “%2$@”?"
+          }
+        }
+      }
+    },
+    "Delete %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar %@"
+          }
+        }
+      }
+    },
+    "Delete Record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar rexistro"
+          }
+        }
+      }
+    },
+    "Delete Rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar rectángulo"
+          }
+        }
+      }
+    },
+    "Delete record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar rexistro"
+          }
+        }
+      }
+    },
+    "Delete the selected record?": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar o rexistro seleccionado?"
+          }
+        }
+      }
+    },
+    "Delete the selected rectangle (⌫)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar o rectángulo seleccionado (⌫)"
+          }
+        }
+      }
+    },
+    "Delete this record?": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar este rexistro?"
+          }
+        }
+      }
+    },
+    "Deleted": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminado"
+          }
+        }
+      }
+    },
+    "Deleted %@ record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminouse un rexistro de %@"
+          }
+        }
+      }
+    },
+    "Delete…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar…"
+          }
+        }
+      }
+    },
+    "Design": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deseño"
+          }
+        }
+      }
+    },
+    "Design change": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambio de deseño"
+          }
+        }
+      }
+    },
+    "Design mode: double-click icons to change fields, layouts, formulas, views, queries and indexes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo deseño: fai dobre clic nas iconas para cambiar campos, disposicións, fórmulas, vistas, consultas e índices."
+          }
+        }
+      }
+    },
+    "Details": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalles"
+          }
+        }
+      }
+    },
+    "Display": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualización"
+          }
+        }
+      }
+    },
+    "Display icons at their positions, or as a list": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar as iconas na súa posición ou como lista"
+          }
+        }
+      }
+    },
+    "Double-click a relation to open its window.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fai dobre clic nunha relación para abrir a súa xanela."
+          }
+        }
+      }
+    },
+    "Double-click an icon to open its editor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fai dobre clic nunha icona para abrir o seu editor."
+          }
+        }
+      }
+    },
+    "Download": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargar"
+          }
+        }
+      }
+    },
+    "Drag icons to arrange them. Right-click an icon to rename or delete it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra as iconas para colocalas. Preme co botón dereito nunha icona para renomeala ou eliminala."
+          }
+        }
+      }
+    },
+    "Drag icons to arrange them; positions are saved.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra as iconas para colocalas; as posicións gárdanse."
+          }
+        }
+      }
+    },
+    "Drag to resize": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra para cambiar o tamaño"
+          }
+        }
+      }
+    },
+    "Drop or paste a picture": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solta ou pega unha imaxe"
+          }
+        }
+      }
+    },
+    "Drop, paste (right-click) or double-click to choose a picture": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solta, pega (botón dereito) ou fai dobre clic para escoller unha imaxe"
+          }
+        }
+      }
+    },
+    "Duplicate": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duplicar"
+          }
+        }
+      }
+    },
+    "Duplicate Rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duplicar rectángulo"
+          }
+        }
+      }
+    },
+    "Duplicate the selected rectangle (⌘D)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duplicar o rectángulo seleccionado (⌘D)"
+          }
+        }
+      }
+    },
+    "Edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar"
+          }
+        }
+      }
+    },
+    "Edit Abacus": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar ábaco"
+          }
+        }
+      }
+    },
+    "Edit Label": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar etiqueta"
+          }
+        }
+      }
+    },
+    "Edit Query": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar consulta"
+          }
+        }
+      }
+    },
+    "Edit rows in place": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar as filas no sitio"
+          }
+        }
+      }
+    },
+    "Edit ▸ Undo (⌘Z) and Redo (⇧⌘Z) step through your changes, including design changes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar ▸ Desfacer (⌘Z) e Refacer (⇧⌘Z) percorren os teus cambios, incluídos os de deseño."
+          }
+        }
+      }
+    },
+    "Editing": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editando"
+          }
+        }
+      }
+    },
+    "Editing is unavailable: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A edición non está dispoñible: %@"
+          }
+        }
+      }
+    },
+    "Empty — the abacus has no value.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baleiro — o ábaco non ten valor."
+          }
+        }
+      }
+    },
+    "Enter": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introducir"
+          }
+        }
+      }
+    },
+    "Enter Record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introducir rexistro"
+          }
+        }
+      }
+    },
+    "Every change — records and design — is logged. You can undo step by step, or put an old version of a record back.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada cambio — rexistros e deseño — queda rexistrado. Podes desfacer paso a paso ou recuperar unha versión anterior dun rexistro."
+          }
+        }
+      }
+    },
+    "Every record you enter, replace or delete is logged here and can be restored.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada rexistro que introduces, substitúes ou eliminas queda anotado aquí e pódese restaurar."
+          }
+        }
+      }
+    },
+    "Everything inside repeats once per record in list views. Drag fields into it; move it to move its contents.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo o que está dentro repítese unha vez por rexistro nas vistas de lista. Arrastra campos dentro; móveo para mover o seu contido."
+          }
+        }
+      }
+    },
+    "Everything that belongs to one relation, as icons: fields, abaci, templates, views, queries and indexes. Arrange them however you like.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo o que pertence a unha relación, como iconas: campos, ábacos, modelos, vistas, consultas e índices. Colócaas como queiras."
+          }
+        }
+      }
+    },
+    "Example": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exemplo"
+          }
+        }
+      }
+    },
+    "Export Collection as JSON…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar colección como JSON…"
+          }
+        }
+      }
+    },
+    "Export Collection as JSON… writes every relation and record.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar colección como JSON… escribe todas as relacións e rexistros."
+          }
+        }
+      }
+    },
+    "Export Records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar rexistros"
+          }
+        }
+      }
+    },
+    "Export Records…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar rexistros…"
+          }
+        }
+      }
+    },
+    "Export View as PDF…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar vista como PDF…"
+          }
+        }
+      }
+    },
+    "Export…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar…"
+          }
+        }
+      }
+    },
+    "Faulix": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faulix"
+          }
+        }
+      }
+    },
+    "Faulix %@ is available": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Está dispoñible Faulix %@"
+          }
+        }
+      }
+    },
+    "Faulix Quickstart": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guía rápida de Faulix"
+          }
+        }
+      }
+    },
+    "Faulix backs up its database every day (Data ▸ Show Backups in Finder); Back Up Now makes one immediately.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faulix fai unha copia da súa base de datos cada día (Datos ▸ Amosar copias no Finder); Facer copia agora fai unha ao momento."
+          }
+        }
+      }
+    },
+    "Faulix is up to date": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faulix está actualizado"
+          }
+        }
+      }
+    },
+    "Faulix opens Helix collections and works the way Helix does: User mode to look up and enter data, Design mode to change the collection. Your original Helix file is never changed — Faulix keeps its own copy.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faulix abre coleccións de Helix e funciona como Helix: o modo usuario para consultar e introducir datos e o modo deseño para cambiar a colección. O teu ficheiro orixinal de Helix nunca se modifica — Faulix garda a súa propia copia."
+          }
+        }
+      }
+    },
+    "Faulix ▸ Settings… holds options that apply to every collection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faulix ▸ Axustes… contén as opcións que se aplican a todas as coleccións."
+          }
+        }
+      }
+    },
+    "Field": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campo"
+          }
+        }
+      }
+    },
+    "Field %u": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campo %u"
+          }
+        }
+      }
+    },
+    "Field number": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Número de campo"
+          }
+        }
+      }
+    },
+    "Field: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campo: %@"
+          }
+        }
+      }
+    },
+    "Fields": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campos"
+          }
+        }
+      }
+    },
+    "Fields on the view, in tab order": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campos da vista, na orde de tabulación"
+          }
+        }
+      }
+    },
+    "Field…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campo…"
+          }
+        }
+      }
+    },
+    "File ▸ Print (⌘P) prints the open view: forms one record per page (Print All Records for every record), lists with the header on every page. Export View as PDF saves the same pages.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ficheiro ▸ Imprimir (⌘P) imprime a vista aberta: os formularios, un rexistro por páxina (Imprimir todos os rexistros para todos), e as listas coa cabeceira en cada páxina. Exportar vista como PDF garda as mesmas páxinas."
+          }
+        }
+      }
+    },
+    "Find": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar"
+          }
+        }
+      }
+    },
+    "Find (top right) ignores accents, commas and word order: “Chao Rego, Xosé” also finds “Xosé Chao Rego”.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar (arriba á dereita) ignora acentos, comas e a orde das palabras: “Chao Rego, Xosé” tamén atopa “Xosé Chao Rego”."
+          }
+        }
+      }
+    },
+    "Find (top right) narrows the records to those containing your words — accents, commas and word order don’t matter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar (arriba á dereita) reduce os rexistros aos que conteñen as túas palabras — os acentos, as comas e a orde non importan."
+          }
+        }
+      }
+    },
+    "Find (⇧⌘F) blanks the form so you can type what to look for in any fields — e.g. Vigo in Lugar and > 1990 in Data — then press Find. Use = for exact, ≠ for “not”, < > ≤ ≥ for ranges; = alone finds empty fields. Clear with the × on the chip.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar (⇧⌘F) deixa o formulario en branco para que escribas o que buscas en calquera campo — p. ex. Vigo en Lugar e > 1990 en Data — e despois preme Buscar. Usa = para exacto, ≠ para “non”, < > ≤ ≥ para intervalos; = só atopa campos baleiros. Quita o filtro co × da etiqueta."
+          }
+        }
+      }
+    },
+    "Find by form": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar co formulario"
+          }
+        }
+      }
+    },
+    "Find by form: type criteria into the fields (⇧⌘F)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar co formulario: escribe criterios nos campos (⇧⌘F)"
+          }
+        }
+      }
+    },
+    "Find by form: type what to look for in any fields, then press Find. Use = < > ≤ ≥ ≠ for exact or ranges (e.g. > 1990).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar co formulario: escribe o que buscas en calquera campo e preme Buscar. Usa = < > ≤ ≥ ≠ para valores exactos ou intervalos (p. ex. > 1990)."
+          }
+        }
+      }
+    },
+    "Find: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Busca: %@"
+          }
+        }
+      }
+    },
+    "First line lists field names": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A primeira liña leva os nomes dos campos"
+          }
+        }
+      }
+    },
+    "Flag": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca"
+          }
+        }
+      }
+    },
+    "Font": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo de letra"
+          }
+        }
+      }
+    },
+    "For Helix: import the file into the same view — columns follow its tab order.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para Helix: importa o ficheiro na mesma vista — as columnas seguen a súa orde de tabulación."
+          }
+        }
+      }
+    },
+    "For lists, rectangles inside the dashed repeat rectangle repeat once per record. Make List adds one.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nas listas, os rectángulos dentro do rectángulo de repetición punteado repítense unha vez por rexistro. Facer lista engade un."
+          }
+        }
+      }
+    },
+    "Form (one record)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formulario (un rexistro)"
+          }
+        }
+      }
+    },
+    "Form with all fields": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formulario con todos os campos"
+          }
+        }
+      }
+    },
+    "Format": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato"
+          }
+        }
+      }
+    },
+    "Forms": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formularios"
+          }
+        }
+      }
+    },
+    "Forms (User mode)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formularios (modo usuario)"
+          }
+        }
+      }
+    },
+    "Formula OK": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fórmula correcta"
+          }
+        }
+      }
+    },
+    "Frame": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marco"
+          }
+        }
+      }
+    },
+    "From the view “%1$@” of %2$@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da vista “%1$@” de %2$@."
+          }
+        }
+      }
+    },
+    "Function": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Función"
+          }
+        }
+      }
+    },
+    "Helix file": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ficheiro de Helix"
+          }
+        }
+      }
+    },
+    "Helix formatted numbers with the Mac’s region. Currency rectangles append the symbol, e.g. 3.319Pts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Helix formataba os números segundo a rexión do Mac. Os rectángulos de moeda engaden o símbolo, p. ex. 3.319Pts."
+          }
+        }
+      }
+    },
+    "Helix import text": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Texto de importación de Helix"
+          }
+        }
+      }
+    },
+    "Help": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Axuda"
+          }
+        }
+      }
+    },
+    "History": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historial"
+          }
+        }
+      }
+    },
+    "History and Undo": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historial e Desfacer"
+          }
+        }
+      }
+    },
+    "Icon": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iconas"
+          }
+        }
+      }
+    },
+    "In Helix, import this file into the same view: columns follow the view’s tab order. If text contains returns, keep “Vertical tab” (or pick the ASCII 30 record delimiter and set the same in the view’s import settings).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Helix, importa este ficheiro na mesma vista: as columnas seguen a orde de tabulación da vista. Se o texto ten saltos de liña, deixa “Tabulación vertical” (ou escolle o delimitador ASCII 30 e configura o mesmo na importación da vista)."
+          }
+        }
+      }
+    },
+    "Index": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índice"
+          }
+        }
+      }
+    },
+    "Index “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índice “%@”"
+          }
+        }
+      }
+    },
+    "Index: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índice: %@"
+          }
+        }
+      }
+    },
+    "Indexes (sort orders)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índices (ordes)"
+          }
+        }
+      }
+    },
+    "Index…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índice…"
+          }
+        }
+      }
+    },
+    "Its records stay in the database but will no longer be shown.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os seus rexistros quedan na base de datos pero xa non se amosarán."
+          }
+        }
+      }
+    },
+    "Keep": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter"
+          }
+        }
+      }
+    },
+    "Kind": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
+          }
+        }
+      }
+    },
+    "Label": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etiqueta"
+          }
+        }
+      }
+    },
+    "Language": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma"
+          }
+        }
+      }
+    },
+    "Later": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máis tarde"
+          }
+        }
+      }
+    },
+    "List": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lista"
+          }
+        }
+      }
+    },
+    "List (repeat rectangle)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lista (rectángulo de repetición)"
+          }
+        }
+      }
+    },
+    "List with all fields": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lista con todos os campos"
+          }
+        }
+      }
+    },
+    "Lists": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listas"
+          }
+        }
+      }
+    },
+    "Lists (User mode)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listas (modo usuario)"
+          }
+        }
+      }
+    },
+    "Mac Roman text encoding (for older Helix versions)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codificación Mac Roman (para versións antigas de Helix)"
+          }
+        }
+      }
+    },
+    "Make List": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facer lista"
+          }
+        }
+      }
+    },
+    "Make List (Repeat Rectangle)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facer lista (rectángulo de repetición)"
+          }
+        }
+      }
+    },
+    "Menu": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menú"
+          }
+        }
+      }
+    },
+    "Mode": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo"
+          }
+        }
+      }
+    },
+    "Modified in Helix": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modificado en Helix"
+          }
+        }
+      }
+    },
+    "Move Icon": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover icona"
+          }
+        }
+      }
+    },
+    "Move Rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover rectángulo"
+          }
+        }
+      }
+    },
+    "Move between records with the arrows or ⌘↑ / ⌘↓ (⌥⌘↑ / ⌥⌘↓ for first and last).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Móvete entre rexistros coas frechas ou ⌘↑ / ⌘↓ (⌥⌘↑ / ⌥⌘↓ para o primeiro e o último)."
+          }
+        }
+      }
+    },
+    "Name": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome"
+          }
+        }
+      }
+    },
+    "New": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo"
+          }
+        }
+      }
+    },
+    "New %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo: %@"
+          }
+        }
+      }
+    },
+    "New %@ record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo rexistro de %@"
+          }
+        }
+      }
+    },
+    "New (toolbar) adds a field, abacus, template, view, query or index.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo (na barra) engade un campo, ábaco, modelo, vista, consulta ou índice."
+          }
+        }
+      }
+    },
+    "New (⇧⌘N) adds a blank row at the top. Delete removes the selected row (after asking).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo (⇧⌘N) engade unha fila en branco arriba. Eliminar borra a fila seleccionada (despois de preguntar)."
+          }
+        }
+      }
+    },
+    "New (⇧⌘N) starts a blank record with Helix’s default values; press Enter (⌘S) to save it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo (⇧⌘N) comeza un rexistro en branco cos valores predeterminados de Helix; preme Introducir (⌘S) para gardalo."
+          }
+        }
+      }
+    },
+    "New fields: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campos novos: %@."
+          }
+        }
+      }
+    },
+    "New record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexistro novo"
+          }
+        }
+      }
+    },
+    "New record (⇧⌘N)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexistro novo (⇧⌘N)"
+          }
+        }
+      }
+    },
+    "New views appear in the User mode sidebar under Forms or Lists.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As vistas novas aparecen na barra lateral do modo usuario en Formularios ou Listas."
+          }
+        }
+      }
+    },
+    "New ▸ Relation… adds an empty relation (table).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo ▸ Relación… engade unha relación (táboa) baleira."
+          }
+        }
+      }
+    },
+    "No Changes Yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aínda non hai cambios"
+          }
+        }
+      }
+    },
+    "No Record Selected": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún rexistro seleccionado"
+          }
+        }
+      }
+    },
+    "No Records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen rexistros"
+          }
+        }
+      }
+    },
+    "No Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen modelo"
+          }
+        }
+      }
+    },
+    "No View Open": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningunha vista aberta"
+          }
+        }
+      }
+    },
+    "No colour": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen cor"
+          }
+        }
+      }
+    },
+    "No keys yet — records stay in record-number order.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aínda sen claves — os rexistros quedan na orde do número de rexistro."
+          }
+        }
+      }
+    },
+    "No records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen rexistros"
+          }
+        }
+      }
+    },
+    "No records match.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún rexistro coincide."
+          }
+        }
+      }
+    },
+    "No view uses this index yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aínda ningunha vista usa este índice."
+          }
+        }
+      }
+    },
+    "None": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún"
+          }
+        }
+      }
+    },
+    "Not used on any template, abacus or index yet. Open a template and choose Add ▸ Field to show it on a form.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aínda non se usa en ningún modelo, ábaco nin índice. Abre un modelo e escolle Engadir ▸ Campo para amosalo nun formulario."
+          }
+        }
+      }
+    },
+    "Nudge": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover"
+          }
+        }
+      }
+    },
+    "Nudge ": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover"
+          }
+        }
+      }
+    },
+    "Number": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Número"
+          }
+        }
+      }
+    },
+    "Number region": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexión dos números"
+          }
+        }
+      }
+    },
+    "Numbers": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números"
+          }
+        }
+      }
+    },
+    "Numbers: choose the region for decimal and thousands separators, and the currency symbol.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Números: escolle a rexión para os separadores de decimais e milleiros, e o símbolo da moeda."
+          }
+        }
+      }
+    },
+    "OK": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aceptar"
+          }
+        }
+      }
+    },
+    "Object ID": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID do obxecto"
+          }
+        }
+      }
+    },
+    "Open": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir"
+          }
+        }
+      }
+    },
+    "Open in New Window": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir nunha xanela nova"
+          }
+        }
+      }
+    },
+    "Open in User Mode": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir no modo usuario"
+          }
+        }
+      }
+    },
+    "Open the collection again to see this view.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre de novo a colección para ver esta vista."
+          }
+        }
+      }
+    },
+    "Open this record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir este rexistro"
+          }
+        }
+      }
+    },
+    "Opened from a list? Back (⌘[) returns to it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abriches o rexistro desde unha lista? Atrás (⌘[) volve a ela."
+          }
+        }
+      }
+    },
+    "Operator": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Operador"
+          }
+        }
+      }
+    },
+    "Operators: & joins text; + − × ÷; = ≠ < ≤ > ≥; contains, starts with, ends with; and, or, not().": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Operadores: & une texto; + − × ÷; = ≠ < ≤ > ≥; contains, starts with, ends with; and, or, not()."
+          }
+        }
+      }
+    },
+    "Optionally pick a query (which records) and a sort order (index).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opcionalmente escolle unha consulta (que rexistros) e unha orde (índice)."
+          }
+        }
+      }
+    },
+    "Origin": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orixe"
+          }
+        }
+      }
+    },
+    "Original Helix bytes (%1$lld bytes at block %2$u)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bytes orixinais de Helix (%1$lld bytes no bloque %2$u)"
+          }
+        }
+      }
+    },
+    "Paste": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pegar"
+          }
+        }
+      }
+    },
+    "Pick a template to see the view.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolle un modelo para ver a vista."
+          }
+        }
+      }
+    },
+    "Pick the template that lays out the records.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolle o modelo que dispón os rexistros."
+          }
+        }
+      }
+    },
+    "Picture": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imaxe"
+          }
+        }
+      }
+    },
+    "Picture in a legacy format (%lld bytes)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imaxe nun formato antigo (%lld bytes)"
+          }
+        }
+      }
+    },
+    "Position and size": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posición e tamaño"
+          }
+        }
+      }
+    },
+    "Press Edit to type into rows. Changed rows get an orange bar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme Editar para escribir nas filas. As filas cambiadas levan unha barra laranxa."
+          }
+        }
+      }
+    },
+    "Press the ? button on any page for help with that page.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme o botón ? en calquera páxina para ver a axuda desa páxina."
+          }
+        }
+      }
+    },
+    "Print": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimir"
+          }
+        }
+      }
+    },
+    "Print All Records…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimir todos os rexistros…"
+          }
+        }
+      }
+    },
+    "Print This Record…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimir este rexistro…"
+          }
+        }
+      }
+    },
+    "Print the list (⌘P)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimir a lista (⌘P)"
+          }
+        }
+      }
+    },
+    "Print this record (⌘P) — File ▸ Print All Records for every record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimir este rexistro (⌘P) — Ficheiro ▸ Imprimir todos os rexistros para todos"
+          }
+        }
+      }
+    },
+    "Print your views, bring in a newer Helix file, take your data out of Faulix, and keep backups.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprime as túas vistas, trae un ficheiro de Helix máis recente, saca os teus datos de Faulix e garda copias de seguranza."
+          }
+        }
+      }
+    },
+    "Printing, exporting and backups": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impresión, exportación e copias de seguranza"
+          }
+        }
+      }
+    },
+    "Print…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imprimir…"
+          }
+        }
+      }
+    },
+    "Put this record back the way it was before this change. The restore is logged too.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deixa este rexistro como estaba antes deste cambio. A restauración tamén queda anotada."
+          }
+        }
+      }
+    },
+    "Queries": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultas"
+          }
+        }
+      }
+    },
+    "Query": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta"
+          }
+        }
+      }
+    },
+    "Query “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta “%@”"
+          }
+        }
+      }
+    },
+    "Query…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta…"
+          }
+        }
+      }
+    },
+    "Quickstart: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guía rápida: %@"
+          }
+        }
+      }
+    },
+    "Quit and reopen Faulix to switch language.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pecha e volve abrir Faulix para cambiar de idioma."
+          }
+        }
+      }
+    },
+    "Record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexistro"
+          }
+        }
+      }
+    },
+    "Record %u": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexistro %u"
+          }
+        }
+      }
+    },
+    "Record delimiter": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delimitador de rexistros"
+          }
+        }
+      }
+    },
+    "Record number": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Número de rexistro"
+          }
+        }
+      }
+    },
+    "Record separator (ASCII 30)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Separador de rexistros (ASCII 30)"
+          }
+        }
+      }
+    },
+    "Records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexistros"
+          }
+        }
+      }
+    },
+    "Records are sorted by the first key, then the next one breaks ties.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os rexistros ordénanse pola primeira clave e a seguinte desempata."
+          }
+        }
+      }
+    },
+    "Records in the current view": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rexistros da vista actual"
+          }
+        }
+      }
+    },
+    "Rectangles": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectángulos"
+          }
+        }
+      }
+    },
+    "Redo": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refacer"
+          }
+        }
+      }
+    },
+    "Redo %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refacer %@"
+          }
+        }
+      }
+    },
+    "Relation": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relación"
+          }
+        }
+      }
+    },
+    "Relation window (Design mode)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xanela da relación (modo deseño)"
+          }
+        }
+      }
+    },
+    "Relation…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relación…"
+          }
+        }
+      }
+    },
+    "Remove Picture": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar imaxe"
+          }
+        }
+      }
+    },
+    "Rename": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear"
+          }
+        }
+      }
+    },
+    "Rename Abacus": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear ábaco"
+          }
+        }
+      }
+    },
+    "Rename Field": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear campo"
+          }
+        }
+      }
+    },
+    "Rename Index": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear índice"
+          }
+        }
+      }
+    },
+    "Rename Query": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear consulta"
+          }
+        }
+      }
+    },
+    "Rename Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear modelo"
+          }
+        }
+      }
+    },
+    "Rename View": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear vista"
+          }
+        }
+      }
+    },
+    "Rename…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear…"
+          }
+        }
+      }
+    },
+    "Reorder keys with the arrows; remove with the minus button.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reordena as claves coas frechas; quítaas co botón menos."
+          }
+        }
+      }
+    },
+    "Repeat": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repetición"
+          }
+        }
+      }
+    },
+    "Repeat rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rectángulo de repetición"
+          }
+        }
+      }
+    },
+    "Replace": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Substituír"
+          }
+        }
+      }
+    },
+    "Replace (⌘S) saves every changed row at once; Revert (Esc) discards them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Substituír (⌘S) garda á vez todas as filas cambiadas; Reverter (Esc) descártaas."
+          }
+        }
+      }
+    },
+    "Replace (⌘S) saves your changes; Revert (Esc) throws them away.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Substituír (⌘S) garda os teus cambios; Reverter (Esc) descártaos."
+          }
+        }
+      }
+    },
+    "Replace or revert your changes first": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primeiro substitúe ou reverte os teus cambios"
+          }
+        }
+      }
+    },
+    "Resize Rectangle": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar tamaño do rectángulo"
+          }
+        }
+      }
+    },
+    "Restore": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar"
+          }
+        }
+      }
+    },
+    "Restore Previous Version": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar a versión anterior"
+          }
+        }
+      }
+    },
+    "Restore Previous Version puts that record back as it was before the change (and is logged too).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar a versión anterior deixa ese rexistro como estaba antes do cambio (e tamén queda anotado)."
+          }
+        }
+      }
+    },
+    "Restored to before change #%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurado a antes do cambio n.º %lld"
+          }
+        }
+      }
+    },
+    "Result for the first records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resultado para os primeiros rexistros"
+          }
+        }
+      }
+    },
+    "Return": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retorno"
+          }
+        }
+      }
+    },
+    "Returns inside text": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saltos de liña no texto"
+          }
+        }
+      }
+    },
+    "Revert": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reverter"
+          }
+        }
+      }
+    },
+    "Right-click a view in the sidebar ▸ Open in New Window to keep several views open side by side.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preme co botón dereito nunha vista da barra lateral ▸ Abrir nunha xanela nova para ter varias vistas abertas á vez."
+          }
+        }
+      }
+    },
+    "Right-click an icon: Open, Rename, Duplicate or Delete. Delete warns you if other things use it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Botón dereito nunha icona: Abrir, Renomear, Duplicar ou Eliminar. Eliminar avisa se outras cousas a usan."
+          }
+        }
+      }
+    },
+    "Save a Copy of the Database…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardar unha copia da base de datos…"
+          }
+        }
+      }
+    },
+    "Save a Copy of the Database… gives you a SQLite file any database tool can open.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardar unha copia da base de datos… dáche un ficheiro SQLite que pode abrir calquera ferramenta de bases de datos."
+          }
+        }
+      }
+    },
+    "Save changes (⌘S)": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardar os cambios (⌘S)"
+          }
+        }
+      }
+    },
+    "Search records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar rexistros"
+          }
+        }
+      }
+    },
+    "Select a record to see every field on the right.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecciona un rexistro para ver todos os seus campos á dereita."
+          }
+        }
+      }
+    },
+    "Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Axustes"
+          }
+        }
+      }
+    },
+    "Show Backups in Finder": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar copias no Finder"
+          }
+        }
+      }
+    },
+    "Show Database in Finder": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar a base de datos no Finder"
+          }
+        }
+      }
+    },
+    "Show Empty Fields": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar campos baleiros"
+          }
+        }
+      }
+    },
+    "Show all records again": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar de novo todos os rexistros"
+          }
+        }
+      }
+    },
+    "Show fields that have no value in this record": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar os campos sen valor neste rexistro"
+          }
+        }
+      }
+    },
+    "Show the log of every change, with undo and restore": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amosar o rexistro de cada cambio, con desfacer e restaurar"
+          }
+        }
+      }
+    },
+    "Size: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamaño: %lld"
+          }
+        }
+      }
+    },
+    "Sort by": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordenar por"
+          }
+        }
+      }
+    },
+    "Sort order": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orde"
+          }
+        }
+      }
+    },
+    "Space": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espazo"
+          }
+        }
+      }
+    },
+    "Start with": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comezar con"
+          }
+        }
+      }
+    },
+    "Stop editing (save or revert changes first) — then click values to explore": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deixar de editar (antes garda ou reverte os cambios) — despois preme nos valores para explorar"
+          }
+        }
+      }
+    },
+    "Switch between Icon and List display at the top right.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia entre a vista de iconas e de lista arriba á dereita."
+          }
+        }
+      }
+    },
+    "System": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema"
+          }
+        }
+      }
+    },
+    "Template": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelo"
+          }
+        }
+      }
+    },
+    "Template editor": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editor de modelos"
+          }
+        }
+      }
+    },
+    "Template not found": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelo non atopado"
+          }
+        }
+      }
+    },
+    "Template “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelo “%@”"
+          }
+        }
+      }
+    },
+    "Template: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelo: %@"
+          }
+        }
+      }
+    },
+    "Template…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelo…"
+          }
+        }
+      }
+    },
+    "Text": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Texto"
+          }
+        }
+      }
+    },
+    "The abacus gives the field its default value in new records.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O ábaco dálle ao campo o seu valor predeterminado nos rexistros novos."
+          }
+        }
+      }
+    },
+    "The clock button opens the History: newest first. Click a record change to see old → new values.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O botón do reloxo abre o Historial: o máis recente primeiro. Preme nun cambio de rexistro para ver os valores anterior → novo."
+          }
+        }
+      }
+    },
+    "The inspector on the right edits text, the field or abacus shown, font, size, style, alignment, frame and scroll bar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O inspector da dereita edita o texto, o campo ou ábaco amosado, o tipo de letra, o tamaño, o estilo, o aliñamento, o marco e a barra de desprazamento."
+          }
+        }
+      }
+    },
+    "The preview below shows the view; Open in User Mode jumps there.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A vista previa de abaixo amosa a vista; Abrir no modo usuario leva a ela."
+          }
+        }
+      }
+    },
+    "The preview shows how many records match.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A vista previa amosa cantos rexistros coinciden."
+          }
+        }
+      }
+    },
+    "The top window of the collection, like Helix RADE: one icon per relation (table) and user.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A xanela principal da colección, como en Helix RADE: unha icona por relación (táboa) e usuario."
+          }
+        }
+      }
+    },
+    "This item no longer exists. Undo (⌘Z) brings it back.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este elemento xa non existe. Desfacer (⌘Z) recupérao."
+          }
+        }
+      }
+    },
+    "Tiles": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pezas"
+          }
+        }
+      }
+    },
+    "To show a new field on a form, open a template and use Add ▸ Field.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para amosar un campo novo nun formulario, abre un modelo e usa Engadir ▸ Campo."
+          }
+        }
+      }
+    },
+    "Totals and counts in the header follow the records shown (query and Find).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os totais e contas da cabeceira seguen os rexistros amosados (consulta e Buscar)."
+          }
+        }
+      }
+    },
+    "Type": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
+          }
+        }
+      }
+    },
+    "Type the formula; Faulix checks it as you type and shows the result for the first records.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe a fórmula; Faulix compróbaa mentres escribes e amosa o resultado para os primeiros rexistros."
+          }
+        }
+      }
+    },
+    "Undo": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desfacer"
+          }
+        }
+      }
+    },
+    "Undo %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desfacer %@"
+          }
+        }
+      }
+    },
+    "Unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descoñecido"
+          }
+        }
+      }
+    },
+    "Update": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizar"
+          }
+        }
+      }
+    },
+    "Update from Helix, export, backups": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizar desde Helix, exportar, copias de seguranza"
+          }
+        }
+      }
+    },
+    "Update from Newer Helix File…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizar desde un ficheiro de Helix máis recente…"
+          }
+        }
+      }
+    },
+    "Updated from “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizado desde “%@”"
+          }
+        }
+      }
+    },
+    "Use the Insert menus to add fields, abaci, functions and operators. Apply (⌘S) saves.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa os menús de inserción para engadir campos, ábacos, funcións e operadores. Aplicar (⌘S) garda."
+          }
+        }
+      }
+    },
+    "Used by": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usado por"
+          }
+        }
+      }
+    },
+    "Used by: %@. Those places will show an empty slot.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usado por: %@. Neses lugares aparecerá un oco baleiro."
+          }
+        }
+      }
+    },
+    "User": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usuario"
+          }
+        }
+      }
+    },
+    "User mode (top left): pick a form or list in the sidebar to work with your data.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo usuario (arriba á esquerda): escolle un formulario ou lista na barra lateral para traballar cos teus datos."
+          }
+        }
+      }
+    },
+    "User mode shows views as Helix forms; Design mode shows the collection's structure": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O modo usuario amosa as vistas como formularios de Helix; o modo deseño amosa a estrutura da colección"
+          }
+        }
+      }
+    },
+    "Uses the exact order saved in the Helix file until you change the keys.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa a orde exacta gardada no ficheiro de Helix ata que cambies as claves."
+          }
+        }
+      }
+    },
+    "Version %@ is the newest version.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A versión %@ é a máis recente."
+          }
+        }
+      }
+    },
+    "Vertical scroll bar": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barra de desprazamento vertical"
+          }
+        }
+      }
+    },
+    "Vertical tab": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabulación vertical"
+          }
+        }
+      }
+    },
+    "View": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista"
+          }
+        }
+      }
+    },
+    "View Not Found": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista non atopada"
+          }
+        }
+      }
+    },
+    "View “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista “%@”"
+          }
+        }
+      }
+    },
+    "View: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista: %@"
+          }
+        }
+      }
+    },
+    "Views": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vistas"
+          }
+        }
+      }
+    },
+    "Views use an index as their sort order; users can also pick it from the ⇅ menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As vistas usan un índice como orde; tamén se pode escoller no menú ⇅."
+          }
+        }
+      }
+    },
+    "View…": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista…"
+          }
+        }
+      }
+    },
+    "Welcome to Faulix": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benvido a Faulix"
+          }
+        }
+      }
+    },
+    "While typing in a field, ⌘Z undoes your typing instead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mentres escribes nun campo, ⌘Z desfai o que escribiches."
+          }
+        }
+      }
+    },
+    "Write a formula that is true for the records you want, e.g. [Clasificación] contains \"Poesía\".": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe unha fórmula que sexa verdadeira para os rexistros que queres, p. ex. [Clasificación] contains \"Poesía\"."
+          }
+        }
+      }
+    },
+    "You can undo this with ⌘Z.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podes desfacelo con ⌘Z."
+          }
+        }
+      }
+    },
+    "You can undo this, and it stays in the History. The original Helix file is never changed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podes desfacelo e queda no Historial. O ficheiro orixinal de Helix nunca se modifica."
+          }
+        }
+      }
+    },
+    "You have version %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes a versión %@."
+          }
+        }
+      }
+    },
+    "[Field name] uses a field, {Abacus name} another abacus, \"text\" a text, numbers as 166.386.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Nome do campo] usa un campo, {Nome do ábaco} outro ábaco, \"texto\" un texto, e os números como 166.386."
+          }
+        }
+      }
+    },
+    "auto": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "auto"
+          }
+        }
+      }
+    },
+    "form": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "formulario"
+          }
+        }
+      }
+    },
+    "icon": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "icona"
+          }
+        }
+      }
+    },
+    "if … then … else …": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "if … then … else …"
+          }
+        }
+      }
+    },
+    "if … then … else … chooses. Text: text() length() upper() lower() trim() left(t, n) right(t, n) mid(t, start, n). Numbers: number() round(x, decimals) abs() int() min(a, b) max(a, b).": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "if … then … else … escolle. Texto: text() length() upper() lower() trim() left(t, n) right(t, n) mid(t, inicio, n). Números: number() round(x, decimais) abs() int() min(a, b) max(a, b)."
+          }
+        }
+      }
+    },
+    "index: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "índice: %@"
+          }
+        }
+      }
+    },
+    "list": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lista"
+          }
+        }
+      }
+    },
+    "query “%@”": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "consulta “%@”"
+          }
+        }
+      }
+    },
+    "query: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "consulta: %@"
+          }
+        }
+      }
+    },
+    "sorted by %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ordenado por %@"
+          }
+        }
+      }
+    },
+    "template: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modelo: %@"
+          }
+        }
+      }
+    },
+    "—": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "—"
+          }
+        }
+      }
+    },
+    "“%@” has no records.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” non ten rexistros."
+          }
+        }
+      }
+    },
+    "“Used by” lists the templates, abaci and indexes that refer to this field.": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Usado por” lista os modelos, ábacos e índices que se refiren a este campo."
+          }
+        }
+      }
+    },
+    "⌘↑ / ⌘↓ to move between records": {
+      "extractionState": "manual",
+      "localizations": {
+        "gl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘↑ / ⌘↓ para moverse entre rexistros"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

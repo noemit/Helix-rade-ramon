@@ -257,7 +257,7 @@ struct TemplateInspector: View {
                 } else {
                     Section("Template") {
                         NameField(title: "Name", name: t.name) { n in model.editDesign("Rename Template") { $0.rename(templateID, to: n) } }
-                        LabeledContent("Kind", value: t.repeatElement == nil ? "Form (one record)" : "List (repeat rectangle)")
+                        LabeledContent("Kind", value: t.repeatElement == nil ? L("Form (one record)") : L("List (repeat rectangle)"))
                         LabeledContent("Rectangles", value: "\(TemplateElement.flatten(t.elements).count)")
                         LabeledContent("Content size", value: "\(t.contentBounds.width) × \(t.contentBounds.height)")
                     }
@@ -293,7 +293,7 @@ struct TemplateInspector: View {
                 Toggle("Currency (e.g. 3.319Pts)", isOn: Binding(get: { e.format.currency }, set: { on in
                     set(e, "Change Format") { $0.format = NumberFormat(kind: 1, flags: on ? 0x80 : ($0.format.flags & 0x40), decimals: $0.format.decimals) }
                 }))
-                Stepper("Decimals: \(e.format.isCustom ? "\(e.format.decimals)" : "auto")", onIncrement: {
+                Stepper("Decimals: \(e.format.isCustom ? "\(e.format.decimals)" : L("auto"))", onIncrement: {
                     set(e, "Change Format") { $0.format = NumberFormat(kind: 1, flags: $0.format.flags | 0x40, decimals: min(6, $0.format.decimals + ($0.format.isCustom ? 1 : 0))) }
                 }, onDecrement: {
                     set(e, "Change Format") {

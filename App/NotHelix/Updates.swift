@@ -39,20 +39,21 @@ enum UpdateChecker {
             let release = try JSONDecoder().decode(Release.self, from: data)
             let alert = NSAlert()
             if isNewer(release.tag_name, than: currentVersion) {
-                alert.messageText = "Faulix \(release.tag_name.trimmingCharacters(in: CharacterSet(charactersIn: "v"))) is available"
-                alert.informativeText = "You have version \(currentVersion).\n\n" + String((release.body ?? "").prefix(600))
-                alert.addButton(withTitle: "Download")
-                alert.addButton(withTitle: "Later")
+                let version = release.tag_name.trimmingCharacters(in: CharacterSet(charactersIn: "v"))
+                alert.messageText = L("Faulix \(version) is available")
+                alert.informativeText = L("You have version \(currentVersion).") + "\n\n" + String((release.body ?? "").prefix(600))
+                alert.addButton(withTitle: L("Download"))
+                alert.addButton(withTitle: L("Later"))
                 if alert.runModal() == .alertFirstButtonReturn { NSWorkspace.shared.open(release.html_url) }
             } else if userInitiated {
-                alert.messageText = "Faulix is up to date"
-                alert.informativeText = "Version \(currentVersion) is the newest version."
+                alert.messageText = L("Faulix is up to date")
+                alert.informativeText = L("Version \(currentVersion) is the newest version.")
                 alert.runModal()
             }
         } catch {
             if userInitiated {
                 let alert = NSAlert()
-                alert.messageText = "Could not check for updates"
+                alert.messageText = L("Could not check for updates")
                 alert.informativeText = error.localizedDescription
                 alert.runModal()
             }

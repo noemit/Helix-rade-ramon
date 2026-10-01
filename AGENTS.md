@@ -21,7 +21,7 @@ Native macOS reader for legacy Helix ("HeliX Heap") collections. Sample file: `L
 - Verified against real Helix screenshots (Lista Xeral, Ficha): row order/values, "previous" opcode, rectangle
   flags (+4 0x80 framed, +5 0x80 vertical scroll), number formats (+0x26 kind, +0x27 flags 0x40 fixed/0x80 currency,
   +0x28 decimals; Spanish region → "19,95", "3.319Pts"). Extra `0x4698` blocks in the heap are deleted/old record copies.
-- App testing overrides: `OpenRecordText "taberna de Galiana"` opens a record; `SearchText "Chao Rego, Xosé"` fills Find;
+- App testing overrides: `PrintPDFTo /tmp/x.pdf` writes the open view's print PDF; `OpenRecordText "taberna de Galiana"` opens a record; `SearchText "Chao Rego, Xosé"` fills Find;
   `ClickText "Chao Rego"` simulates clicking a list cell (drill-down / open record). Search: `TextSearch` (HelixKit).
 - Writing the Helix heap format itself is intentionally NOT supported (indexes use Helix's private collation keys;
   no way to verify output without real Helix).
@@ -29,6 +29,14 @@ Native macOS reader for legacy Helix ("HeliX Heap") collections. Sample file: `L
   `defaults write com.nothelix.NotHelix DesignOpen "Libros/Título lista"` (Design mode path); `defaults delete` to reset
 - `App/NotHelix` – SwiftUI document-based viewer app
 - `project.yml` – XcodeGen spec; regenerate with `xcodegen generate` after adding app files
+
+## Localization (English + Galician)
+- UI strings: SwiftUI literals are localized automatically; strings built in code use `L("…")` (or `Lk(key)` for
+  runtime keys such as undo action names). Translations live in `scripts/translations_gl.py`.
+- After UI changes: `xcodebuild -exportLocalizations -project NotHelix.xcodeproj -localizationPath /tmp/loc -exportLanguage gl`,
+  then `python3 scripts/build_strings.py --check "/tmp/loc/gl.xcloc/Localized Contents/gl.xliff"` lists untranslated
+  strings; add them to `translations_gl.py` and run `python3 scripts/build_strings.py` to regenerate `Localizable.xcstrings`.
+- Language: Settings ▸ Language (Automatic = Galician on es/gl/pt/ca Macs). Test with `defaults write com.nothelix.NotHelix FaulixLanguage gl`.
 
 ## Release
 - `scripts/release.sh` → universal Release build signed with "Developer ID Application" (team CT5KSA99W8, hardened

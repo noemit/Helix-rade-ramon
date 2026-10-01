@@ -11,6 +11,7 @@ enum SidebarItem: Hashable {
 enum AppMode: String, CaseIterable, Identifiable {
     case user = "User", design = "Design"
     var id: String { rawValue }
+    var label: String { self == .user ? L("User") : L("Design") }
 }
 
 @MainActor
@@ -235,7 +236,7 @@ final class CollectionModel: ObservableObject {
             let name = counts[idx.name, default: 0] > 1 && keys.count > 1 ? "\(idx.name) (\(keys.dropFirst().prefix(2).joined(separator: ", ")))" : idx.name
             return (idx.id, name)
         }
-        options.append((Self.recordNumberSort, "Record number"))
+        options.append((Self.recordNumberSort, L("Record number")))
         return SortControl(options: options, selection: Binding(
             get: { self.sortIndex(for: view) ?? Self.recordNumberSort },
             set: { self.sortOverride[view.id] = $0; self.viewRecordIndex[view.id] = 0 }))
@@ -380,7 +381,7 @@ final class CollectionModel: ObservableObject {
         let title = crit.sorted { $0.key < $1.key }
             .map { "\(design.name(of: $0.key) ?? "?") \($0.value.first.map { "=≠<>≤≥".contains($0) } == true ? "" : "~ ")\($0.value)" }
             .joined(separator: ", ")
-        drills[view.id] = Drill(title: "Find: " + title, keyID: nil, value: nil, recordID: nil, criteria: crit)
+        drills[view.id] = Drill(title: L("Find: \(title)"), keyID: nil, value: nil, recordID: nil, criteria: crit)
         viewRecordIndex[view.id] = 0
     }
 
@@ -407,7 +408,7 @@ final class CollectionModel: ObservableObject {
     var canEdit: Bool { store != nil }
 
     func nextRecordID(in rel: Relation) throws -> UInt32 {
-        guard let store else { throw HelixFormatError("Editing is unavailable: \(storeError ?? "no store")") }
+        guard let store else { throw HelixFormatError(L("Editing is unavailable: \(storeError ?? "no store")")) }
         return try store.nextRecordID(relationID: rel.id)
     }
 
@@ -422,9 +423,9 @@ final class CollectionModel: ObservableObject {
     /// Sets a record's state, logs it, and registers the inverse with the undo manager
     /// (undoing registers the redo automatically).
     func apply(_ record: Record?, recordID: UInt32, in rel: Relation, actionName: String, note: String = "") throws {
-        guard let store else { throw HelixFormatError("Editing is unavailable: \(storeError ?? "no store")") }
+        guard let store else { throw HelixFormatError(L("Editing is unavailable: \(storeError ?? "no store")")) }
         let isUndoing = undoManager.isUndoing, isRedoing = undoManager.isRedoing
-        let n = note.isEmpty ? (isUndoing ? "Undo \(actionName)" : isRedoing ? "Redo \(actionName)" : "") : note
+        let n = note.isEmpty ? (isUndoing ? L("Undo \(Lk(actionName))") : isRedoing ? L("Redo \(Lk(actionName))") : "") : note
         guard let entry = try store.put(record, recordID: recordID, relationID: rel.id, note: n) else { return }
         undoManager.registerUndo(withTarget: self) { m in
             do {
@@ -433,7 +434,7 @@ final class CollectionModel: ObservableObject {
                 NSAlert(error: error).runModal()
             }
         }
-        undoManager.setActionName(entry.action == .insert ? "Enter Record" : actionName)
+        undoManager.setActionName(entry.action == .insert ? L("Enter Record") : Lk(actionName))
         invalidate(rel)
     }
 
@@ -442,7 +443,7 @@ final class CollectionModel: ObservableObject {
         guard let rel = design.relations.first(where: { $0.id == entry.relationID }) else { return }
         do {
             try apply(entry.before, recordID: entry.recordID, in: rel, actionName: "Restore",
-                      note: "Restored to before change #\(entry.id)")
+                      note: L("Restored to before change #\(entry.id)"))
         } catch {
             NSAlert(error: error).runModal()
         }
@@ -472,9 +473,9 @@ final class CollectionModel: ObservableObject {
 
     private func commitDesign(_ actionName: String, before: DesignModel) {
         guard design.model != before else { return }
-        let prefix = undoManager.isUndoing ? "Undo " : undoManager.isRedoing ? "Redo " : ""
+        let note = undoManager.isUndoing ? L("Undo \(Lk(actionName))") : undoManager.isRedoing ? L("Redo \(Lk(actionName))") : Lk(actionName)
         do {
-            try store?.saveDesign(design.model, note: prefix + actionName)
+            try store?.saveDesign(design.model, note: note)
         } catch {
             NSAlert(error: error).runModal()
         }
@@ -483,7 +484,7 @@ final class CollectionModel: ObservableObject {
             m.design.replace(with: before)
             m.commitDesign(actionName, before: current)
         }
-        undoManager.setActionName(actionName)
+        undoManager.setActionName(Lk(actionName))
         designChanged()
     }
 
@@ -504,15 +505,15 @@ final class CollectionModel: ObservableObject {
         for r in design.model.relations {
             for t in r.templates where TemplateElement.flatten(t.elements).contains(where: {
                 if case .data(let f, let a) = $0.content { f == id || a == id } else { false }
-            }) { out.append("Template “\(t.name)”") }
+            }) { out.append(L("Template “\(t.name)”")) }
             for a in r.abaci where a.id != id && (a.root?.references.contains(id) ?? false) {
-                if let q = r.queries.first(where: { $0.abacusID == a.id }) { out.append("Query “\(q.name)”") }
-                else { out.append("Abacus “\(a.name)”") }
+                if let q = r.queries.first(where: { $0.abacusID == a.id }) { out.append(L("Query “\(q.name)”")) }
+                else { out.append(L("Abacus “\(a.name)”")) }
             }
             for v in r.views where [v.templateID, v.queryID, v.indexID, v.defaultIndexID].contains(id) {
-                out.append("View “\(v.name)”")
+                out.append(L("View “\(v.name)”"))
             }
-            for x in r.indexes where x.keys.contains(id) { out.append("Index “\(x.name)”") }
+            for x in r.indexes where x.keys.contains(id) { out.append(L("Index “\(x.name)”")) }
         }
         return out
     }
@@ -605,8 +606,8 @@ final class CollectionModel: ObservableObject {
     func updateFromHelix() {
         guard let store else { return }
         let panel = NSOpenPanel()
-        panel.message = "Choose the newer copy of “\(collection.name)” exported from Helix."
-        panel.prompt = "Update"
+        panel.message = L("Choose the newer copy of “\(collection.name)” exported from Helix.")
+        panel.prompt = L("Update")
         panel.allowsMultipleSelection = false
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
@@ -621,13 +622,16 @@ final class CollectionModel: ObservableObject {
             searchCache.removeAll()
             designChanged()
             let alert = NSAlert()
-            alert.messageText = "Updated from “\(url.lastPathComponent)”"
-            var lines = ["\(report.added) new, \(report.updated) changed, \(report.deleted) removed, \(report.unchanged) unchanged."]
-            if !report.newFields.isEmpty { lines.append("New fields: " + report.newFields.joined(separator: ", ") + ".") }
-            if !report.conflicts.isEmpty {
-                lines.append("\(report.conflicts.count) record(s) were changed both in Helix and in Faulix; the Faulix version was kept.")
+            alert.messageText = L("Updated from “\(url.lastPathComponent)”")
+            var lines = [L("\(report.added) new, \(report.updated) changed, \(report.deleted) removed, \(report.unchanged) unchanged.")]
+            if !report.newFields.isEmpty {
+                let names = report.newFields.joined(separator: ", ")
+                lines.append(L("New fields: \(names)."))
             }
-            lines.append("A backup was made first (Export ▸ Show Backups in Finder).")
+            if !report.conflicts.isEmpty {
+                lines.append(L("\(report.conflicts.count) record(s) were changed both in Helix and in Faulix; the Faulix version was kept."))
+            }
+            lines.append(L("A backup was made first (Data ▸ Show Backups in Finder)."))
             alert.informativeText = lines.joined(separator: "\n\n")
             alert.runModal()
         } catch {

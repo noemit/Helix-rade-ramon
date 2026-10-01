@@ -29,7 +29,7 @@ struct RecordDetailView: View {
                     .help("Show fields that have no value in this record")
             }
         }
-        .navigationTitle("Record \(record.id)")
+        .navigationTitle(L("Record \(record.id)"))
     }
 
     @ViewBuilder private func valueView(_ value: Value?) -> some View {
@@ -62,12 +62,12 @@ struct DesignObjectView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(design.name(of: objectID).flatMap { $0.isEmpty ? nil : $0 } ?? "#\(objectID)").font(.title2.bold())
                 Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 4) {
-                    row("Kind", design.kind(of: objectID)?.displayName ?? helixObject?.kind?.displayName ?? "Unknown")
-                    row("Object ID", "\(objectID)")
-                    row("Origin", helixObject == nil ? "Created in Faulix" : "Helix file")
+                    row(L("Kind"), design.kind(of: objectID)?.localizedName ?? helixObject?.kind?.localizedName ?? L("Unknown"))
+                    row(L("Object ID"), "\(objectID)")
+                    row(L("Origin"), helixObject == nil ? L("Created in Faulix") : L("Helix file"))
                 }
                 if let o = helixObject, let heap = design.collection?.heap {
-                    DisclosureGroup("Original Helix bytes (\(o.length) bytes at block \(o.block))") {
+                    DisclosureGroup(L("Original Helix bytes (\(o.length) bytes at block \(o.block))")) {
                         Text(Self.hexDump(heap, o))
                             .font(.system(.caption, design: .monospaced))
                             .textSelection(.enabled)

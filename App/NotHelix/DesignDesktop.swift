@@ -11,6 +11,7 @@ enum DesignRoute: Hashable {
 enum IconDisplayMode: String, CaseIterable, Identifiable {
     case icon = "Icon", list = "List"
     var id: String { rawValue }
+    var label: String { self == .icon ? L("Icon") : L("List") }
 }
 
 struct DesignModeView: View {
@@ -75,7 +76,7 @@ struct IconDesktop: View {
                         Button("Index…") { creating = .index }
                     }
                 } label: { Label("New", systemImage: "plus") }
-                .help(relationID == nil ? "Add a relation" : "Add a field, abacus, template, view, query or index")
+                .help(relationID == nil ? L("Add a relation") : L("Add a field, abacus, template, view, query or index"))
             }
             if let relationID {
                 ToolbarItem {
@@ -85,7 +86,7 @@ struct IconDesktop: View {
             }
             ToolbarItem {
                 Picker("Display", selection: $displayMode) {
-                    ForEach(IconDisplayMode.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(IconDisplayMode.allCases) { Text($0.label).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .help("Display icons at their positions, or as a list")
@@ -105,7 +106,7 @@ struct IconDesktop: View {
         }
         .confirmationDialog(deleteTitle, isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } })) {
             Button("Delete", role: .destructive) {
-                if let id = deleting { model.editDesign("Delete \(design.kind(of: id)?.displayName ?? "Icon")") { $0.delete(id) } }
+                if let id = deleting { model.editDesign(L("Delete \(design.kind(of: id)?.localizedName ?? L("Icon"))")) { $0.delete(id) } }
             }
         } message: { Text(deleteMessage) }
         .onDeleteCommand { if let s = selection { deleting = s } }
@@ -113,16 +114,16 @@ struct IconDesktop: View {
 
     private var deleteTitle: String {
         guard let id = deleting else { return "" }
-        return "Delete \(design.kind(of: id)?.displayName.lowercased() ?? "icon") “\(design.name(of: id) ?? "")”?"
+        return L("Delete \(design.kind(of: id)?.localizedName.lowercased() ?? L("icon")) “\(design.name(of: id) ?? "")”?")
     }
 
     private var deleteMessage: String {
         guard let id = deleting else { return "" }
         var parts: [String] = []
-        if design.kind(of: id) == .relation { parts.append("Its records stay in the database but will no longer be shown.") }
+        if design.kind(of: id) == .relation { parts.append(L("Its records stay in the database but will no longer be shown.")) }
         let uses = model.usages(of: id)
-        if !uses.isEmpty { parts.append("Used by: " + uses.prefix(8).joined(separator: ", ") + (uses.count > 8 ? "…" : "") + ". Those places will show an empty slot.") }
-        parts.append("You can undo this with ⌘Z.")
+        if !uses.isEmpty { parts.append(L("Used by: \(uses.prefix(8).joined(separator: ", ") + (uses.count > 8 ? "…" : "")). Those places will show an empty slot.")) }
+        parts.append(L("You can undo this with ⌘Z."))
         return parts.joined(separator: "\n\n")
     }
 
@@ -193,7 +194,7 @@ struct IconDesktop: View {
         }.map(IdentifiedInt.init)
         return Table(rows, selection: $selection) {
             TableColumn("Kind") { r in
-                Label(design.kind(of: r.id)?.displayName ?? "?", systemImage: HelixIcon.symbol(for: r.id, in: design))
+                Label(design.kind(of: r.id)?.localizedName ?? "?", systemImage: HelixIcon.symbol(for: r.id, in: design))
             }
             .width(min: 90, ideal: 120, max: 160)
             TableColumn("Name") { r in Text(design.name(of: r.id).flatMap { $0.isEmpty ? nil : $0 } ?? "#\(r.id)") }
@@ -267,21 +268,21 @@ extension CollectionModel {
         switch d.kind(of: id) {
         case .relation:
             guard let r = d.relation(id: id) else { return "" }
-            return "\(baseRecords(r).records.count) records, \(r.fields.count) fields"
-        case .field: return d.field(id: id)?.type.description ?? ""
+            return L("\(baseRecords(r).records.count) records, \(r.fields.count) fields")
+        case .field: return d.field(id: id)?.type.localizedName ?? ""
         case .abacus: return d.formulaText(d.abacus(id: id)?.root)
         case .query: return d.formulaText(d.queryAbacusID(ofQuery: id).flatMap(d.abacus(id:))?.root)
         case .view:
             guard let v = d.view(id: id) else { return "" }
-            return ["template: \(name(v.templateID) ?? "—")", name(v.queryID).map { "query: \($0)" },
-                    name(v.indexID ?? v.defaultIndexID).map { "index: \($0)" }].compactMap { $0 }.joined(separator: ", ")
+            return [L("template: \(name(v.templateID) ?? "—")"), name(v.queryID).map { L("query: \($0)") },
+                    name(v.indexID ?? v.defaultIndexID).map { L("index: \($0)") }].compactMap { $0 }.joined(separator: ", ")
         case .template:
             guard let t = d.template(id: id) else { return "" }
-            return "\(t.contentBounds.width)×\(t.contentBounds.height)" + (t.repeatElement != nil ? ", list" : ", form")
+            return "\(t.contentBounds.width)×\(t.contentBounds.height), " + (t.repeatElement != nil ? L("list") : L("form"))
         case .index:
             return d.indexKeys(ofIndexObject: id).compactMap { d.name(of: $0) }.joined(separator: ", ")
         default:
-            return d.kind(of: id)?.displayName ?? ""
+            return d.kind(of: id)?.localizedName ?? ""
         }
     }
 }
@@ -324,8 +325,15 @@ struct NewObjectSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     enum Layout: String, CaseIterable, Identifiable {
-        case form = "Form with all fields", list = "List with all fields", blank = "Blank"
+        case form, list, blank
         var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .form: L("Form with all fields")
+            case .list: L("List with all fields")
+            case .blank: L("Blank")
+            }
+        }
     }
 
     @State private var name = ""
@@ -338,16 +346,16 @@ struct NewObjectSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("New \(kind.displayName)").font(.headline)
+            Text(L("New \(kind.localizedName)")).font(.headline)
             Form {
                 TextField("Name", text: $name)
                 switch kind {
                 case .field:
                     Picker("Type", selection: $type) {
-                        ForEach([FieldType.text, .number, .date, .flag, .picture], id: \.self) { Text($0.description).tag($0) }
+                        ForEach([FieldType.text, .number, .date, .flag, .picture], id: \.self) { Text($0.localizedName).tag($0) }
                     }
                 case .template:
-                    Picker("Start with", selection: $layout) { ForEach(Layout.allCases) { Text($0.rawValue).tag($0) } }
+                    Picker("Start with", selection: $layout) { ForEach(Layout.allCases) { Text($0.label).tag($0) } }
                 case .view:
                     Picker("Template", selection: $templateID) {
                         Text("None").tag(Int?.none)
@@ -379,7 +387,7 @@ struct NewObjectSheet: View {
         let n = name.trimmingCharacters(in: .whitespaces)
         let rid = relationID ?? 0
         let fields = relation?.fields ?? []
-        let id: Int? = model.editDesign("New \(kind.displayName)") { m in
+        let id: Int? = model.editDesign(L("New \(kind.localizedName)")) { m in
             switch kind {
             case .relation: m.addRelation(name: n)
             case .field: m.addField(to: rid, name: n, type: type)

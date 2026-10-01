@@ -249,7 +249,7 @@ struct StatusBar<Center: View>: View {
                 Button("Revert", action: onRevert)
                     .disabled(!dirty)
                     .keyboardShortcut(.escape, modifiers: [])
-                Button(commitTitle, action: onCommit)
+                Button(Lk(commitTitle), action: onCommit)
                     .keyboardShortcut("s", modifiers: .command)
                     .buttonStyle(.borderedProminent)
                     .disabled(!dirty)
@@ -505,7 +505,7 @@ struct ListForm: View {
                       onNew: addRow, onDelete: { confirmDelete = true }, onRevert: drafts.reset, onCommit: commit) {
                 HStack(spacing: 12) {
                     if actions != nil {
-                        Toggle(isOn: $editing) { Label(editing ? "Editing" : "Edit", systemImage: "pencil") }
+                        Toggle(isOn: $editing) { Label(editing ? L("Editing") : L("Edit"), systemImage: "pencil") }
                             .toggleStyle(.button)
                             .disabled(drafts.isDirty)
                             .help(editing ? "Stop editing (save or revert changes first) — then click values to explore"

@@ -35,13 +35,13 @@ struct FieldEditor: View {
         if let f = d.field(id: fieldID) {
             Form {
                 Section {
-                    NameField(title: "Name", name: f.name) { n in model.editDesign("Rename Field") { $0.rename(fieldID, to: n) } }
+                    NameField(title: L("Name"), name: f.name) { n in model.editDesign("Rename Field") { $0.rename(fieldID, to: n) } }
                     Picker("Type", selection: Binding(get: { f.type }, set: { t in
                         var g = f
                         g.type = t
                         model.editDesign("Change Field Type") { $0.setField(g) }
                     })) {
-                        ForEach([FieldType.text, .number, .date, .flag, .picture], id: \.self) { Text($0.description).tag($0) }
+                        ForEach([FieldType.text, .number, .date, .flag, .picture], id: \.self) { Text($0.localizedName).tag($0) }
                     }
                 } header: { Text("Field") } footer: {
                     Text("Changing the type does not convert values already entered.").foregroundStyle(.secondary)
@@ -81,7 +81,7 @@ struct ViewEditor: View {
             VSplitView {
                 Form {
                     Section {
-                        NameField(title: "Name", name: v.name) { n in model.editDesign("Rename View") { $0.rename(viewID, to: n) } }
+                        NameField(title: L("Name"), name: v.name) { n in model.editDesign("Rename View") { $0.rename(viewID, to: n) } }
                         Picker("Template", selection: binding(v, \.templateID)) {
                             Text("None").tag(Int?.none)
                             ForEach(rd.templates) { Text($0.name).tag(Int?.some($0.id)) }
@@ -142,7 +142,7 @@ struct IndexEditor: View {
         if let x = d.index(id: indexID), let rel = d.relation(containing: indexID) {
             Form {
                 Section("Index") {
-                    NameField(title: "Name", name: x.name) { n in model.editDesign("Rename Index") { $0.rename(indexID, to: n) } }
+                    NameField(title: L("Name"), name: x.name) { n in model.editDesign("Rename Index") { $0.rename(indexID, to: n) } }
                 }
                 Section {
                     if x.keys.isEmpty { Text("No keys yet — records stay in record-number order.").foregroundStyle(.secondary) }
@@ -150,7 +150,7 @@ struct IndexEditor: View {
                         HStack {
                             Text("\(i + 1).").monospacedDigit().foregroundStyle(.secondary)
                             Image(systemName: HelixIcon.symbol(for: key, in: d))
-                            Text(d.name(of: key) ?? "(deleted)")
+                            Text(d.name(of: key) ?? L("(deleted)"))
                             Spacer()
                             Button { move(x, i, -1) } label: { Image(systemName: "arrow.up") }.disabled(i == 0)
                             Button { move(x, i, 1) } label: { Image(systemName: "arrow.down") }.disabled(i == x.keys.count - 1)
@@ -172,8 +172,8 @@ struct IndexEditor: View {
                     }
                 } header: { Text("Sort by") } footer: {
                     Text(x.helixNumber != nil
-                         ? "Uses the exact order saved in the Helix file until you change the keys."
-                         : "Records are sorted by the first key, then the next one breaks ties.")
+                         ? L("Uses the exact order saved in the Helix file until you change the keys.")
+                         : L("Records are sorted by the first key, then the next one breaks ties."))
                         .foregroundStyle(.secondary)
                 }
                 Section("Used by") {
@@ -230,8 +230,8 @@ struct AbacusEditor: View {
         let result = parsed
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                NameField(title: "Name", name: design.name(of: objectID) ?? "") { n in
-                    model.editDesign(isQuery ? "Rename Query" : "Rename Abacus") { $0.rename(objectID, to: n) }
+                NameField(title: L("Name"), name: design.name(of: objectID) ?? "") { n in
+                    model.editDesign(isQuery ? L("Rename Query") : L("Rename Abacus")) { $0.rename(objectID, to: n) }
                 }
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: 320)
@@ -245,7 +245,7 @@ struct AbacusEditor: View {
             HStack {
                 switch result {
                 case .success(let t):
-                    Label(t == nil ? "Empty — the abacus has no value." : "Formula OK", systemImage: "checkmark.circle.fill")
+                    Label(t == nil ? L("Empty — the abacus has no value.") : L("Formula OK"), systemImage: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                 case .failure(let e):
                     Label(e.message, systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
@@ -272,7 +272,7 @@ struct AbacusEditor: View {
             .defaultScrollAnchor(.topLeading)
         }
         .padding(16)
-        .navigationTitle("\(isQuery ? "Query" : "Abacus"): \(design.name(of: objectID).flatMap { $0.isEmpty ? nil : $0 } ?? "#\(objectID)")")
+        .navigationTitle("\(isQuery ? L("Query") : L("Abacus")): \(design.name(of: objectID).flatMap { $0.isEmpty ? nil : $0 } ?? "#\(objectID)")")
         .toolbar { ToolbarItem { HelpButton(topic: isQuery ? .query : .abacus) } }
         .onAppear(perform: load)
         .onChange(of: objectID) { load() }
@@ -314,7 +314,7 @@ struct AbacusEditor: View {
         guard let rel = relation else { return }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let tile = trimmed.isEmpty ? Optional<Tile>.none : (try? design.parseFormula(text, in: rel)) else { return }
-        model.editDesign(isQuery ? "Edit Query" : "Edit Abacus") { m in
+        model.editDesign(isQuery ? L("Edit Query") : L("Edit Abacus")) { m in
             var aid = abacusID
             if aid == nil, isQuery, let new = m.addAbacus(to: rel.id, name: "", root: nil, showIcon: false) {
                 aid = new
@@ -367,9 +367,9 @@ struct TileView: View {
     var body: some View {
         switch tile {
         case .field(let id):
-            chip(design.name(of: id) ?? "(deleted)", symbol: "character.textbox")
+            chip(design.name(of: id) ?? L("(deleted)"), symbol: "character.textbox")
         case .abacus(let id):
-            chip(design.name(of: id) ?? "(deleted)", symbol: "function")
+            chip(design.name(of: id) ?? L("(deleted)"), symbol: "function")
         case .constant(let v):
             chip(v.map { if case .text(let s) = $0 { "\"\(s.replacingOccurrences(of: "\n", with: "⏎"))\"" } else { $0.description } } ?? "?",
                  symbol: nil)
