@@ -21,7 +21,8 @@ Native macOS reader for legacy Helix ("HeliX Heap") collections. Sample file: `L
 - Verified against real Helix screenshots (Lista Xeral, Ficha): row order/values, "previous" opcode, rectangle
   flags (+4 0x80 framed, +5 0x80 vertical scroll), number formats (+0x26 kind, +0x27 flags 0x40 fixed/0x80 currency,
   +0x28 decimals; Spanish region → "19,95", "3.319Pts"). Extra `0x4698` blocks in the heap are deleted/old record copies.
-- App testing override: `defaults write com.nothelix.NotHelix OpenRecordText "taberna de Galiana"` opens a record.
+- App testing overrides: `OpenRecordText "taberna de Galiana"` opens a record; `SearchText "Chao Rego, Xosé"` fills Find;
+  `ClickText "Chao Rego"` simulates clicking a list cell (drill-down / open record). Search: `TextSearch` (HelixKit).
 - Writing the Helix heap format itself is intentionally NOT supported (indexes use Helix's private collation keys;
   no way to verify output without real Helix).
 - App testing overrides: `defaults write com.nothelix.NotHelix OpenView "Ficha"` (User mode view),

@@ -53,10 +53,17 @@ struct CollectionView: View {
                let evaluator = model.evaluator(for: view) {
                 HelixViewPane(view: view, template: template, design: model.design, relation: rel,
                               records: evaluator.records, evaluator: evaluator, actions: model.actions(for: view),
-                              sort: model.sortControl(for: view), currentIndex: model.recordIndexBinding(for: view))
+                              sort: model.sortControl(for: view), navigation: model.navigation(for: view),
+                              currentIndex: model.recordIndexBinding(for: view))
                     .id(view.id)
                     .navigationSubtitle(viewSubtitle(view, rel))
                     .toolbar {
+                        ToolbarItem(placement: .navigation) {
+                            Button(action: model.goBack) { Label("Back", systemImage: "chevron.left") }
+                                .disabled(model.backStack.isEmpty)
+                                .keyboardShortcut("[", modifiers: .command)
+                                .help(model.backStack.last.flatMap { model.design.name(of: $0.viewID) }.map { "Back to \($0) (⌘[)" } ?? "Back")
+                        }
                         ToolbarItem { HelpButton(topic: template.repeatElement == nil ? .form : .list) }
                     }
             } else {
@@ -71,6 +78,7 @@ struct CollectionView: View {
 
     private func viewSubtitle(_ view: ViewDefinition, _ rel: Relation) -> String {
         var parts = ["\(model.records(for: view).count) records"]
+        if let d = model.drills[view.id] { parts.append(d.title) }
         if let q = view.queryID, let name = model.design.name(of: q) { parts.append("query “\(name)”") }
         if let i = view.indexID ?? view.defaultIndexID, let name = model.design.name(of: i) { parts.append("sorted by \(name)") }
         return parts.joined(separator: " · ")

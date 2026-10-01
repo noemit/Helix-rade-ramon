@@ -33,7 +33,13 @@ final class CollectionModel: ObservableObject {
 
     @Published var mode: AppMode = .user
     @Published var openViewID: Int? {
-        didSet { if let id = openViewID { UserDefaults.standard.set(id, forKey: lastViewKey) } }
+        didSet {
+            guard let id = openViewID else { return }
+            UserDefaults.standard.set(id, forKey: lastViewKey)
+            if let v = design.view(id: id), template(for: v)?.repeatElement == nil, let rel = relation(ofView: v) {
+                UserDefaults.standard.set(id, forKey: "lastForm-\(collection.name)-\(rel.id)")
+            }
+        }
     }
     private var lastViewKey: String { "lastView-\(collection.name)" }
     @Published var viewRecordIndex: [Int: Int] = [:]
@@ -50,6 +56,25 @@ final class CollectionModel: ObservableObject {
     private var orderedCache: [Int: [Record]] = [:]
     private var evaluatorCache: [String: AbacusEvaluator] = [:]
     private var baseCache: [Int: (records: [Record], modified: Set<UInt32>)] = [:]
+    private var searchCache: [Int: [UInt32: String]] = [:]
+
+    /// A drill-down filter on a view (clicked value) or a single record opened from a list.
+    struct Drill: Equatable, CustomStringConvertible {
+        var title: String
+        var keyID: Int?
+        var value: Value?
+        var recordID: UInt32?
+        var description: String { "\(keyID ?? 0)|\(value?.description ?? "")|\(recordID ?? 0)" }
+    }
+
+    struct BackEntry {
+        let viewID: Int
+        let drill: Drill?
+        let index: Int
+    }
+
+    @Published var drills: [Int: Drill] = [:]
+    @Published var backStack: [BackEntry] = []
 
     init(collection: HelixCollection, fileName: String?) {
         self.collection = collection
@@ -83,6 +108,22 @@ final class CollectionModel: ObservableObject {
         if let text = UserDefaults.standard.string(forKey: "OpenRecordText"), let view = openView,
            let i = records(for: view).firstIndex(where: { r in r.values.values.contains { $0.text == text } }) {
             viewRecordIndex[view.id] = i
+        }
+        // Testing aids: `SearchText "Chao Rego, Xosé"` fills Find; `ClickText "Chao Rego"` clicks the first
+        // list cell showing that text (drill-down).
+        if let q = UserDefaults.standard.string(forKey: "SearchText") { searchText = q }
+        if let text = UserDefaults.standard.string(forKey: "ClickText"), let view = openView, let rel = relation(ofView: view),
+           let t = template(for: view), let ev = evaluator(for: view) {
+            let cells = TemplateElement.flatten(t.repeatElement.map { [$0] } ?? [])
+            outer: for r in records(for: view) {
+                for e in cells {
+                    let ctx = TemplateContext(design: design, relation: rel, record: r, evaluator: ev)
+                    if let (s, _) = ctx.text(for: e), s.contains(text) {
+                        drill(into: e, record: r, in: view, title: nil)
+                        break outer
+                    }
+                }
+            }
         }
         // Testing aids: `defaults write com.nothelix.NotHelix DesignOpen "Libros/Nome completo"`.
         if let path = UserDefaults.standard.string(forKey: "DesignOpen") {
@@ -126,7 +167,8 @@ final class CollectionModel: ObservableObject {
     func evaluator(for view: ViewDefinition) -> AbacusEvaluator? {
         guard let rel = relation(ofView: view) else { return nil }
         let indexID = sortIndex(for: view)
-        let key = "\(view.id)\u{1F}\(indexID ?? 0)\u{1F}\(searchText)"
+        let drill = drills[view.id]
+        let key = "\(view.id)\u{1F}\(indexID ?? 0)\u{1F}\(searchText)\u{1F}\(drill.map { "\($0)" } ?? "")"
         if let hit = evaluatorCache[key] { return hit }
         let orderKey = indexID ?? -rel.id
         let ordered: [Record]
@@ -144,14 +186,17 @@ final class CollectionModel: ObservableObject {
         if let q = view.queryID {
             selected = AbacusEvaluator(design: design, relation: rel, records: ordered).select(query: q)
         }
-        let q = searchText.trimmingCharacters(in: .whitespaces)
-            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-        if !q.isEmpty {
-            let terms = q.split(separator: " ")
-            selected = selected.filter { r in
-                let s = rel.fields.compactMap { r[$0]?.description }.joined(separator: "\u{1F}")
-                    .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-                return terms.allSatisfy { s.contains($0) }
+        let query = TextSearch.words(searchText)
+        if !query.isEmpty {
+            let hay = searchIndex(rel)
+            selected = selected.filter { TextSearch.matches(hay[$0.id] ?? "", query: query) }
+        }
+        if let drill {
+            if let rid = drill.recordID {
+                selected = selected.filter { $0.id == rid }
+            } else if let keyID = drill.keyID {
+                let keyEval = drillEvaluator(rel)
+                selected = selected.filter { TextSearch.same(keyValue(keyID, $0, rel, keyEval), drill.value) }
             }
         }
         let ev = AbacusEvaluator(design: design, relation: rel, records: selected)
@@ -205,11 +250,8 @@ final class CollectionModel: ObservableObject {
         if cache[rel.id] == nil {
             do {
                 let recs = baseRecords(rel).records
-                let search = recs.map { r in
-                    rel.fields.compactMap { r[$0]?.description }.joined(separator: "\u{1F}")
-                        .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-                }
-                cache[rel.id] = (recs, search)
+                let hay = searchIndex(rel)
+                cache[rel.id] = (recs, recs.map { hay[$0.id] ?? "" })
             } catch {
                 loadError = error.localizedDescription
                 cache[rel.id] = ([], [])
@@ -220,15 +262,103 @@ final class CollectionModel: ObservableObject {
 
     func applySearch() {
         guard let rel = relation, let entry = cache[rel.id] else { return }
-        let q = searchText.trimmingCharacters(in: .whitespaces)
-            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-        if q.isEmpty {
-            records = entry.records
-        } else {
-            let terms = q.split(separator: " ")
-            records = zip(entry.records, entry.search).filter { _, s in terms.allSatisfy { s.contains($0) } }.map(\.0)
-        }
+        let query = TextSearch.words(searchText)
+        records = query.isEmpty ? entry.records
+            : zip(entry.records, entry.search).filter { TextSearch.matches($1, query: query) }.map(\.0)
         if let sel = selectedRecordID, !records.contains(where: { $0.id == sel }) { selectedRecordID = nil }
+    }
+
+    // MARK: Search and drill-down
+
+    /// Normalised search text per record (see `TextSearch`).
+    func searchIndex(_ rel: Relation) -> [UInt32: String] {
+        if let hit = searchCache[rel.id] { return hit }
+        let idx = Dictionary(baseRecords(rel).records.map { ($0.id, TextSearch.haystack(for: $0, in: rel)) },
+                             uniquingKeysWith: { a, _ in a })
+        searchCache[rel.id] = idx
+        return idx
+    }
+
+    /// Evaluator that ignores "previous", so non-repeated columns give every record's value.
+    private func drillEvaluator(_ rel: Relation) -> AbacusEvaluator {
+        let ev = AbacusEvaluator(design: design, relation: rel, records: baseRecords(rel).records)
+        ev.ignorePrevious = true
+        return ev
+    }
+
+    private func keyValue(_ keyID: Int, _ r: Record, _ rel: Relation, _ ev: AbacusEvaluator) -> Value? {
+        if let f = rel.field(objectID: keyID) { return r[f] }
+        return ev.value(ofAbacus: keyID, for: r)
+    }
+
+    /// Clicked a value in a list: show only records with the same value in that column.
+    /// If that leaves a single record (usually a title), open it on a form instead.
+    func drill(into element: TemplateElement, record: Record, in view: ViewDefinition, title: String?) {
+        guard let rel = relation(ofView: view), case .data(let fid, let aid) = element.content,
+              let keyID = fid ?? aid else { return }
+        let ev = drillEvaluator(rel)
+        let value = keyValue(keyID, record, rel, ev)
+        guard value != nil else { open(record, from: view); return }
+        let current = records(for: view)
+        let matches = current.filter { TextSearch.same(keyValue(keyID, $0, rel, ev), value) }
+        if matches.count <= 1 || drills[view.id]?.keyID == keyID { open(record, from: view); return }
+        pushBack()
+        let column = template(for: view).flatMap { t in t.repeatElement.map { ListLayout(template: t, repeatElement: $0).columnTitle(for: element) } } ?? nil
+        let label = title ?? column ?? design.name(of: keyID) ?? ""
+        drills[view.id] = Drill(title: "\(label): \(value!.description.components(separatedBy: .newlines).first ?? "")",
+                                keyID: keyID, value: value, recordID: nil)
+        viewRecordIndex[view.id] = 0
+    }
+
+    /// Opens a record on the relation's most detailed form view.
+    func open(_ record: Record, from view: ViewDefinition) {
+        guard let rel = relation(ofView: view), let form = formView(for: rel, preferring: view) else { return }
+        pushBack()
+        drills[form.id] = nil
+        if let i = records(for: form).firstIndex(where: { $0.id == record.id }) {
+            viewRecordIndex[form.id] = i
+        } else {
+            drills[form.id] = Drill(title: label(for: record, in: rel), keyID: nil, value: nil, recordID: record.id)
+            viewRecordIndex[form.id] = 0
+        }
+        openViewID = form.id
+    }
+
+    /// The form to open a record on: the last form used for this relation, otherwise the one
+    /// with the largest layout (Helix collections usually have one main "card", e.g. Ficha).
+    func formView(for rel: Relation, preferring current: ViewDefinition) -> ViewDefinition? {
+        let forms = design.views(in: rel).filter { template(for: $0).map { $0.repeatElement == nil } ?? false }
+        if forms.contains(where: { $0.id == current.id }) { return current }
+        if let last = UserDefaults.standard.object(forKey: "lastForm-\(collection.name)-\(rel.id)") as? Int,
+           let v = forms.first(where: { $0.id == last }) { return v }
+        func area(_ v: ViewDefinition) -> Int { template(for: v).map { $0.contentBounds.width * $0.contentBounds.height } ?? 0 }
+        return forms.max { a, b in area(a) != area(b) ? area(a) < area(b) : a.name > b.name }
+    }
+
+    private func pushBack() {
+        guard let id = openViewID else { return }
+        backStack.append(BackEntry(viewID: id, drill: drills[id], index: viewRecordIndex[id] ?? 0))
+        if backStack.count > 50 { backStack.removeFirst() }
+    }
+
+    func goBack() {
+        guard let e = backStack.popLast() else { return }
+        drills[e.viewID] = e.drill
+        viewRecordIndex[e.viewID] = e.index
+        openViewID = e.viewID
+    }
+
+    func navigation(for view: ViewDefinition) -> ListNavigation {
+        ListNavigation(
+            filterTitle: drills[view.id]?.title,
+            clearFilter: { [unowned self] in clearDrill(view) },
+            activate: { [unowned self] e, r, title in drill(into: e, record: r, in: view, title: title) },
+            open: { [unowned self] r in open(r, from: view) })
+    }
+
+    func clearDrill(_ view: ViewDefinition) {
+        drills[view.id] = nil
+        viewRecordIndex[view.id] = 0
     }
 
     /// All records of a relation from the native store (or the Helix file if there is no store).
@@ -334,6 +464,7 @@ final class CollectionModel: ObservableObject {
         orderedCache.removeAll()
         evaluatorCache.removeAll()
         cache.removeAll()
+        searchCache.removeAll()
         revision += 1
         if relationID != nil { load() }
         if let id = openViewID, design.view(id: id) == nil { openViewID = viewsByRelation.first?.1.first?.id }
@@ -377,6 +508,7 @@ final class CollectionModel: ObservableObject {
 
     private func invalidate(_ rel: Relation) {
         baseCache[rel.id] = nil
+        searchCache[rel.id] = nil
         cache[rel.id] = nil
         orderedCache.removeAll()
         evaluatorCache.removeAll()

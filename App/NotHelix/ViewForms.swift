@@ -15,6 +15,36 @@ struct RecordActions {
     let position: (UInt32) -> Int?
 }
 
+/// Click-through navigation for lists: drill into a value, open a record, clear the filter.
+struct ListNavigation {
+    /// The active drill-down filter (e.g. "Autor: Chao Rego, Xosé"), shown as a chip.
+    let filterTitle: String?
+    let clearFilter: () -> Void
+    /// Clicked a value: element, record, column title.
+    let activate: (TemplateElement, Record, String?) -> Void
+    let open: (Record) -> Void
+}
+
+/// A removable chip showing the active drill-down filter.
+struct FilterChip: View {
+    let title: String
+    let clear: () -> Void
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "line.3.horizontal.decrease.circle.fill")
+            Text(title).lineLimit(1)
+            Button(action: clear) { Image(systemName: "xmark.circle.fill") }
+                .buttonStyle(.plain)
+                .help("Show all records again")
+        }
+        .font(.callout)
+        .padding(.horizontal, 8).padding(.vertical, 3)
+        .background(Capsule().fill(Color.accentColor.opacity(0.15)))
+        .foregroundStyle(Color.accentColor)
+    }
+}
+
 /// The Helix "Sort Order" popup: which index orders the view.
 struct SortControl {
     let options: [(id: Int, name: String)]
@@ -123,16 +153,17 @@ struct HelixViewPane: View {
     let evaluator: AbacusEvaluator
     var actions: RecordActions?
     var sort: SortControl?
+    var navigation: ListNavigation?
     @Binding var currentIndex: Int
 
     var body: some View {
         Group {
             if let rep = template.repeatElement {
                 ListForm(template: template, repeatElement: rep, design: design, relation: relation, records: records,
-                         evaluator: evaluator, actions: actions, sort: sort)
+                         evaluator: evaluator, actions: actions, sort: sort, navigation: navigation)
             } else {
                 SingleForm(template: template, design: design, relation: relation, records: records,
-                           evaluator: evaluator, actions: actions, sort: sort, currentIndex: $currentIndex)
+                           evaluator: evaluator, actions: actions, sort: sort, navigation: navigation, currentIndex: $currentIndex)
             }
         }
         .navigationTitle(view.name)
@@ -228,6 +259,7 @@ struct SingleForm: View {
     let evaluator: AbacusEvaluator
     let actions: RecordActions?
     let sort: SortControl?
+    var navigation: ListNavigation?
     @Binding var currentIndex: Int
 
     @StateObject private var drafts = Drafts()
@@ -258,7 +290,10 @@ struct SingleForm: View {
             StatusBar(actions: actions, sort: sort, dirty: drafts.isDirty, canDelete: base != nil && drafts.newRecords.isEmpty,
                       commitTitle: drafts.newRecords.isEmpty ? "Replace" : "Enter",
                       onNew: startNew, onDelete: { confirmDelete = true }, onRevert: drafts.reset, onCommit: commit) {
-                navigation
+                HStack(spacing: 12) {
+                    if let f = navigation?.filterTitle, let nav = navigation { FilterChip(title: f, clear: nav.clearFilter) }
+                    recordNavigation
+                }
             }
         }
         .onChange(of: records.count) { currentIndex = min(currentIndex, max(0, records.count - 1)) }
@@ -270,7 +305,7 @@ struct SingleForm: View {
         } message: { Text("You can undo this, and it stays in the History. The original Helix file is never changed.") }
     }
 
-    private var navigation: some View {
+    private var recordNavigation: some View {
         HStack(spacing: 14) {
             Button { currentIndex = 0 } label: { Image(systemName: "backward.end.fill") }
                 .keyboardShortcut(.upArrow, modifiers: [.command, .option])
@@ -343,9 +378,12 @@ struct ListForm: View {
     let evaluator: AbacusEvaluator
     let actions: RecordActions?
     let sort: SortControl?
+    var navigation: ListNavigation?
 
     @StateObject private var drafts = Drafts()
     @State private var selected: UInt32?
+    /// Browse (click values to drill down, open records) or Edit (type into rows).
+    @State private var editing = false
     @State private var errorMessage: String?
     @State private var confirmDelete = false
 
@@ -371,14 +409,24 @@ struct ListForm: View {
                 }
                 .id(drafts.revision)
             }
-            StatusBar(actions: actions, sort: sort, dirty: drafts.isDirty, canDelete: selected != nil,
+            StatusBar(actions: editing ? actions : nil, sort: sort, dirty: drafts.isDirty, canDelete: selected != nil,
                       commitTitle: drafts.newRecords.isEmpty ? "Replace" : "Enter",
                       onNew: addRow, onDelete: { confirmDelete = true }, onRevert: drafts.reset, onCommit: commit) {
-                Group {
-                    let changed = drafts.dirtyIDs.count
-                    Text("\(records.count) records") + Text(changed > 0 ? "  ·  \(changed) changed" : "").foregroundColor(.orange)
+                HStack(spacing: 12) {
+                    if actions != nil {
+                        Toggle(isOn: $editing) { Label(editing ? "Editing" : "Edit", systemImage: "pencil") }
+                            .toggleStyle(.button)
+                            .disabled(drafts.isDirty)
+                            .help(editing ? "Stop editing (save or revert changes first) — then click values to explore"
+                                          : "Edit rows in place")
+                    }
+                    if let f = navigation?.filterTitle, let nav = navigation { FilterChip(title: f, clear: nav.clearFilter) }
+                    Group {
+                        let changed = drafts.dirtyIDs.count
+                        Text("\(records.count) records") + Text(changed > 0 ? "  ·  \(changed) changed" : "").foregroundColor(.orange)
+                    }
+                    .monospacedDigit()
                 }
-                .monospacedDigit()
             }
         }
         .alert("Cannot Save", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
@@ -389,14 +437,18 @@ struct ListForm: View {
         } message: { Text("You can undo this, and it stays in the History. The original Helix file is never changed.") }
     }
 
-    private func context(_ record: Record?, editing: Bool = false) -> TemplateContext {
-        TemplateContext(design: design, relation: relation, record: record, evaluator: evaluator,
-                        editor: editing && actions != nil ? record.map(drafts.editing(for:)) : nil)
+    private func context(_ record: Record?, row: Bool = false, layout: ListLayout? = nil) -> TemplateContext {
+        var c = TemplateContext(design: design, relation: relation, record: record, evaluator: evaluator,
+                                editor: row && editing && actions != nil ? record.map(drafts.editing(for:)) : nil)
+        if row, !editing, let record, let navigation {
+            c.onActivate = { e in navigation.activate(e, record, layout?.columnTitle(for: e)) }
+        }
+        return c
     }
 
     private func row(_ rec: Record, _ layout: ListLayout) -> some View {
         let dirty = drafts.dirtyIDs.contains(rec.id)
-        return TemplateCanvas(elements: layout.rowElements, context: context(rec, editing: true))
+        return TemplateCanvas(elements: layout.rowElements, context: context(rec, row: true, layout: layout))
             .offset(y: CGFloat(-layout.rep.top))
             .frame(width: layout.width, height: CGFloat(layout.stride), alignment: .topLeading)
             .clipped()
@@ -404,12 +456,23 @@ struct ListForm: View {
             .overlay(alignment: .leading) {
                 if dirty { Rectangle().fill(Color.orange).frame(width: 3) }
             }
+            .overlay(alignment: .trailing) {
+                if !editing, let navigation {
+                    Button { navigation.open(rec) } label: { Image(systemName: "chevron.right.circle") }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(Color.accentColor.opacity(0.7))
+                        .padding(.trailing, 6)
+                        .help("Open this record")
+                }
+            }
             .contentShape(Rectangle())
+            .simultaneousGesture(TapGesture(count: 2).onEnded { if !editing { navigation?.open(rec) } })
             .simultaneousGesture(TapGesture().onEnded { selected = rec.id })
     }
 
     private func addRow() {
         guard let actions else { return }
+        editing = true
         do {
             let id = max(try actions.nextID(), (drafts.newRecords.map(\.id).max() ?? 0) + 1)
             let r = RecordDraft.newRecord(id: id, template: template, relation: relation, evaluator: evaluator)
@@ -459,6 +522,15 @@ struct ListLayout {
     let width: CGFloat
     let headerHeight: CGFloat
     let footerHeight: CGFloat
+
+    /// The header label above a row rectangle (e.g. "Autor"), for naming drill-down filters.
+    func columnTitle(for e: TemplateElement) -> String? {
+        let mid = (e.rect.left + e.rect.right) / 2
+        return header.compactMap { h -> (String, Int)? in
+            guard case .label(let t) = h.content, h.rect.top < rep.top, h.rect.left <= mid, mid <= h.rect.right else { return nil }
+            return (t.trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: ":"))), h.rect.width)
+        }.min { $0.1 < $1.1 }?.0
+    }
 
     init(template: Template, repeatElement: TemplateElement) {
         let rep = repeatElement.rect

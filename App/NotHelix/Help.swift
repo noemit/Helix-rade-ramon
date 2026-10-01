@@ -95,10 +95,14 @@ enum HelpTopic: String, CaseIterable, Identifiable {
             "New (⇧⌘N) starts a blank record with Helix’s default values; press Enter (⌘S) to save it.",
             "Move between records with the arrows or ⌘↑ / ⌘↓ (⌥⌘↑ / ⌥⌘↓ for first and last).",
             "Change the sort order from the ⇅ menu at the bottom right.",
-            "Find (top right) narrows the records to those containing your words.",
+            "Find (top right) narrows the records to those containing your words — accents, commas and word order don’t matter.",
+            "Opened from a list? Back (⌘[) returns to it.",
         ]
         case .list: [
-            "Click a row to select it; type into any field to edit it. Changed rows get an orange bar.",
+            "Click any value to see only the records that share it — e.g. click an author to list all their books. Clear the filter with the × on its chip.",
+            "Clicking a value only one record has (usually a title), double-clicking a row, or its › button opens that record on a form. Back (⌘[) returns.",
+            "Find (top right) ignores accents, commas and word order: “Chao Rego, Xosé” also finds “Xosé Chao Rego”.",
+            "Press Edit to type into rows. Changed rows get an orange bar.",
             "Replace (⌘S) saves every changed row at once; Revert (Esc) discards them.",
             "New (⇧⌘N) adds a blank row at the top. Delete removes the selected row (after asking).",
             "Totals and counts in the header follow the records shown (query and Find).",

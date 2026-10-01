@@ -11,6 +11,8 @@ struct TemplateContext {
     var evaluator: AbacusEvaluator?
     /// When set, field rectangles are editable.
     var editor: FieldEditing?
+    /// When set (lists in Browse mode), data rectangles are clickable.
+    var onActivate: ((TemplateElement) -> Void)?
 
     func editableField(for element: TemplateElement) -> Field? {
         guard editor != nil, record != nil, case .data(let fid?, _) = element.content,
@@ -178,6 +180,8 @@ struct TemplateElementView: View {
                     editor.setText(field, $0)
                 }
             }
+        } else if let onActivate = context.onActivate, context.record != nil {
+            LinkCell { displayContent } action: { onActivate(element) }
         } else {
             displayContent
         }
@@ -196,8 +200,11 @@ struct TemplateElementView: View {
             }
         default:
             if let (text, placeholder) = context.text(for: element) {
-                styled(Text(text).italic(placeholder), color: placeholder ? .gray : .black)
-                    .textSelection(.enabled)
+                if context.onActivate == nil {
+                    styled(Text(text).italic(placeholder), color: placeholder ? .gray : .black).textSelection(.enabled)
+                } else {
+                    styled(Text(text).italic(placeholder), color: placeholder ? .gray : .black)
+                }
             }
         }
     }
@@ -208,6 +215,27 @@ struct TemplateElementView: View {
             .foregroundStyle(color)
             .multilineTextAlignment(element.alignment.textAlignment)
             .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+/// A clickable value in a list: underlined on hover with a pointing-hand cursor.
+struct LinkCell<Content: View>: View {
+    @ViewBuilder let content: Content
+    let action: () -> Void
+    @State private var hover = false
+
+    var body: some View {
+        content
+            .overlay(alignment: .bottomLeading) {
+                if hover { Rectangle().fill(Color.accentColor).frame(height: 1).offset(y: -2) }
+            }
+            .contentShape(Rectangle())
+            .onHover { inside in
+                hover = inside
+                if inside { NSCursor.pointingHand.push() } else { NSCursor.pop() }
+            }
+            .onTapGesture(perform: action)
+            .help("Click to show records with this value")
     }
 }
 

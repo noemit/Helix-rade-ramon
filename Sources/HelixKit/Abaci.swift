@@ -168,6 +168,8 @@ public final class AbacusEvaluator {
     public let relation: Relation
     public private(set) var records: [Record]
     public var today = Date()
+    /// When set, `previous` sees no previous record (so "non-repeated" abaci show every value).
+    public var ignorePrevious = false
 
     private var abaci: [Int: Abacus] = [:]
     private var aggregates: [Int: Value?] = [:]
@@ -226,7 +228,7 @@ public final class AbacusEvaluator {
                 return v
             }
             if op == .previous {
-                guard let record, let i = positions[record.id], i > 0 else { return nil }
+                guard !ignorePrevious, let record, let i = positions[record.id], i > 0 else { return nil }
                 return eval(args.first, records[i - 1], &depth)
             }
             if op == .ifThenElse, args.count == 3 {

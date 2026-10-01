@@ -235,6 +235,31 @@ struct LibrosTests {
         #expect(d.template(id: copy)?.name == "Nova copy")
     }
 
+    @Test func forgivingSearch() throws {
+        let recs = try collection.records(of: libros)
+        func find(_ q: String) -> Set<UInt32> {
+            let words = TextSearch.words(q)
+            return Set(recs.filter { TextSearch.matches(TextSearch.haystack(for: $0, in: libros), query: words) }.map(\.id))
+        }
+        let a = find("Chao Rego, Xosé"), b = find("Xosé Chao Rego"), c = find("xose chao rego")
+        #expect(a.count == 3 && a == b && b == c)
+        #expect(!find("Cunqueiro taberna Galiana").isEmpty && find("Cunqueiro taberna Galiana").count <= find("Cunqueiro").count)
+        #expect(TextSearch.same(.text("Chao Rego, Xosé"), .text("chao rego xose")))
+    }
+
+    @Test func drillDownSeesRepeatedNames() throws {
+        // "Nome Non Rep." is blank when the previous row has the same author; with
+        // ignorePrevious every record shows its author, so clicking an author can match them all.
+        let recs = try collection.records(of: libros, orderedByIndex: 21)
+        let ev = AbacusEvaluator(design: design, relation: libros, records: recs)
+        let i = try #require(recs.firstIndex { ev.value(ofAbacus: 98, for: $0)?.text == "Alarcón, Pedro Antonio de" })
+        #expect(ev.value(ofAbacus: 105, for: recs[i + 1]) == nil)
+        ev.ignorePrevious = true
+        let author = ev.value(ofAbacus: 105, for: recs[i])
+        #expect(ev.value(ofAbacus: 105, for: recs[i + 1]) == author)
+        #expect(recs.filter { TextSearch.same(ev.value(ofAbacus: 105, for: $0), author) }.count >= 2)
+    }
+
     @Test func templateEditing() throws {
         var t = try #require(design.template(id: 510))
         let rep = try #require(t.repeatElement)
