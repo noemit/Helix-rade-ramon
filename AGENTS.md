@@ -43,6 +43,9 @@ Native macOS reader for legacy Helix ("HeliX Heap") collections. Sample file: `L
   runtime, timestamp), notarized with keychain profile `faulix-notary`, stapled, zipped to `dist/`.
   `NOTARIZE=0 scripts/release.sh` signs only. Bump `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` in `project.yml`.
 - `Libros` (private sample data) is gitignored; its tests skip when it is absent.
+- Release notes (GitHub releases, Galician first then English) must be generic: no mention of the Libros collection,
+  its relations/fields/views/records (e.g. Ficha, Lista Xeral, Lugar, Data), its authors or data, or specific people.
+  Use neutral examples ("click an author", "> 1990 in a date field").
 
 ## Verify
 - Library tests: `swift test`
