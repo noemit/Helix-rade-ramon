@@ -36,7 +36,11 @@ struct ExportSheet: View {
     var body: some View {
         let view = model.exportView
         VStack(alignment: .leading, spacing: 16) {
-            Text("Export Records").font(.title2.bold())
+            HStack {
+                Text("Export Records").font(.title2.bold())
+                Spacer()
+                HelpButton(topic: .export).labelStyle(.iconOnly).buttonStyle(.borderless)
+            }
             if let view, let rel = model.relation(ofView: view) {
                 Text("From the view “\(view.name)” of \(rel.name).").foregroundStyle(.secondary)
             }

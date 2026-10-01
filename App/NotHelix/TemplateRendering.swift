@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Everything needed to fill a template's rectangles.
 struct TemplateContext {
-    let collection: HelixCollection
+    let design: Design
     let relation: Relation
     /// nil renders the template in design style (icon names instead of data).
     let record: Record?
@@ -23,12 +23,12 @@ struct TemplateContext {
         if let record {
             if let fid, let field = relation.field(objectID: fid), let v = record[field] { return (display(v, element), false) }
             if fid == nil, let aid {
-                guard let evaluator else { return (collection.objects[aid]?.name ?? "", true) }
+                guard let evaluator else { return (design.name(of: aid) ?? "", true) }
                 return (evaluator.value(ofAbacus: aid, for: record).map { display($0, element) } ?? "", false)
             }
             return ("", false)
         }
-        return ([fid, aid].compactMap { $0.flatMap { collection.objects[$0]?.name } }.joined(separator: " / "), true)
+        return ([fid, aid].compactMap { $0.flatMap { design.name(of: $0) } }.joined(separator: " / "), true)
     }
 
     /// A value as the rectangle's format shows it (numbers use the Helix number format and region).

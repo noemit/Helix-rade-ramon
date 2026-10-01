@@ -13,8 +13,11 @@ struct NotHelixApp: App {
         .defaultSize(width: 1300, height: 850)
         .commands {
             CommandGroup(replacing: .undoRedo) { UndoCommands() }
+            CommandGroup(replacing: .help) { HelpMenuItems() }
         }
         Settings { SettingsView() }
+        Window("Faulix Quickstart", id: "quickstart") { QuickstartWindow() }
+            .defaultSize(width: 820, height: 560)
     }
 }
 
@@ -33,6 +36,15 @@ struct HelixDocument: FileDocument {
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         throw CocoaError(.featureUnsupported)
+    }
+}
+
+struct HelpMenuItems: View {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button("Faulix Quickstart") { openWindow(id: "quickstart") }
+            .keyboardShortcut("?", modifiers: .command)
     }
 }
 
@@ -66,6 +78,7 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .frame(width: 420)
+        .toolbar { HelpButton(topic: .settings) }
         .padding()
     }
 }

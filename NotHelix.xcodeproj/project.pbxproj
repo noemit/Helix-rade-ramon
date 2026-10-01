@@ -8,11 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		296CEC73A2812E97C4B2286B /* HelixKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38339582EC57AF9E1308AF8E /* HelixKit */; };
+		29765584C1966C7C98EA20CB /* TemplateEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A3E81C27CAD51D7241C38 /* TemplateEditor.swift */; };
 		2BA2653144CBCA5C1EC6BE22 /* ExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820DFEF7AC11D219E5D961E1 /* ExportSheet.swift */; };
+		3051E1C64CCB9CF7A10C8ADD /* Help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A603DE7E564895BAC76E943 /* Help.swift */; };
 		37D5880D0FA37FAFA691E214 /* DetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C659ABDDBB901311BA5CDE /* DetailViews.swift */; };
 		3D81B72A5B5AC6971D4552AF /* TemplateRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CB2DAA18875A26A99344AD /* TemplateRendering.swift */; };
 		4C8E1BCC70CD1484D8848AB0 /* NotHelixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8439B0AF2D6CACF1033C81 /* NotHelixApp.swift */; };
 		5301BB3F8C9D59E05575EC89 /* CollectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F937B1F644F8C75CAAD2575 /* CollectionModel.swift */; };
+		A9FC66335EA6181E94508605 /* DesignEditors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44261B15FC6C67B617CAB38D /* DesignEditors.swift */; };
 		AFFA2A219CA1AE23212863AF /* DesignDesktop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01492DD257DA1E4C4DF9D206 /* DesignDesktop.swift */; };
 		B2F789B096B6AC4363F5EEB7 /* RecordTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED174154E5F7992B0D12893 /* RecordTable.swift */; };
 		CC8CB37EC2A42F58346897CA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A043E8A3E27AA88977927E /* CollectionView.swift */; };
@@ -25,7 +28,10 @@
 		0DEA8D326E82B896025D789F /* NotHelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotHelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35F379CCBC2E97B8026F267D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		416C435E1158F6550B11469D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		44261B15FC6C67B617CAB38D /* DesignEditors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignEditors.swift; sourceTree = "<group>"; };
 		64C659ABDDBB901311BA5CDE /* DetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViews.swift; sourceTree = "<group>"; };
+		658A3E81C27CAD51D7241C38 /* TemplateEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditor.swift; sourceTree = "<group>"; };
+		6A603DE7E564895BAC76E943 /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
 		6F937B1F644F8C75CAAD2575 /* CollectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionModel.swift; sourceTree = "<group>"; };
 		7A7A70AE344E62104682DEB3 /* Helix-rade-ramon */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Helix-rade-ramon"; path = .; sourceTree = SOURCE_ROOT; };
 		820DFEF7AC11D219E5D961E1 /* ExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSheet.swift; sourceTree = "<group>"; };
@@ -63,12 +69,15 @@
 				6F937B1F644F8C75CAAD2575 /* CollectionModel.swift */,
 				D6A043E8A3E27AA88977927E /* CollectionView.swift */,
 				01492DD257DA1E4C4DF9D206 /* DesignDesktop.swift */,
+				44261B15FC6C67B617CAB38D /* DesignEditors.swift */,
 				64C659ABDDBB901311BA5CDE /* DetailViews.swift */,
 				820DFEF7AC11D219E5D961E1 /* ExportSheet.swift */,
+				6A603DE7E564895BAC76E943 /* Help.swift */,
 				416C435E1158F6550B11469D /* HistoryView.swift */,
 				35F379CCBC2E97B8026F267D /* Info.plist */,
 				8B8439B0AF2D6CACF1033C81 /* NotHelixApp.swift */,
 				CED174154E5F7992B0D12893 /* RecordTable.swift */,
+				658A3E81C27CAD51D7241C38 /* TemplateEditor.swift */,
 				83CB2DAA18875A26A99344AD /* TemplateRendering.swift */,
 				D47D23AC2A193A5CC22657F2 /* ViewForms.swift */,
 			);
@@ -158,11 +167,14 @@
 				5301BB3F8C9D59E05575EC89 /* CollectionModel.swift in Sources */,
 				CC8CB37EC2A42F58346897CA /* CollectionView.swift in Sources */,
 				AFFA2A219CA1AE23212863AF /* DesignDesktop.swift in Sources */,
+				A9FC66335EA6181E94508605 /* DesignEditors.swift in Sources */,
 				37D5880D0FA37FAFA691E214 /* DetailViews.swift in Sources */,
 				2BA2653144CBCA5C1EC6BE22 /* ExportSheet.swift in Sources */,
+				3051E1C64CCB9CF7A10C8ADD /* Help.swift in Sources */,
 				DE883FDCB327B573AE1A7436 /* HistoryView.swift in Sources */,
 				4C8E1BCC70CD1484D8848AB0 /* NotHelixApp.swift in Sources */,
 				B2F789B096B6AC4363F5EEB7 /* RecordTable.swift in Sources */,
+				29765584C1966C7C98EA20CB /* TemplateEditor.swift in Sources */,
 				3D81B72A5B5AC6971D4552AF /* TemplateRendering.swift in Sources */,
 				F77B4C785CE6FB7B7CF78FD2 /* ViewForms.swift in Sources */,
 			);

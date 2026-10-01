@@ -31,7 +31,12 @@ struct LibrosTests {
 
     let collection: HelixCollection
 
-    init() throws { collection = try HelixCollection(url: Self.url) }
+    let design: Design
+
+    init() throws {
+        collection = try HelixCollection(url: Self.url)
+        design = Design(model: DesignModel(importing: collection), collection: collection)
+    }
 
     var libros: Relation { collection.relations.first { $0.name == "Libros" }! }
 
@@ -118,7 +123,7 @@ struct LibrosTests {
 
     @Test func abaciEvaluate() throws {
         let recs = try collection.records(of: libros, orderedByIndex: 21)
-        let ev = AbacusEvaluator(collection: collection, relation: libros, records: recs)
+        let ev = AbacusEvaluator(design: design, relation: libros, records: recs)
         let alarcon = try #require(recs.first { $0.values[3] == .text("Capitán veneno.  El sombrero de tres picos") })
         #expect(ev.value(ofAbacus: 98, for: alarcon) == .text("Alarcón, Pedro Antonio de"))
         #expect(ev.value(ofAbacus: 25, for: alarcon) == .text("El Capitán veneno.  El sombrero de tres picos "))
@@ -126,11 +131,11 @@ struct LibrosTests {
         let i = try #require(recs.firstIndex(of: alarcon))
         #expect(ev.value(ofAbacus: 105, for: recs[i + 1]) == nil)
         #expect(ev.value(ofAbacus: 112, for: alarcon) == .number(2147))
-        #expect(collection.formulaText(collection.abacus(id: 691)?.root) == "([Precio Merca] ÷ 166.386)")
+        #expect(collection.formulaText(collection.abacus(id: 691)?.root) == "[Precio Merca] ÷ 166.386")
     }
 
     @Test func queriesSelectRecords() throws {
-        let ev = AbacusEvaluator(collection: collection, relation: libros, records: try collection.records(of: libros))
+        let ev = AbacusEvaluator(design: design, relation: libros, records: try collection.records(of: libros))
         #expect(ev.select(query: 148).count == 183) // Poesía
         #expect(ev.select(query: 118).count == 2147) // Query (all records)
     }
@@ -161,6 +166,109 @@ struct LibrosTests {
         let es = Locale(identifier: "es_ES")
         #expect(try el(704).format.string(19.95, locale: es, currencySymbol: "Pts") == "19,95")
         #expect(try el(53).format.string(3319.4007, locale: es, currencySymbol: "Pts") == "3.319Pts")
+    }
+
+    @Test func formulasRoundTrip() throws {
+        // Every abacus prints to text that parses back to the same tile tree.
+        for rel in design.relations {
+            for a in design.abaci(in: rel) {
+                let text = design.formulaText(a.root)
+                guard let root = a.root else { continue }
+                let parsed = try design.parseFormula(text, in: rel)
+                #expect(parsed.structure == root.structure, "\(a.name): \(text)")
+            }
+        }
+        let rel = libros
+        let tituloLista = design.formulaText(design.abacus(id: 25)?.root)
+        #expect(tituloLista.hasPrefix("if undefined([Artigo]) then"))
+        let t = try design.parseFormula("if [Ano merca] >= 2002 then [Precio Euros] * 166.386 else empty", in: rel)
+        #expect(design.formulaText(t) == "if [Ano merca] ≥ 2002 then [Precio Euros] × 166.386 else empty")
+        #expect(throws: Formula.ParseError.self) { try design.parseFormula("[Nope] & 1", in: rel) }
+        #expect(throws: Formula.ParseError.self) { try design.parseFormula("text(1, 2)", in: rel) }
+    }
+
+    @Test func importedDesignMatchesHelix() throws {
+        let m = design.model
+        let rd = try #require(m.relations.first { $0.name == "Libros" })
+        #expect(rd.fields.count == 41 && rd.views.count == 30 && rd.templates.count >= 18)
+        #expect(rd.queries.count == 20 && rd.indexes.count == 10)
+        #expect(rd.queries.allSatisfy { $0.abacusID.flatMap(design.abacus(id:)) != nil })
+        // Survives JSON storage.
+        let back = try JSONDecoder().decode(DesignModel.self, from: JSONEncoder().encode(m))
+        #expect(back == m)
+        // Ordering through the design matches the Helix B-tree.
+        let ordered = design.order(try collection.records(of: libros), relation: libros, byIndex: 22)
+        #expect(ordered.first?.values[3] == .text("100 artigos"))
+    }
+
+    @Test func designEditing() throws {
+        let d = Design(model: design.model, collection: collection)
+        let rel = libros
+        let fid = try #require(d.update { $0.addField(to: rel.id, name: "Notas", type: .text) })
+        #expect(d.relation(id: rel.id)?.fields.contains { $0.name == "Notas" && $0.fieldID == 42 } == true)
+        #expect(d.relation(id: rel.id)?.iconIDs.contains(fid) == true)
+        let aid = try #require(d.update { $0.addAbacus(to: rel.id, name: "Notas maiúsculas", root: nil) })
+        let tile = try d.parseFormula("[Notas] & \"!\"", in: d.relation(id: rel.id)!)
+        d.update { $0.setAbacus(Abacus(id: aid, name: "Notas maiúsculas", root: tile)) }
+        let ev = AbacusEvaluator(design: d, relation: d.relation(id: rel.id)!, records: [])
+        #expect(ev.value(ofAbacus: aid, for: Record(id: 1, values: [42: .text("Ola")])) == .text("Ola!"))
+        let tid = try #require(d.update { $0.addTemplate(to: rel.id, name: "Nova", fields: d.relation(id: rel.id)!.fields.prefix(3).map { $0 }) })
+        #expect(d.template(id: tid)?.elements.count == 6)
+        let vid = try #require(d.update { $0.addView(to: rel.id, name: "Vista nova", templateID: tid) })
+        #expect(d.views(in: d.relation(id: rel.id)!).contains { $0.id == vid })
+        let qid = try #require(d.update { $0.addQuery(to: rel.id, name: "Só poesía") })
+        let q = try #require(d.query(id: qid))
+        let poesia = try d.parseFormula("[Clasificación] contains \"Poesía\"", in: rel)
+        d.update { $0.setAbacus(Abacus(id: q.abacusID!, name: "", root: poesia)) }
+        let all = try collection.records(of: rel)
+        #expect(AbacusEvaluator(design: d, relation: rel, records: all).select(query: qid).count == 183)
+        // Edited index keys drop the Helix B-tree and sort by value.
+        var idx = try #require(d.index(id: 22))
+        idx.keys = [16]
+        d.update { $0.setIndex(idx) }
+        #expect(d.index(id: 22)?.helixNumber == nil)
+        let byApelido = d.order(all, relation: rel, byIndex: 22).compactMap { $0.values[1]?.text }
+        #expect(byApelido.first == "A Voz de Galicia ed.")
+        d.update { $0.rename(fid, to: "Notas persoais"); $0.delete(vid) }
+        #expect(d.name(of: fid) == "Notas persoais" && d.view(id: vid) == nil)
+        let copy = try #require(d.update { $0.duplicate(tid) })
+        #expect(d.template(id: copy)?.name == "Nova copy")
+    }
+
+    @Test func templateEditing() throws {
+        var t = try #require(design.template(id: 510))
+        let rep = try #require(t.repeatElement)
+        let field = try #require(TemplateElement.flatten(t.elements).first { e in
+            if case .data(16?, _) = e.content { true } else { false }
+        })
+        // Dragging a field out of the repeat rectangle moves it to the page, and back again.
+        t.move(field.id, dx: 0, dy: 300)
+        #expect(!TemplateElement.flatten(t.repeatElement.map { [$0] } ?? []).contains { $0.id == field.id })
+        #expect(t.element(field.id)?.rect.top == field.rect.top + 300)
+        t.move(field.id, dx: 0, dy: -300)
+        if case .repeatGroup(let kids) = t.repeatElement!.content { #expect(kids.contains { $0.id == field.id }) }
+        // Moving the repeat rectangle carries its contents.
+        t.move(rep.id, dx: 10, dy: 20)
+        #expect(t.element(field.id)?.rect.left == field.rect.left + 10)
+        t.update(field.id) { $0.framed = true; $0.font.size = 20 }
+        #expect(t.element(field.id)?.framed == true && t.element(field.id)?.font.size == 20)
+        t.remove(field.id)
+        #expect(t.element(field.id) == nil)
+        var form = try #require(design.template(id: 1086))
+        form.makeList(id: 999_999)
+        #expect(form.repeatElement?.id == 999_999)
+    }
+
+    @Test func designPersistsInStore() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("faulix-design-\(UUID().uuidString).sqlite")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let store = try RecordStore(url: url)
+        #expect(store.loadDesign() == nil)
+        var m = design.model
+        m.addField(to: libros.id, name: "Notas", type: .text)
+        try store.saveDesign(m, note: "New Field")
+        #expect(store.loadDesign() == m)
+        #expect(try store.history().first?.action == .design)
     }
 
     @Test func recordStoreRoundTripAndEdits() throws {

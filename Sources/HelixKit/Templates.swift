@@ -1,8 +1,8 @@
 import Foundation
 
 /// Rectangle in template (QuickDraw) coordinates: y grows downward, units are pixels.
-public struct HelixRect: Hashable {
-    public let top: Int, left: Int, bottom: Int, right: Int
+public struct HelixRect: Hashable, Codable {
+    public var top: Int, left: Int, bottom: Int, right: Int
 
     public init(top: Int, left: Int, bottom: Int, right: Int) {
         (self.top, self.left, self.bottom, self.right) = (top, left, bottom, right)
@@ -20,16 +20,20 @@ public struct HelixRect: Hashable {
     }
 }
 
-public enum HelixAlignment: UInt8, Hashable {
+public enum HelixAlignment: UInt8, Hashable, Codable, CaseIterable {
     case left = 0, center = 1, right = 2
 }
 
-public struct HelixFont: Hashable {
+public struct HelixFont: Hashable, Codable {
     /// Family name from the collection font table; nil means the system font.
-    public let family: String?
-    public let size: Int
+    public var family: String?
+    public var size: Int
     /// QuickDraw style bits: 1 bold, 2 italic, 4 underline.
-    public let style: UInt8
+    public var style: UInt8
+
+    public init(family: String?, size: Int, style: UInt8) {
+        (self.family, self.size, self.style) = (family, size, style)
+    }
 
     public var bold: Bool { style & 1 != 0 }
     public var italic: Bool { style & 2 != 0 }
@@ -39,10 +43,10 @@ public struct HelixFont: Hashable {
 /// Display format of a data rectangle (`+0x26` kind, `+0x27` flags, `+0x28` u16 decimals).
 /// Flags seen: `0x40` fixed decimals, `0x80` currency (grouped, with the Mac's regional
 /// currency symbol appended, e.g. "3.319Pts").
-public struct NumberFormat: Hashable {
-    public let kind: UInt8
-    public let flags: UInt8
-    public let decimals: Int
+public struct NumberFormat: Hashable, Codable {
+    public var kind: UInt8
+    public var flags: UInt8
+    public var decimals: Int
 
     public var isNumber: Bool { kind == 1 }
     public var currency: Bool { flags & 0x80 != 0 }
@@ -95,8 +99,8 @@ public struct NumberFormat: Hashable {
 /// two `{u32 icon ref, i16, i16}` slots (field / abacus) at `+0x3C` and `+0x44`.
 /// Groups (page and repeat rectangles) store `u16 count` at `+0x1C` followed by child refs.
 /// Flags: `+4` bit 0x80 framed; `+5` bit 0x80 vertical scroll bar.
-public struct TemplateElement: Identifiable, Hashable {
-    public enum Content: Hashable {
+public struct TemplateElement: Identifiable, Hashable, Codable {
+    public enum Content: Hashable, Codable {
         case label(String)
         /// A field and/or abacus. When both are present the abacus supplies the default value.
         case data(fieldObjectID: Int?, abacusObjectID: Int?)
@@ -104,12 +108,12 @@ public struct TemplateElement: Identifiable, Hashable {
         case group([TemplateElement])
     }
 
-    public let id: Int
-    public let rect: HelixRect
-    public let font: HelixFont
-    public let alignment: HelixAlignment
-    public let tabOrder: Int
-    public let content: Content
+    public var id: Int
+    public var rect: HelixRect
+    public var font: HelixFont
+    public var alignment: HelixAlignment
+    public var tabOrder: Int
+    public var content: Content
     public var framed = false
     public var scrollsVertically = false
     public var format = NumberFormat.general
@@ -121,11 +125,15 @@ public struct TemplateElement: Identifiable, Hashable {
     }
 }
 
-public struct Template: Identifiable, Hashable {
-    public let id: Int
-    public let name: String
-    public let page: HelixRect
-    public let elements: [TemplateElement]
+public struct Template: Identifiable, Hashable, Codable {
+    public var id: Int
+    public var name: String
+    public var page: HelixRect
+    public var elements: [TemplateElement]
+
+    public init(id: Int, name: String, page: HelixRect, elements: [TemplateElement]) {
+        (self.id, self.name, self.page, self.elements) = (id, name, page, elements)
+    }
 
     /// The repeat rectangle, if this is a list template.
     public var repeatElement: TemplateElement? {
@@ -154,16 +162,21 @@ public struct Template: Identifiable, Hashable {
     }
 }
 
-public struct ViewDefinition: Identifiable, Hashable {
-    public let id: Int
-    public let name: String
-    public let templateID: Int?
-    public let queryID: Int?
+public struct ViewDefinition: Identifiable, Hashable, Codable {
+    public var id: Int
+    public var name: String
+    public var templateID: Int?
+    public var queryID: Int?
     /// Index object ids (current, then default) used to order records.
-    public let indexID: Int?
-    public let defaultIndexID: Int?
+    public var indexID: Int?
+    public var defaultIndexID: Int?
     /// Saved window frame in screen coordinates.
-    public let window: HelixRect
+    public var window: HelixRect
+
+    public init(id: Int, name: String, templateID: Int?, queryID: Int?, indexID: Int?, defaultIndexID: Int?, window: HelixRect) {
+        (self.id, self.name, self.templateID, self.queryID) = (id, name, templateID, queryID)
+        (self.indexID, self.defaultIndexID, self.window) = (indexID, defaultIndexID, window)
+    }
 }
 
 extension HelixCollection {
@@ -289,30 +302,7 @@ extension HelixCollection {
            info.root != 0, let entries = try? BTree(heap: heap, root: info.root).entries() {
             for (i, e) in entries.enumerated() where rank[e.value] == nil { rank[e.value] = i }
         }
-        let keys = indexKeys(ofIndexObject: id)
         let key: (Record, Int) -> Value? = keyValue ?? { r, k in relation.field(objectID: k).flatMap { r[$0] } }
-        func less(_ a: Record, _ b: Record) -> Bool {
-            for k in keys {
-                let x = key(a, k), y = key(b, k)
-                if x == y { continue }
-                return Value.sortLess(x, y)
-            }
-            return a.id < b.id
-        }
-        var ordered = records.filter { !modified.contains($0.id) && rank[$0.id] != nil }
-            .sorted { rank[$0.id]! < rank[$1.id]! }
-        let rest = records.filter { modified.contains($0.id) || rank[$0.id] == nil }
-        if rank.isEmpty && !keys.isEmpty {
-            return records.sorted(by: less)
-        }
-        for r in rest where modified.contains(r.id) {
-            var lo = 0, hi = ordered.count
-            while lo < hi {
-                let mid = (lo + hi) / 2
-                if less(ordered[mid], r) { lo = mid + 1 } else { hi = mid }
-            }
-            ordered.insert(r, at: lo)
-        }
-        return ordered + rest.filter { !modified.contains($0.id) }
+        return RecordOrdering.order(records, rank: rank, keys: indexKeys(ofIndexObject: id), key: key, modified: modified)
     }
 }

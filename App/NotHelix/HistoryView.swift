@@ -20,6 +20,7 @@ struct HistoryView: View {
                     .help(model.undoManager.redoMenuItemTitle)
                 Spacer()
                 Text("\(entries.count) changes").font(.caption).foregroundStyle(.secondary)
+                HelpButton(topic: .history)
             }
             .labelStyle(.iconOnly)
             .buttonStyle(.borderless)
@@ -45,7 +46,7 @@ struct HistoryRow: View {
     let entry: RecordStore.HistoryEntry
     let expanded: Bool
 
-    private var relation: Relation? { model.collection.relations.first { $0.id == entry.relationID } }
+    private var relation: Relation? { model.design.relations.first { $0.id == entry.relationID } }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -56,7 +57,9 @@ struct HistoryRow: View {
                 Text(entry.date, format: .dateTime.day().month(.abbreviated).hour().minute())
                     .font(.caption).foregroundStyle(.secondary)
             }
-            if let rel = relation {
+            if entry.action == .design {
+                Text("Design change").font(.caption).foregroundStyle(.secondary)
+            } else if let rel = relation {
                 Text(model.label(for: entry.after ?? entry.before, in: rel).nilIfEmpty ?? "Record \(entry.recordID)")
                     .font(.caption).foregroundStyle(.secondary).lineLimit(1)
                 if !entry.note.isEmpty {
@@ -89,6 +92,7 @@ struct HistoryRow: View {
         case .insert: return "New \(rel) record"
         case .update: return "Changed \(entry.changedFields.count) field\(entry.changedFields.count == 1 ? "" : "s")"
         case .delete: return "Deleted \(rel) record"
+        case .design: return entry.note
         }
     }
 
@@ -97,6 +101,7 @@ struct HistoryRow: View {
         case .insert: "plus.circle.fill"
         case .update: "pencil.circle.fill"
         case .delete: "minus.circle.fill"
+        case .design: "paintbrush.pointed.fill"
         }
     }
 
@@ -105,6 +110,7 @@ struct HistoryRow: View {
         case .insert: .green
         case .update: .blue
         case .delete: .red
+        case .design: .purple
         }
     }
 

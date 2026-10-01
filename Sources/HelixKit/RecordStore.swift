@@ -16,7 +16,7 @@ import SQLite3
 /// ```
 public final class RecordStore {
     public struct HistoryEntry: Identifiable, Hashable {
-        public enum Action: String { case insert, update, delete }
+        public enum Action: String { case insert, update, delete, design }
         public let id: Int
         public let date: Date
         public let relationID: Int
@@ -198,6 +198,28 @@ public final class RecordStore {
     private static func record(json: String, id: UInt32) -> Record? {
         guard let dict = try? JSONDecoder().decode([String: Value].self, from: Data(json.utf8)) else { return nil }
         return Record(id: id, values: Dictionary(uniqueKeysWithValues: dict.compactMap { k, v in UInt16(k).map { ($0, v) } }))
+    }
+
+    // MARK: Design
+
+    /// The editable design (see `DesignModel`), or nil if not imported yet.
+    public func loadDesign() -> DesignModel? {
+        guard let json = try? metaValue("design") else { return nil }
+        return try? JSONDecoder().decode(DesignModel.self, from: Data(json.utf8))
+    }
+
+    public func saveDesign(_ model: DesignModel) throws {
+        let data = try JSONEncoder().encode(model)
+        try run("INSERT OR REPLACE INTO meta VALUES ('design', ?)", [.text(String(decoding: data, as: UTF8.self))])
+    }
+
+    /// Saves the design and records a line in the history log.
+    public func saveDesign(_ model: DesignModel, note: String) throws {
+        try transaction {
+            try saveDesign(model)
+            try run("INSERT INTO history(time, relation_id, record_id, action, before, after, note) VALUES (?, ?, 0, 'design', NULL, NULL, ?)",
+                    [.real(Date().timeIntervalSince1970), .int(-1), .text(note)])
+        }
     }
 
     /// Writes a consistent standalone copy of the database (for backup or use in other tools).

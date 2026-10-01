@@ -15,7 +15,10 @@ enum AppMode: String, CaseIterable, Identifiable {
 
 @MainActor
 final class CollectionModel: ObservableObject {
+    /// The Helix file (read-only source).
     let collection: HelixCollection
+    /// The editable design: imported from the Helix file once, then edited in Design mode.
+    let design: Design
     let fileName: String?
     /// Editable native copy of the data; nil if it could not be created (then read-only).
     let store: RecordStore?
@@ -45,27 +48,33 @@ final class CollectionModel: ObservableObject {
 
     private var cache: [Int: (records: [Record], search: [String])] = [:]
     private var orderedCache: [Int: [Record]] = [:]
-    private var templateCache: [Int: Template] = [:]
     private var evaluatorCache: [String: AbacusEvaluator] = [:]
     private var baseCache: [Int: (records: [Record], modified: Set<UInt32>)] = [:]
 
     init(collection: HelixCollection, fileName: String?) {
         self.collection = collection
         self.fileName = fileName
+        var model: DesignModel?
         do {
             let store = try RecordStore(url: RecordStore.defaultURL(for: collection.heap, name: collection.name))
             try store.importIfNeeded(from: collection)
+            model = store.loadDesign()
+            if model == nil {
+                model = DesignModel(importing: collection)
+                try store.saveDesign(model!)
+            }
             self.store = store
         } catch {
             store = nil
             storeError = error.localizedDescription
         }
-        let first = collection.relations.max { $0.recordCount < $1.recordCount }
+        design = Design(model: model ?? DesignModel(importing: collection), collection: collection)
+        let first = design.relations.max { $0.recordCount < $1.recordCount }
         select(.relation(first?.id ?? 0))
         openViewID = first.flatMap { rel in
-            let views = collection.views(in: rel)
+            let views = design.views(in: rel)
             if UserDefaults.standard.string(forKey: "OpenView") == nil,
-               let last = UserDefaults.standard.object(forKey: "lastView-\(collection.name)") as? Int,
+               let last = UserDefaults.standard.object(forKey: "lastView-\(design.name)") as? Int,
                views.contains(where: { $0.id == last }) { return last }
             let preferred = UserDefaults.standard.string(forKey: "OpenView") ?? "Lista Xeral"
             return (views.first { $0.name == preferred } ?? views.first)?.id
@@ -78,10 +87,10 @@ final class CollectionModel: ObservableObject {
         // Testing aids: `defaults write com.nothelix.NotHelix DesignOpen "Libros/Nome completo"`.
         if let path = UserDefaults.standard.string(forKey: "DesignOpen") {
             mode = .design
-            var scope = collection.icons.map(\.objectID)
+            var scope = design.model.icons.map(\.objectID)
             for name in path.split(separator: "/").map(String.init) {
-                guard let id = scope.first(where: { collection.objects[$0]?.name == name }) else { break }
-                if let rel = collection.relations.first(where: { $0.id == id }) {
+                guard let id = scope.first(where: { design.name(of: $0) == name }) else { break }
+                if let rel = design.relations.first(where: { $0.id == id }) {
                     designPath.append(.relation(id))
                     scope = rel.iconIDs
                 } else {
@@ -95,17 +104,17 @@ final class CollectionModel: ObservableObject {
 
     /// Views of every relation, sorted by name, as Helix shows them on its user menus.
     var viewsByRelation: [(Relation, [ViewDefinition])] {
-        collection.relations.map { rel in
-            (rel, collection.views(in: rel).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending })
+        design.relations.map { rel in
+            (rel, design.views(in: rel).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending })
         }.filter { !$0.1.isEmpty }
     }
 
-    var openView: ViewDefinition? { openViewID.flatMap(collection.view(id:)) }
+    var openView: ViewDefinition? { openViewID.flatMap(design.view(id:)) }
 
     func relation(ofView view: ViewDefinition) -> Relation? { relationContaining(view.id) }
 
     func relationContaining(_ objectID: Int) -> Relation? {
-        collection.relations.first { rel in rel.iconIDs.contains(objectID) }
+        design.relation(containing: objectID)
     }
 
     func template(for view: ViewDefinition) -> Template? { view.templateID.flatMap(cachedTemplate) }
@@ -125,15 +134,15 @@ final class CollectionModel: ObservableObject {
             ordered = hit
         } else {
             let base = baseRecords(rel)
-            let keyEval = AbacusEvaluator(collection: collection, relation: rel, records: base.records)
-            ordered = collection.order(base.records, relation: rel, byIndex: indexID, modified: base.modified) { r, key in
+            let keyEval = AbacusEvaluator(design: design, relation: rel, records: base.records)
+            ordered = design.order(base.records, relation: rel, byIndex: indexID, modified: base.modified) { r, key in
                 rel.field(objectID: key).flatMap { r[$0] } ?? keyEval.value(ofAbacus: key, for: r)
             }
             orderedCache[orderKey] = ordered
         }
         var selected = ordered
         if let q = view.queryID {
-            selected = AbacusEvaluator(collection: collection, relation: rel, records: ordered).select(query: q)
+            selected = AbacusEvaluator(design: design, relation: rel, records: ordered).select(query: q)
         }
         let q = searchText.trimmingCharacters(in: .whitespaces)
             .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
@@ -145,7 +154,7 @@ final class CollectionModel: ObservableObject {
                 return terms.allSatisfy { s.contains($0) }
             }
         }
-        let ev = AbacusEvaluator(collection: collection, relation: rel, records: selected)
+        let ev = AbacusEvaluator(design: design, relation: rel, records: selected)
         if evaluatorCache.count > 64 { evaluatorCache.removeAll() }
         evaluatorCache[key] = ev
         return ev
@@ -158,12 +167,13 @@ final class CollectionModel: ObservableObject {
 
     func sortControl(for view: ViewDefinition) -> SortControl? {
         guard let rel = relation(ofView: view) else { return nil }
-        let indexes = collection.objects(in: rel, kind: .index).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        let indexes = (design.relationDesign(id: rel.id)?.indexes ?? [])
+            .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         let counts = Dictionary(grouping: indexes, by: \.name).mapValues(\.count)
-        var options = indexes.map { obj -> (id: Int, name: String) in
-            let keys = collection.indexKeys(ofIndexObject: obj.id).compactMap { collection.objects[$0]?.name }
-            let name = counts[obj.name, default: 0] > 1 && keys.count > 1 ? "\(obj.name) (\(keys.dropFirst().prefix(2).joined(separator: ", ")))" : obj.name
-            return (obj.id, name)
+        var options = indexes.map { idx -> (id: Int, name: String) in
+            let keys = idx.keys.compactMap { design.name(of: $0) }
+            let name = counts[idx.name, default: 0] > 1 && keys.count > 1 ? "\(idx.name) (\(keys.dropFirst().prefix(2).joined(separator: ", ")))" : idx.name
+            return (idx.id, name)
         }
         options.append((Self.recordNumberSort, "Record number"))
         return SortControl(options: options, selection: Binding(
@@ -175,19 +185,9 @@ final class CollectionModel: ObservableObject {
         Binding(get: { self.viewRecordIndex[view.id] ?? 0 }, set: { self.viewRecordIndex[view.id] = $0 })
     }
 
-    func cachedTemplate(id: Int) -> Template? {
-        if let t = templateCache[id] { return t }
-        let t = collection.template(id: id)
-        templateCache[id] = t
-        return t
-    }
+    func cachedTemplate(id: Int) -> Template? { design.template(id: id) }
 
-    var relation: Relation? { collection.relations.first { $0.id == relationID } }
-
-    var selectedObject: DesignObject? {
-        if case .object(let id)? = sidebarSelection { return collection.objects[id] }
-        return nil
-    }
+    var relation: Relation? { design.relations.first { $0.id == relationID } }
 
     var selectedRecord: Record? { records.first { $0.id == selectedRecordID } }
 
@@ -281,7 +281,7 @@ final class CollectionModel: ObservableObject {
 
     /// Restores a record to how it was before a logged change (from the History panel).
     func restore(before entry: RecordStore.HistoryEntry) {
-        guard let rel = collection.relations.first(where: { $0.id == entry.relationID }) else { return }
+        guard let rel = design.relations.first(where: { $0.id == entry.relationID }) else { return }
         do {
             try apply(entry.before, recordID: entry.recordID, in: rel, actionName: "Restore",
                       note: "Restored to before change #\(entry.id)")
@@ -299,6 +299,63 @@ final class CollectionModel: ObservableObject {
             if case .text(let s)? = record[f], !s.isEmpty { s.components(separatedBy: .newlines).first } else { nil }
         }
         return parts.prefix(2).joined(separator: " — ")
+    }
+
+    // MARK: Design editing
+
+    /// Applies a design change: saves it, logs it in the History, and makes it undoable.
+    @discardableResult
+    func editDesign<T>(_ actionName: String, _ change: (inout DesignModel) -> T) -> T {
+        let before = design.model
+        let result = design.update(change)
+        commitDesign(actionName, before: before)
+        return result
+    }
+
+    private func commitDesign(_ actionName: String, before: DesignModel) {
+        guard design.model != before else { return }
+        let prefix = undoManager.isUndoing ? "Undo " : undoManager.isRedoing ? "Redo " : ""
+        do {
+            try store?.saveDesign(design.model, note: prefix + actionName)
+        } catch {
+            NSAlert(error: error).runModal()
+        }
+        undoManager.registerUndo(withTarget: self) { m in
+            let current = m.design.model
+            m.design.replace(with: before)
+            m.commitDesign(actionName, before: current)
+        }
+        undoManager.setActionName(actionName)
+        designChanged()
+    }
+
+    /// Clears everything derived from the design.
+    func designChanged() {
+        orderedCache.removeAll()
+        evaluatorCache.removeAll()
+        cache.removeAll()
+        revision += 1
+        if relationID != nil { load() }
+        if let id = openViewID, design.view(id: id) == nil { openViewID = viewsByRelation.first?.1.first?.id }
+    }
+
+    /// Names of the design objects that refer to `id` (shown before deleting).
+    func usages(of id: Int) -> [String] {
+        var out: [String] = []
+        for r in design.model.relations {
+            for t in r.templates where TemplateElement.flatten(t.elements).contains(where: {
+                if case .data(let f, let a) = $0.content { f == id || a == id } else { false }
+            }) { out.append("Template “\(t.name)”") }
+            for a in r.abaci where a.id != id && (a.root?.references.contains(id) ?? false) {
+                if let q = r.queries.first(where: { $0.abacusID == a.id }) { out.append("Query “\(q.name)”") }
+                else { out.append("Abacus “\(a.name)”") }
+            }
+            for v in r.views where [v.templateID, v.queryID, v.indexID, v.defaultIndexID].contains(id) {
+                out.append("View “\(v.name)”")
+            }
+            for x in r.indexes where x.keys.contains(id) { out.append("Index “\(x.name)”") }
+        }
+        return out
     }
 
     func actions(for view: ViewDefinition) -> RecordActions? {
@@ -333,14 +390,14 @@ final class CollectionModel: ObservableObject {
 
     /// The view whose records the Export sheet uses (the open view in User mode).
     var exportView: ViewDefinition? {
-        if mode == .design, case .object(let id)? = designPath.last, let v = collection.view(id: id) { return v }
+        if mode == .design, case .object(let id)? = designPath.last, let v = design.view(id: id) { return v }
         return openView
     }
 
     func exportJSON() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "\(collection.name).json"
+        panel.nameFieldStringValue = "\(design.name).json"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
             try Exporter.json(collection) { [unowned self] rel in baseRecords(rel).records }.write(to: url)
@@ -353,7 +410,7 @@ final class CollectionModel: ObservableObject {
         guard let store else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [UTType(filenameExtension: "sqlite") ?? .data]
-        panel.nameFieldStringValue = "\(collection.name).sqlite"
+        panel.nameFieldStringValue = "\(design.name).sqlite"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
             try store.backup(to: url)

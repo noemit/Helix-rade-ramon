@@ -46,46 +46,33 @@ struct CollectionView: View {
 
     private var userMode: some View {
         NavigationSplitView {
-            List(selection: $model.openViewID) {
-                ForEach(model.viewsByRelation, id: \.0.id) { rel, views in
-                    let forms = views.filter { model.template(for: $0)?.repeatElement == nil }
-                    let lists = views.filter { model.template(for: $0)?.repeatElement != nil }
-                    ForEach([("Forms", forms, "doc.text"), ("Lists", lists, "list.bullet.rectangle")], id: \.0) { title, vs, symbol in
-                        if !vs.isEmpty {
-                            Section(model.viewsByRelation.count > 1 ? "\(rel.name) · \(title)" : title) {
-                                ForEach(vs) { v in
-                                    Label(v.name, systemImage: symbol)
-                                        .help(model.iconSummary(model.collection.objects[v.id]!))
-                                        .tag(v.id)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            .listStyle(.sidebar)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 220)
+            ViewSidebar(model: model)
+                .navigationSplitViewColumnWidth(min: 180, ideal: 220)
         } detail: {
             if let view = model.openView, let rel = model.relation(ofView: view), let template = model.template(for: view),
                let evaluator = model.evaluator(for: view) {
-                HelixViewPane(view: view, template: template, collection: model.collection, relation: rel,
+                HelixViewPane(view: view, template: template, design: model.design, relation: rel,
                               records: evaluator.records, evaluator: evaluator, actions: model.actions(for: view),
                               sort: model.sortControl(for: view), currentIndex: model.recordIndexBinding(for: view))
                     .id(view.id)
                     .navigationSubtitle(viewSubtitle(view, rel))
+                    .toolbar {
+                        ToolbarItem { HelpButton(topic: template.repeatElement == nil ? .form : .list) }
+                    }
             } else {
                 ContentUnavailableView("No View Open", systemImage: "macwindow",
-                                       description: Text("Choose a view from the list."))
+                                       description: Text("Choose a view from the list, or create one in Design mode."))
+                    .toolbar { ToolbarItem { HelpButton(topic: .welcome) } }
             }
         }
         .searchable(text: $model.searchText, placement: .toolbar, prompt: "Find")
-        .navigationTitle(model.collection.name)
+        .navigationTitle(model.design.name)
     }
 
     private func viewSubtitle(_ view: ViewDefinition, _ rel: Relation) -> String {
         var parts = ["\(model.records(for: view).count) records"]
-        if let q = view.queryID, let name = model.collection.objects[q]?.name { parts.append("query “\(name)”") }
-        if let i = view.indexID ?? view.defaultIndexID, let name = model.collection.objects[i]?.name { parts.append("sorted by \(name)") }
+        if let q = view.queryID, let name = model.design.name(of: q) { parts.append("query “\(name)”") }
+        if let i = view.indexID ?? view.defaultIndexID, let name = model.design.name(of: i) { parts.append("sorted by \(name)") }
         return parts.joined(separator: " · ")
     }
 
@@ -111,5 +98,45 @@ struct RecordsPane: View {
         }
         .searchable(text: $model.searchText, placement: .toolbar, prompt: "Search records")
         .onChange(of: model.searchText) { model.applySearch() }
+    }
+}
+
+/// User-mode sidebar: each relation's views, split into forms and lists.
+struct ViewSidebar: View {
+    @ObservedObject var model: CollectionModel
+
+    private struct Group: Identifiable {
+        let id: String
+        let title: String
+        let symbol: String
+        let views: [ViewDefinition]
+    }
+
+    private var groups: [Group] {
+        let multi = model.viewsByRelation.count > 1
+        return model.viewsByRelation.flatMap { rel, views -> [Group] in
+            let forms = views.filter { model.template(for: $0)?.repeatElement == nil }
+            let lists = views.filter { model.template(for: $0)?.repeatElement != nil }
+            return [
+                Group(id: "\(rel.id)-f", title: multi ? "\(rel.name) · Forms" : "Forms", symbol: "doc.text", views: forms),
+                Group(id: "\(rel.id)-l", title: multi ? "\(rel.name) · Lists" : "Lists", symbol: "list.bullet.rectangle", views: lists),
+            ].filter { !$0.views.isEmpty }
+        }
+    }
+
+    var body: some View {
+        let _ = model.revision
+        List(selection: $model.openViewID) {
+            ForEach(groups) { g in
+                Section(g.title) {
+                    ForEach(g.views) { v in
+                        Label(v.name, systemImage: g.symbol)
+                            .help(model.iconSummary(v.id))
+                            .tag(v.id)
+                    }
+                }
+            }
+        }
+        .listStyle(.sidebar)
     }
 }

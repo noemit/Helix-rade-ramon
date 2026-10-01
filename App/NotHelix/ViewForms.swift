@@ -117,7 +117,7 @@ final class Drafts: ObservableObject {
 struct HelixViewPane: View {
     let view: ViewDefinition
     let template: Template
-    let collection: HelixCollection
+    let design: Design
     let relation: Relation
     let records: [Record]
     let evaluator: AbacusEvaluator
@@ -128,10 +128,10 @@ struct HelixViewPane: View {
     var body: some View {
         Group {
             if let rep = template.repeatElement {
-                ListForm(template: template, repeatElement: rep, collection: collection, relation: relation, records: records,
+                ListForm(template: template, repeatElement: rep, design: design, relation: relation, records: records,
                          evaluator: evaluator, actions: actions, sort: sort)
             } else {
-                SingleForm(template: template, collection: collection, relation: relation, records: records,
+                SingleForm(template: template, design: design, relation: relation, records: records,
                            evaluator: evaluator, actions: actions, sort: sort, currentIndex: $currentIndex)
             }
         }
@@ -222,7 +222,7 @@ struct StatusBar<Center: View>: View {
 /// Enter (new record) or Replace (existing record).
 struct SingleForm: View {
     let template: Template
-    let collection: HelixCollection
+    let design: Design
     let relation: Relation
     let records: [Record]
     let evaluator: AbacusEvaluator
@@ -243,7 +243,7 @@ struct SingleForm: View {
             if let base {
                 Paper(width: CGFloat(b.right + 16)) {
                     TemplateCanvas(elements: template.elements,
-                                   context: TemplateContext(collection: collection, relation: relation, record: base,
+                                   context: TemplateContext(design: design, relation: relation, record: base,
                                                             evaluator: evaluator,
                                                             editor: actions == nil ? nil : drafts.editing(for: base)))
                         .frame(width: CGFloat(b.right + 16), height: CGFloat(b.bottom + 16), alignment: .topLeading)
@@ -337,7 +337,7 @@ struct SingleForm: View {
 struct ListForm: View {
     let template: Template
     let repeatElement: TemplateElement
-    let collection: HelixCollection
+    let design: Design
     let relation: Relation
     let records: [Record]
     let evaluator: AbacusEvaluator
@@ -390,7 +390,7 @@ struct ListForm: View {
     }
 
     private func context(_ record: Record?, editing: Bool = false) -> TemplateContext {
-        TemplateContext(collection: collection, relation: relation, record: record, evaluator: evaluator,
+        TemplateContext(design: design, relation: relation, record: record, evaluator: evaluator,
                         editor: editing && actions != nil ? record.map(drafts.editing(for:)) : nil)
     }
 

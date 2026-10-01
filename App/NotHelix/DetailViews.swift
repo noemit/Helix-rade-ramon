@@ -50,43 +50,33 @@ struct RecordDetailView: View {
     }
 }
 
-/// Design-mode inspector: shows what is known about an object plus its raw bytes.
+/// Information about a design object, plus its original Helix bytes when it came from the file.
 struct DesignObjectView: View {
-    let collection: HelixCollection
-    let object: DesignObject
+    let design: Design
+    let objectID: Int
+
+    private var helixObject: DesignObject? { design.collection?.objects[objectID] }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                Text(object.name.isEmpty ? "#\(object.id)" : object.name).font(.title2.bold())
+                Text(design.name(of: objectID).flatMap { $0.isEmpty ? nil : $0 } ?? "#\(objectID)").font(.title2.bold())
                 Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 4) {
-                    row("Kind", object.kind?.displayName ?? "Unknown (\(object.rawKind))")
-                    row("Object ID", "\(object.id)")
-                    row("Heap block", "\(object.block) (offset 0x\(String(object.block * 32, radix: 16)))")
-                    row("Size", "\(object.length) bytes")
-                    if let field = collection.relations.lazy.flatMap(\.fields).first(where: { $0.id == object.id }) {
-                        row("Field number", "\(field.fieldID)")
-                        row("Type", field.type.description)
-                        if let c = field.created { row("Created", c.description) }
-                        if let m = field.modified { row("Modified", m.description) }
-                    }
+                    row("Kind", design.kind(of: objectID)?.displayName ?? helixObject?.kind?.displayName ?? "Unknown")
+                    row("Object ID", "\(objectID)")
+                    row("Origin", helixObject == nil ? "Created in Faulix" : "Helix file")
                 }
-                if let a = collection.abacus(id: object.id) ?? collection.queryAbacusID(ofQuery: object.id).flatMap(collection.abacus(id:)) {
-                    GroupBox("Formula") {
-                        Text(collection.formulaText(a.root).isEmpty ? "(empty)" : collection.formulaText(a.root))
-                            .font(.system(.body, design: .monospaced))
+                if let o = helixObject, let heap = design.collection?.heap {
+                    DisclosureGroup("Original Helix bytes (\(o.length) bytes at block \(o.block))") {
+                        Text(Self.hexDump(heap, o))
+                            .font(.system(.caption, design: .monospaced))
                             .textSelection(.enabled)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-                GroupBox("Raw bytes") {
-                    Text(hexDump)
-                        .font(.system(.caption, design: .monospaced))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
             }
             .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -97,8 +87,8 @@ struct DesignObjectView: View {
         }
     }
 
-    private var hexDump: String {
-        let bytes = Array(collection.heap.slice(Int(object.block) * 32, min(object.length, 4096)))
+    static func hexDump(_ heap: HeapFile, _ object: DesignObject) -> String {
+        let bytes = Array(heap.slice(Int(object.block) * 32, min(object.length, 4096)))
         return stride(from: 0, to: bytes.count, by: 16).map { i in
             let chunk = bytes[i..<min(i + 16, bytes.count)]
             let hex = chunk.map { String(format: "%02x", $0) }.joined(separator: " ")

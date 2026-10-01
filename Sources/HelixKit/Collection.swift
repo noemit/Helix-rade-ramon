@@ -1,19 +1,23 @@
 import Foundation
 
-public struct Field: Identifiable, Hashable {
+public struct Field: Identifiable, Hashable, Codable {
     /// Object id of the field icon.
     public let id: Int
-    public let name: String
+    public var name: String
     /// Field number used as the key inside record data.
-    public let fieldID: UInt16
-    public let type: FieldType
-    public let created: HelixDate?
-    public let modified: HelixDate?
+    public var fieldID: UInt16
+    public var type: FieldType
+    public var created: HelixDate?
+    public var modified: HelixDate?
+
+    public init(id: Int, name: String, fieldID: UInt16, type: FieldType, created: HelixDate? = nil, modified: HelixDate? = nil) {
+        (self.id, self.name, self.fieldID, self.type, self.created, self.modified) = (id, name, fieldID, type, created, modified)
+    }
 
     public var displayName: String { name.isEmpty ? "Field \(fieldID)" : name }
 }
 
-public struct IndexInfo: Hashable {
+public struct IndexInfo: Hashable, Codable {
     public let number: UInt16
     public let flags: UInt16
     public let nodeSize: UInt16
@@ -22,10 +26,14 @@ public struct IndexInfo: Hashable {
 }
 
 /// An icon placed in a collection or relation window (icon-mode position, top-left).
-public struct IconPlacement: Hashable {
-    public let objectID: Int
-    public let v: Int
-    public let h: Int
+public struct IconPlacement: Hashable, Codable {
+    public var objectID: Int
+    public var v: Int
+    public var h: Int
+
+    public init(objectID: Int, v: Int, h: Int) {
+        (self.objectID, self.v, self.h) = (objectID, v, h)
+    }
 }
 
 public struct Relation: Identifiable, Hashable {
@@ -38,6 +46,11 @@ public struct Relation: Identifiable, Hashable {
     public let icons: [IconPlacement]
     public let fields: [Field]
     public let indexes: [IndexInfo]
+
+    public init(id: Int, name: String, dataID: UInt16, icons: [IconPlacement], fields: [Field], indexes: [IndexInfo]) {
+        (self.id, self.name, self.dataID, self.icons, self.fields, self.indexes) = (id, name, dataID, icons, fields, indexes)
+        iconIDs = icons.map(\.objectID)
+    }
 
     /// The primary (record number) tree is index #1.
     public var recordTree: IndexInfo? { indexes.first { $0.number == 1 } }
@@ -128,7 +141,7 @@ public final class HelixCollection {
             .filter { $0.kind == .field }
             .map { parseField(heap, $0) }
             .sorted { $0.fieldID < $1.fieldID }
-        return Relation(id: obj.id, name: obj.name, dataID: dataID, iconIDs: icons, icons: placements,
+        return Relation(id: obj.id, name: obj.name, dataID: dataID, icons: placements,
                         fields: fields, indexes: directories[dataID] ?? [])
     }
 

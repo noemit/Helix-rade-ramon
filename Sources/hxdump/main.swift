@@ -83,7 +83,8 @@ do {
     case "abaci":
         for rel in collection.relations {
             let recs = try collection.records(of: rel, orderedByIndex: collection.objects(in: rel, kind: .index).first?.id)
-            let ev = AbacusEvaluator(collection: collection, relation: rel, records: recs)
+            let ev = AbacusEvaluator(design: Design(model: DesignModel(importing: collection), collection: collection),
+                                     relation: rel, records: recs)
             let sample = args.count > 3 ? recs.first { String($0.id) == args[3] } : recs.first
             print("\nRelation '\(rel.name)'" + (sample.map { " (values for record \($0.id))" } ?? ""))
             for obj in collection.objects(in: rel, kind: .abacus) {

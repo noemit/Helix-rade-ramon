@@ -1,6 +1,6 @@
 import Foundation
 
-public enum FieldType: UInt8, CaseIterable, CustomStringConvertible {
+public enum FieldType: UInt8, CaseIterable, Codable, CustomStringConvertible {
     case text = 0
     case number = 1
     case date = 2

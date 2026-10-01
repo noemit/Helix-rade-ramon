@@ -8,7 +8,7 @@ import Foundation
 /// (0 = empty slot). Constant tiles (kind 19) store the type at `+4` (0 text,
 /// 1 number, 2 date, 3 flag), the binary value from `+6` and display text as a
 /// Pascal string at `+0xE`.
-public indirect enum Tile: Hashable {
+public indirect enum Tile: Hashable, Codable {
     case field(objectID: Int)
     case abacus(objectID: Int)
     case constant(Value?)
@@ -18,7 +18,7 @@ public indirect enum Tile: Hashable {
 
 /// Helix operator tiles. Meanings are inferred from how the sample collection uses
 /// them; the ones marked (?) are best guesses.
-public enum Opcode: Hashable, CustomStringConvertible {
+public enum Opcode: Hashable, Codable, CustomStringConvertible {
     case add, subtract, multiply, divide
     case textOf, numberOf, dateOf
     case returnCharacter
@@ -106,10 +106,14 @@ public enum Opcode: Hashable, CustomStringConvertible {
     var isAggregate: Bool { [.total, .maximum, .count].contains(self) }
 }
 
-public struct Abacus: Identifiable, Hashable {
-    public let id: Int
-    public let name: String
-    public let root: Tile?
+public struct Abacus: Identifiable, Hashable, Codable {
+    public var id: Int
+    public var name: String
+    public var root: Tile?
+
+    public init(id: Int, name: String, root: Tile?) {
+        (self.id, self.name, self.root) = (id, name, root)
+    }
 }
 
 extension HelixCollection {
@@ -145,30 +149,9 @@ extension HelixCollection {
         }
     }
 
-    /// Human-readable formula text, e.g. `if (defined [Artigo]) …`.
+    /// The formula as editable text (see `Formula`).
     public func formulaText(_ tile: Tile?) -> String {
-        guard let tile else { return "" }
-        func name(_ id: Int) -> String { objects[id]?.name ?? "#\(id)" }
-        switch tile {
-        case .field(let id): return "[\(name(id))]"
-        case .abacus(let id): return "‹\(name(id))›"
-        case .constant(let v?):
-            if case .text(let s) = v { return "\"\(s)\"" }
-            if case .flag(let b) = v { return b ? "true" : "false" }
-            return v.description
-        case .constant(nil), .empty: return "□"
-        case .op(let op, let args, _):
-            let a = args.map { formulaText($0) }
-            switch (op, a.count) {
-            case (.ifThenElse, 3): return "if \(a[0]) then \(a[1]) else \(a[2])"
-            case (.add, 2), (.subtract, 2), (.multiply, 2), (.divide, 2), (.followedBy, 2), (.equal, 2), (.notEqual, 2),
-                 (.less, 2), (.lessOrEqual, 2), (.greater, 2), (.greaterOrEqual, 2), (.contains, 2), (.startsWith, 2):
-                return "(\(a[0]) \(op) \(a[1]))"
-            case (.defaultValue, 2): return "(\(a[0]), or \(a[1]) if invalid)"
-            case (_, 0): return op.description
-            default: return "\(op)(\(a.joined(separator: ", ")))"
-            }
-        }
+        Formula.print(tile) { [objects] in objects[$0]?.name }
     }
 
     /// The abacus used by a query icon to select records.
@@ -181,7 +164,7 @@ extension HelixCollection {
 /// Evaluates abaci for records of one relation. `records` is the record set of the
 /// current view: summary tiles aggregate over it and `previous` looks back in it.
 public final class AbacusEvaluator {
-    public let collection: HelixCollection
+    public let design: Design
     public let relation: Relation
     public private(set) var records: [Record]
     public var today = Date()
@@ -195,8 +178,8 @@ public final class AbacusEvaluator {
         return c
     }()
 
-    public init(collection: HelixCollection, relation: Relation, records: [Record]) {
-        self.collection = collection
+    public init(design: Design, relation: Relation, records: [Record]) {
+        self.design = design
         self.relation = relation
         self.records = records
         positions = Dictionary(records.enumerated().map { ($1.id, $0) }, uniquingKeysWith: { a, _ in a })
@@ -204,7 +187,7 @@ public final class AbacusEvaluator {
 
     public func abacus(_ id: Int) -> Abacus? {
         if let a = abaci[id] { return a }
-        let a = collection.abacus(id: id)
+        let a = design.abacus(id: id)
         abaci[id] = a
         return a
     }
@@ -216,7 +199,7 @@ public final class AbacusEvaluator {
 
     /// Records for which the query's abacus evaluates to true.
     public func select(query id: Int) -> [Record] {
-        guard let aid = collection.queryAbacusID(ofQuery: id) ?? (collection.objects[id]?.kind == .abacus ? id : nil) else {
+        guard let aid = design.queryAbacusID(ofQuery: id) ?? (design.kind(of: id) == .abacus ? id : nil) else {
             return records
         }
         return records.filter { if case .flag(true)? = value(ofAbacus: aid, for: $0) { true } else { false } }

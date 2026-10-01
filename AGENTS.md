@@ -11,6 +11,10 @@ Native macOS reader for legacy Helix ("HeliX Heap") collections. Sample file: `L
 - `Sources/HelixKit/RecordStore.swift` – SQLite store; data is imported once to
   `~/Library/Application Support/Faulix/<name>-<sha256>.sqlite` and edited there (Helix file is never written).
   Every change goes through `put()` which logs before/after JSON in the `history` table (used for undo/restore).
+- `Sources/HelixKit/Design.swift` – editable native design (`DesignModel`, imported once from Helix, stored as JSON in
+  the store's `meta` table) and `Design` (all app lookups + ordering). `Formula.swift` – text formula language
+  (print/parse round-trips every abacus). App design edits go through `CollectionModel.editDesign` (undo + history).
+- `App/NotHelix/Help.swift` – quickstart text for every page (`HelpButton(topic:)` in each toolbar, Help menu window).
 - `Exporter.helixText` writes Helix's tab-delimited import format; `Template.fieldOrder` gives a view's tab order.
 - App: `ViewForms.swift` (forms/lists, editing, status bar), `HistoryView.swift` (log + Edit menu undo),
   `ExportSheet.swift`, `DesignDesktop.swift` (RADE icon windows, tile editor)
