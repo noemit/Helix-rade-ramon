@@ -94,6 +94,7 @@ final class CollectionModel: ObservableObject {
             storeError = error.localizedDescription
         }
         design = Design(model: model ?? DesignModel(importing: collection), collection: collection)
+        try? store?.backupIfNeeded()
         let first = design.relations.max { $0.recordCount < $1.recordCount }
         select(.relation(first?.id ?? 0))
         openViewID = first.flatMap { rel in
@@ -124,6 +125,10 @@ final class CollectionModel: ObservableObject {
                     }
                 }
             }
+        }
+        // Testing aid: `PrintPDFTo /tmp/x.pdf` writes the open view's print output.
+        if let path = UserDefaults.standard.string(forKey: "PrintPDFTo"), let job = printJob(allRecords: false) {
+            try? ViewPrinter.pdf(job).write(to: URL(fileURLWithPath: path))
         }
         // Testing aids: `defaults write com.nothelix.NotHelix DesignOpen "Libros/Nome completo"`.
         if let path = UserDefaults.standard.string(forKey: "DesignOpen") {
@@ -546,6 +551,76 @@ final class CollectionModel: ObservableObject {
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
             try store.backup(to: url)
+        } catch {
+            NSAlert(error: error).runModal()
+        }
+    }
+
+    // MARK: Printing
+
+    /// The view to print (open view in User mode, or a view opened in Design mode).
+    func printJob(allRecords: Bool) -> ViewPrinter.Job? {
+        guard let view = exportView, let rel = relation(ofView: view), let t = template(for: view),
+              let ev = evaluator(for: view) else { return nil }
+        var recs = ev.records
+        if t.repeatElement == nil, !allRecords {
+            let i = min(viewRecordIndex[view.id] ?? 0, max(0, recs.count - 1))
+            recs = recs.isEmpty ? [] : [recs[i]]
+        }
+        return ViewPrinter.Job(title: view.name, template: t, design: design, relation: rel, records: recs, evaluator: ev)
+    }
+
+    var printIsForm: Bool { exportView.flatMap(template(for:))?.repeatElement == nil }
+
+    func printView(allRecords: Bool) { if let j = printJob(allRecords: allRecords) { ViewPrinter.print(j) } }
+    func exportPDF() { if let j = printJob(allRecords: true) { ViewPrinter.savePDF(j) } }
+
+    // MARK: Updating from Helix, backups
+
+    /// Brings in records (and new fields) from a newer copy of the Helix file. Records edited
+    /// in Faulix are kept. A backup is made first.
+    func updateFromHelix() {
+        guard let store else { return }
+        let panel = NSOpenPanel()
+        panel.message = "Choose the newer copy of “\(collection.name)” exported from Helix."
+        panel.prompt = "Update"
+        panel.allowsMultipleSelection = false
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            let newer = try HelixCollection(url: url)
+            try store.backupIfNeeded(force: true)
+            var m = design.model
+            let report = try store.merge(from: newer, original: collection, design: &m)
+            store.registerAlias(for: newer.heap)
+            design.replace(with: m)
+            undoManager.removeAllActions()
+            baseCache.removeAll()
+            searchCache.removeAll()
+            designChanged()
+            let alert = NSAlert()
+            alert.messageText = "Updated from “\(url.lastPathComponent)”"
+            var lines = ["\(report.added) new, \(report.updated) changed, \(report.deleted) removed, \(report.unchanged) unchanged."]
+            if !report.newFields.isEmpty { lines.append("New fields: " + report.newFields.joined(separator: ", ") + ".") }
+            if !report.conflicts.isEmpty {
+                lines.append("\(report.conflicts.count) record(s) were changed both in Helix and in Faulix; the Faulix version was kept.")
+            }
+            lines.append("A backup was made first (Export ▸ Show Backups in Finder).")
+            alert.informativeText = lines.joined(separator: "\n\n")
+            alert.runModal()
+        } catch {
+            NSAlert(error: error).runModal()
+        }
+    }
+
+    func showBackups() {
+        guard let store else { return }
+        try? FileManager.default.createDirectory(at: store.backupFolder, withIntermediateDirectories: true)
+        NSWorkspace.shared.open(store.backupFolder)
+    }
+
+    func backUpNow() {
+        do {
+            if let url = try store?.backupIfNeeded(force: true) { NSWorkspace.shared.activateFileViewerSelecting([url]) }
         } catch {
             NSAlert(error: error).runModal()
         }

@@ -14,6 +14,7 @@ struct NotHelixApp: App {
         .commands {
             CommandGroup(replacing: .undoRedo) { UndoCommands() }
             CommandGroup(replacing: .help) { HelpMenuItems() }
+            CommandGroup(replacing: .printItem) { PrintCommands() }
         }
         Settings { SettingsView() }
         Window("Faulix Quickstart", id: "quickstart") { QuickstartWindow() }
@@ -36,6 +37,22 @@ struct HelixDocument: FileDocument {
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         throw CocoaError(.featureUnsupported)
+    }
+}
+
+struct PrintCommands: View {
+    @FocusedObject var model: CollectionModel?
+
+    var body: some View {
+        Button(model?.printIsForm == true ? "Print This Record…" : "Print…") { model?.printView(allRecords: false) }
+            .keyboardShortcut("p", modifiers: .command)
+            .disabled(model?.exportView == nil)
+        if model?.printIsForm == true {
+            Button("Print All Records…") { model?.printView(allRecords: true) }
+                .keyboardShortcut("p", modifiers: [.command, .shift])
+        }
+        Button("Export View as PDF…") { model?.exportPDF() }
+            .disabled(model?.exportView == nil)
     }
 }
 

@@ -13,10 +13,12 @@ struct TemplateContext {
     var editor: FieldEditing?
     /// When set (lists in Browse mode), data rectangles are clickable.
     var onActivate: ((TemplateElement) -> Void)?
+    /// Rendering for print/PDF: no scroll views (they cannot be drawn off screen).
+    var forPrint = false
 
     func editableField(for element: TemplateElement) -> Field? {
         guard editor != nil, record != nil, case .data(let fid?, _) = element.content,
-              let field = relation.field(objectID: fid), field.type != .picture else { return nil }
+              let field = relation.field(objectID: fid) else { return nil }
         return field
     }
 
@@ -60,6 +62,71 @@ struct FieldEditing {
     let setText: (Field, String) -> Void
     let flag: (Field) -> Bool
     let setFlag: (Field, Bool) -> Void
+    var picture: (Field) -> Data? = { _ in nil }
+    var setPicture: (Field, Data?) -> Void = { _, _ in }
+}
+
+/// A picture field on a form: drop, paste or choose an image; it is stored as PNG.
+struct PictureWell: View {
+    let image: Data?
+    let changed: Bool
+    let set: (Data?) -> Void
+    @State private var targeted = false
+
+    var body: some View {
+        ZStack {
+            if let image, let ns = NSImage(data: image) {
+                Image(nsImage: ns).resizable().scaledToFit()
+            } else {
+                VStack(spacing: 4) {
+                    Image(systemName: "photo.badge.plus").font(.title2)
+                    Text("Drop or paste a picture").font(.caption2)
+                }
+                .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(targeted ? Color.accentColor.opacity(0.15) : changed ? Color.orange.opacity(0.12) : Color.clear)
+        .contentShape(Rectangle())
+        .onDrop(of: [.image, .fileURL], isTargeted: $targeted) { providers in
+            guard let p = providers.first else { return false }
+            if p.canLoadObject(ofClass: NSImage.self) {
+                _ = p.loadObject(ofClass: NSImage.self) { obj, _ in
+                    if let img = obj as? NSImage { DispatchQueue.main.async { set(Self.png(img)) } }
+                }
+                return true
+            }
+            return false
+        }
+        .contextMenu {
+            Button("Choose Picture…", action: choose)
+            Button("Paste") { if let img = NSImage(pasteboard: .general) { set(Self.png(img)) } }
+            if image != nil { Button("Remove Picture", role: .destructive) { set(nil) } }
+        }
+        .onTapGesture(count: 2, perform: choose)
+        .help("Drop, paste (right-click) or double-click to choose a picture")
+    }
+
+    private func choose() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.image]
+        guard panel.runModal() == .OK, let url = panel.url, let img = NSImage(contentsOf: url) else { return }
+        set(Self.png(img))
+    }
+
+    /// PNG data, scaled down so the longest side is at most 1600 pixels.
+    static func png(_ image: NSImage) -> Data? {
+        guard let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+        let scale = min(1, 1600 / CGFloat(max(cg.width, cg.height)))
+        let w = Int(CGFloat(cg.width) * scale), h = Int(CGFloat(cg.height) * scale)
+        guard let ctx = CGContext(data: nil, width: w, height: h, bitsPerComponent: 8, bytesPerRow: 0,
+                                  space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        else { return nil }
+        ctx.interpolationQuality = .high
+        ctx.draw(cg, in: CGRect(x: 0, y: 0, width: w, height: h))
+        guard let out = ctx.makeImage() else { return nil }
+        return NSBitmapImageRep(cgImage: out).representation(using: .png, properties: [:])
+    }
 }
 
 /// Text used to edit a stored value (dates as d-m-yyyy, numbers without grouping).
@@ -154,7 +221,7 @@ struct TemplateElementView: View {
                 if element.framed || context.record == nil {
                     Rectangle().strokeBorder(Color.black.opacity(context.record == nil ? 0.5 : 0.6), lineWidth: 1)
                 }
-                if element.scrollsVertically && context.record != nil {
+                if element.scrollsVertically && context.record != nil && !context.forPrint {
                     ScrollView(.vertical) {
                         dataContent.padding(.horizontal, 3).padding(.vertical, 1)
                             .frame(maxWidth: .infinity, alignment: element.alignment.frameAlignment)
@@ -174,6 +241,8 @@ struct TemplateElementView: View {
             if field.type == .flag {
                 Toggle("", isOn: Binding(get: { editor.flag(field) }, set: { editor.setFlag(field, $0) }))
                     .toggleStyle(.checkbox).labelsHidden()
+            } else if field.type == .picture {
+                PictureWell(image: editor.picture(field), changed: editor.changed(field)) { editor.setPicture(field, $0) }
             } else {
                 EditableText(field: field, initial: editor.text(field), font: element.font, alignment: element.alignment,
                              changed: editor.changed(field)) {

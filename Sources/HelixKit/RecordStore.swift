@@ -53,9 +53,23 @@ public final class RecordStore {
                 kind TEXT, text TEXT, number REAL, int1 INTEGER, int2 INTEGER, blob BLOB,
                 PRIMARY KEY(relation_id, record_id, field_id),
                 FOREIGN KEY(relation_id, record_id) REFERENCES records ON DELETE CASCADE);
+            CREATE TABLE IF NOT EXISTS helix_base(relation_id INTEGER, record_id INTEGER, json TEXT,
+                PRIMARY KEY(relation_id, record_id));
             CREATE TABLE IF NOT EXISTS history(seq INTEGER PRIMARY KEY AUTOINCREMENT, time REAL, relation_id INTEGER,
                 record_id INTEGER, action TEXT, before TEXT, after TEXT, note TEXT);
             """)
+        try migrate()
+    }
+
+    /// Adds columns introduced after the first release.
+    private func migrate() throws {
+        var hasEdited = false
+        try query("PRAGMA table_info(records)", []) { s in
+            if sqlite3_column_text(s, 1).map({ String(cString: $0) }) == "edited" { hasEdited = true }
+        }
+        if !hasEdited {
+            try exec("ALTER TABLE records ADD COLUMN edited INTEGER DEFAULT 0; UPDATE records SET edited = modified;")
+        }
     }
 
     deinit {
@@ -76,7 +90,47 @@ public final class RecordStore {
         if !fm.fileExists(atPath: folder.path), fm.fileExists(atPath: legacy.path) {
             try? fm.moveItem(at: legacy, to: folder)
         }
+        // A newer Helix file brought in with "Update from Helix File" maps to the same database.
+        if let target = aliases(in: folder)[digest] { return folder.appendingPathComponent(target) }
         return folder.appendingPathComponent("\(safe)-\(digest).sqlite")
+    }
+
+    static func aliases(in folder: URL) -> [String: String] {
+        guard let data = try? Data(contentsOf: folder.appendingPathComponent("aliases.json")) else { return [:] }
+        return (try? JSONDecoder().decode([String: String].self, from: data)) ?? [:]
+    }
+
+    /// Makes opening `heap` (a newer Helix file) open this database.
+    public func registerAlias(for heap: HeapFile) {
+        let digest = SHA256.hash(data: Data(heap.bytes)).prefix(8).map { String(format: "%02x", $0) }.joined()
+        let folder = url.deletingLastPathComponent()
+        var map = Self.aliases(in: folder)
+        map[digest] = url.lastPathComponent
+        if let data = try? JSONEncoder().encode(map) { try? data.write(to: folder.appendingPathComponent("aliases.json")) }
+    }
+
+    // MARK: Backups
+
+    public var backupFolder: URL { url.deletingLastPathComponent().appendingPathComponent("Backups", isDirectory: true) }
+
+    /// Copies the database into Backups/ (at most once per `minimumInterval`), keeping the newest `keep`.
+    @discardableResult
+    public func backupIfNeeded(minimumInterval: TimeInterval = 86_400, keep: Int = 15, force: Bool = false) throws -> URL? {
+        let fm = FileManager.default
+        try fm.createDirectory(at: backupFolder, withIntermediateDirectories: true)
+        let base = url.deletingPathExtension().lastPathComponent
+        let existing = (try fm.contentsOfDirectory(at: backupFolder, includingPropertiesForKeys: [.creationDateKey]))
+            .filter { $0.lastPathComponent.hasPrefix(base) }
+            .sorted { $0.lastPathComponent > $1.lastPathComponent }
+        if !force, let newest = existing.first,
+           let date = try newest.resourceValues(forKeys: [.creationDateKey]).creationDate,
+           Date().timeIntervalSince(date) < minimumInterval { return nil }
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HHmmss"
+        let dest = backupFolder.appendingPathComponent("\(base) \(f.string(from: Date())).sqlite")
+        try backup(to: dest)
+        for old in existing.dropFirst(max(0, keep - 1)) { try? fm.removeItem(at: old) }
+        return dest
     }
 
     public var isImported: Bool { (try? metaValue("imported")) == "1" }
@@ -152,23 +206,132 @@ public final class RecordStore {
     }
 
     /// Sets a record to a given state (nil = absent). Used for saving, deleting, undo and restore.
+    /// `userEdit` marks the record as changed in Faulix (updates from Helix pass false), so a later
+    /// update from a newer Helix file will not overwrite it.
     @discardableResult
-    public func put(_ record: Record?, recordID: UInt32, relationID: Int, note: String = "") throws -> HistoryEntry? {
+    public func put(_ record: Record?, recordID: UInt32, relationID: Int, note: String = "", userEdit: Bool = true) throws -> HistoryEntry? {
         var entry: HistoryEntry?
-        try transaction {
-            let before = try self.record(recordID, relationID: relationID)
-            guard before?.values != record?.values || (before == nil) != (record == nil) else { return }
-            try run("DELETE FROM records WHERE relation_id = ? AND record_id = ?", [.int(relationID), .int(Int(recordID))])
-            if let record { try insert(record, relationID: relationID, modified: true) }
-            let action: HistoryEntry.Action = before == nil ? .insert : record == nil ? .delete : .update
-            let now = Date()
-            try run("INSERT INTO history(time, relation_id, record_id, action, before, after, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [.real(now.timeIntervalSince1970), .int(relationID), .int(Int(recordID)), .text(action.rawValue),
-                     Self.json(before), Self.json(record), .text(note)])
-            entry = HistoryEntry(id: Int(sqlite3_last_insert_rowid(db)), date: now, relationID: relationID, recordID: recordID,
-                                 action: action, before: before, after: record, note: note)
-        }
+        try transaction { entry = try putInTransaction(record, recordID: recordID, relationID: relationID, note: note, userEdit: userEdit) }
         return entry
+    }
+
+    private func putInTransaction(_ record: Record?, recordID: UInt32, relationID: Int, note: String, userEdit: Bool) throws -> HistoryEntry? {
+        let before = try self.record(recordID, relationID: relationID)
+        guard before?.values != record?.values || (before == nil) != (record == nil) else { return nil }
+        let wasEdited = try isEdited(recordID, relationID: relationID)
+        try run("DELETE FROM records WHERE relation_id = ? AND record_id = ?", [.int(relationID), .int(Int(recordID))])
+        if let record {
+            try insert(record, relationID: relationID, modified: true)
+            try run("UPDATE records SET edited = ? WHERE relation_id = ? AND record_id = ?",
+                    [.int(userEdit || wasEdited ? 1 : 0), .int(relationID), .int(Int(recordID))])
+        }
+        if record == nil, userEdit {
+            // Remember deletions made in Faulix so a Helix update does not bring the record back.
+            try run("INSERT OR REPLACE INTO meta VALUES (?, '1')", [.text("deleted-\(relationID)-\(recordID)")])
+        }
+        let action: HistoryEntry.Action = before == nil ? .insert : record == nil ? .delete : .update
+        let now = Date()
+        try run("INSERT INTO history(time, relation_id, record_id, action, before, after, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                [.real(now.timeIntervalSince1970), .int(relationID), .int(Int(recordID)), .text(action.rawValue),
+                 Self.json(before), Self.json(record), .text(note)])
+        return HistoryEntry(id: Int(sqlite3_last_insert_rowid(db)), date: now, relationID: relationID, recordID: recordID,
+                            action: action, before: before, after: record, note: note)
+    }
+
+    func isEdited(_ recordID: UInt32, relationID: Int) throws -> Bool {
+        var e = false
+        try query("SELECT edited FROM records WHERE relation_id = ? AND record_id = ?", [.int(relationID), .int(Int(recordID))]) { s in
+            e = sqlite3_column_int(s, 0) != 0
+        }
+        return e
+    }
+
+    public func editedRecordIDs(ofRelation relationID: Int) throws -> Set<UInt32> {
+        var ids = Set<UInt32>()
+        try query("SELECT record_id FROM records WHERE relation_id = ? AND edited = 1", [.int(relationID)]) { s in
+            ids.insert(UInt32(sqlite3_column_int64(s, 0)))
+        }
+        return ids
+    }
+
+    // MARK: Updating from a newer Helix file
+
+    public struct MergeReport {
+        public var added = 0, updated = 0, deleted = 0, unchanged = 0
+        /// Records changed both in Faulix and in Helix: the Faulix version was kept.
+        public var conflicts: [(relation: String, recordID: UInt32)] = []
+        public var newFields: [String] = []
+    }
+
+    /// The Helix version a record had when it was last brought in (for three-way comparison).
+    func helixBase(relationID: Int) throws -> [UInt32: Record] {
+        var out: [UInt32: Record] = [:]
+        try query("SELECT record_id, json FROM helix_base WHERE relation_id = ?", [.int(relationID)]) { s in
+            let id = UInt32(sqlite3_column_int64(s, 0))
+            if let j = sqlite3_column_text(s, 1).map({ String(cString: $0) }), let r = Self.record(json: j, id: id) { out[id] = r }
+        }
+        return out
+    }
+
+    /// Brings in records from a newer copy of the same Helix collection. Records not edited in
+    /// Faulix take the Helix version; records edited in Faulix are kept (and reported if Helix
+    /// changed them too). New fields are added to the design.
+    public func merge(from newer: HelixCollection, original: HelixCollection, design: inout DesignModel) throws -> MergeReport {
+        var report = MergeReport()
+        try transaction {
+            for newRel in newer.relations {
+                guard let r = design.relations.firstIndex(where: { $0.id == newRel.id })
+                        ?? design.relations.firstIndex(where: { $0.name == newRel.name }) else { continue }
+                let relID = design.relations[r].id
+                // New fields (by Helix object id).
+                for f in newRel.fields where !design.relations[r].fields.contains(where: { $0.id == f.id || $0.fieldID == f.fieldID }) {
+                    design.relations[r].fields.append(f)
+                    let p = newRel.icons.first { $0.objectID == f.id } ?? IconPlacement(objectID: f.id, v: 0, h: 0)
+                    design.relations[r].icons.append(p)
+                    report.newFields.append(f.name)
+                }
+                var base = try helixBase(relationID: relID)
+                if base.isEmpty, let oldRel = original.relations.first(where: { $0.id == newRel.id }) {
+                    for rec in try original.records(of: oldRel) { base[rec.id] = rec }
+                }
+                let edited = try editedRecordIDs(ofRelation: relID)
+                let incoming = try newer.records(of: newRel)
+                let incomingIDs = Set(incoming.map(\.id))
+                let note = "Updated from Helix file"
+                for n in incoming {
+                    let cur = try record(n.id, relationID: relID)
+                    let b = base[n.id]
+                    if cur == nil {
+                        if (try? metaValue("deleted-\(relID)-\(n.id)")) == "1", b?.values == n.values { continue }
+                        _ = try putInTransaction(n, recordID: n.id, relationID: relID, note: note, userEdit: false)
+                        report.added += 1
+                    } else if cur!.values == n.values {
+                        report.unchanged += 1
+                    } else if !edited.contains(n.id) {
+                        _ = try putInTransaction(n, recordID: n.id, relationID: relID, note: note, userEdit: false)
+                        report.updated += 1
+                    } else if b?.values != n.values {
+                        report.conflicts.append((design.relations[r].name, n.id))
+                    }
+                }
+                for (id, _) in base where !incomingIDs.contains(id) {
+                    guard try record(id, relationID: relID) != nil else { continue }
+                    if edited.contains(id) {
+                        report.conflicts.append((design.relations[r].name, id))
+                    } else {
+                        _ = try putInTransaction(nil, recordID: id, relationID: relID, note: note, userEdit: false)
+                        report.deleted += 1
+                    }
+                }
+                try run("DELETE FROM helix_base WHERE relation_id = ?", [.int(relID)])
+                for n in incoming {
+                    try run("INSERT INTO helix_base VALUES (?, ?, ?)", [.int(relID), .int(Int(n.id)), Self.json(n)])
+                }
+            }
+            let data = try JSONEncoder().encode(design)
+            try run("INSERT OR REPLACE INTO meta VALUES ('design', ?)", [.text(String(decoding: data, as: UTF8.self))])
+        }
+        return report
     }
 
     /// Most recent changes first.
@@ -239,7 +402,7 @@ public final class RecordStore {
     // MARK: Values
 
     private func insert(_ r: Record, relationID: Int, modified: Bool) throws {
-        try run("INSERT INTO records VALUES (?, ?, ?)", [.int(relationID), .int(Int(r.id)), .int(modified ? 1 : 0)])
+        try run("INSERT INTO records(relation_id, record_id, modified) VALUES (?, ?, ?)", [.int(relationID), .int(Int(r.id)), .int(modified ? 1 : 0)])
         for (fid, v) in r.values {
             var p: [Param] = [.int(relationID), .int(Int(r.id)), .int(Int(fid))]
             switch v {

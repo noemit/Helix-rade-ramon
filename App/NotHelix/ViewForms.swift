@@ -58,8 +58,10 @@ struct DraftError: LocalizedError {
 
 enum RecordDraft {
     /// Applies typed text and flag changes to a record, validating numbers and dates.
-    static func apply(text: [UInt16: String], flags: [UInt16: Bool], to base: Record, relation: Relation) throws -> Record {
+    static func apply(text: [UInt16: String], flags: [UInt16: Bool], pictures: [UInt16: Data?] = [:], to base: Record,
+                      relation: Relation) throws -> Record {
         var r = base
+        for (fid, data) in pictures { r.values[fid] = data.map(Value.picture) }
         for (fid, s) in text {
             guard let f = relation.field(withID: fid) else { continue }
             let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -99,17 +101,20 @@ enum RecordDraft {
 final class Drafts: ObservableObject {
     @Published var text: [UInt32: [UInt16: String]] = [:]
     @Published var flags: [UInt32: [UInt16: Bool]] = [:]
+    @Published var pictures: [UInt32: [UInt16: Data?]] = [:]
     @Published var newRecords: [Record] = []
     @Published var revision = 0
 
-    var dirtyIDs: Set<UInt32> { Set(text.keys).union(flags.keys).union(newRecords.map(\.id)) }
+    var dirtyIDs: Set<UInt32> { Set(text.keys).union(flags.keys).union(pictures.keys).union(newRecords.map(\.id)) }
     var isDirty: Bool { !dirtyIDs.isEmpty }
     func isNew(_ id: UInt32) -> Bool { newRecords.contains { $0.id == id } }
 
     func editing(for record: Record) -> FieldEditing {
         let rid = record.id
         return FieldEditing(
-            changed: { [unowned self] f in text[rid]?[f.fieldID] != nil || flags[rid]?[f.fieldID] != nil },
+            changed: { [unowned self] f in
+                text[rid]?[f.fieldID] != nil || flags[rid]?[f.fieldID] != nil || pictures[rid]?.keys.contains(f.fieldID) == true
+            },
             text: { [unowned self] f in text[rid]?[f.fieldID] ?? editingText(record[f]) },
             setText: { [unowned self] f, s in
                 var d = text[rid] ?? [:]
@@ -121,6 +126,16 @@ final class Drafts: ObservableObject {
                 var d = flags[rid] ?? [:]
                 d[f.fieldID] = b
                 flags[rid] = d
+            },
+            picture: { [unowned self] f in
+                if let p = pictures[rid], p.keys.contains(f.fieldID) { return p[f.fieldID]! }
+                if case .picture(let data)? = record[f] { return data }
+                return nil
+            },
+            setPicture: { [unowned self] f, data in
+                var d = pictures[rid] ?? [:]
+                d[f.fieldID] = .some(data)
+                pictures[rid] = d
             })
     }
 
@@ -128,13 +143,15 @@ final class Drafts: ObservableObject {
     func build(_ base: (UInt32) -> Record?, relation: Relation) throws -> [Record] {
         try dirtyIDs.sorted().compactMap { id in
             guard let b = newRecords.first(where: { $0.id == id }) ?? base(id) else { return nil }
-            return try RecordDraft.apply(text: text[id] ?? [:], flags: flags[id] ?? [:], to: b, relation: relation)
+            return try RecordDraft.apply(text: text[id] ?? [:], flags: flags[id] ?? [:], pictures: pictures[id] ?? [:], to: b,
+                                         relation: relation)
         }
     }
 
     func reset() {
         text = [:]
         flags = [:]
+        pictures = [:]
         newRecords = []
         revision += 1
     }

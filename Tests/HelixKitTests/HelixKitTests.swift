@@ -284,6 +284,32 @@ struct LibrosTests {
         #expect(form.repeatElement?.id == 999_999)
     }
 
+    @Test func updateFromHelixKeepsFaulixEdits() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("faulix-merge-\(UUID().uuidString).sqlite")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let store = try RecordStore(url: url)
+        try store.importIfNeeded(from: collection)
+        let recs = try store.records(ofRelation: libros.id)
+        let (a, b, c) = (recs[0], recs[1], recs[2])
+        try store.delete(recordID: a.id, relationID: libros.id)                       // deleted in Faulix
+        var bb = b; bb.values[3] = .text("changed by an old import")
+        try store.put(bb, recordID: b.id, relationID: libros.id, userEdit: false)       // not a user edit
+        var cc = c; cc.values[3] = .text("Ramón's own title")
+        try store.save(cc, relationID: libros.id)                                       // user edit
+        let newID = try store.nextRecordID(relationID: libros.id)
+        try store.save(Record(id: newID, values: [3: .text("Only in Faulix")]), relationID: libros.id)
+        var m = design.model
+        let report = try store.merge(from: collection, original: collection, design: &m)
+        #expect(report.updated == 1 && report.added == 0 && report.deleted == 0 && report.conflicts.isEmpty)
+        #expect(try store.record(a.id, relationID: libros.id) == nil)
+        #expect(try store.record(b.id, relationID: libros.id)?.values == b.values)
+        #expect(try store.record(c.id, relationID: libros.id)?.values[3] == .text("Ramón's own title"))
+        #expect(try store.record(newID, relationID: libros.id) != nil)
+        #expect(try store.backupIfNeeded(force: true) != nil)
+        #expect(try store.backupIfNeeded() == nil)
+        try? FileManager.default.removeItem(at: store.backupFolder)
+    }
+
     @Test func designPersistsInStore() throws {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("faulix-design-\(UUID().uuidString).sqlite")
         defer { try? FileManager.default.removeItem(at: url) }

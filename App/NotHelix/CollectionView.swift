@@ -21,16 +21,28 @@ struct CollectionView: View {
             }
             ToolbarItem {
                 Menu {
+                    Button("Update from Newer Helix File…", action: model.updateFromHelix)
+                    Divider()
                     Button("Export Records…") { model.showExport = true }
+                        .disabled(model.exportView == nil)
+                    Button("Export View as PDF…", action: model.exportPDF)
                         .disabled(model.exportView == nil)
                     Button("Export Collection as JSON…", action: model.exportJSON)
                     Divider()
                     Button("Save a Copy of the Database…", action: model.saveDatabaseCopy)
                     Button("Show Database in Finder", action: model.revealDatabase)
+                    Divider()
+                    Button("Back Up Now", action: model.backUpNow)
+                    Button("Show Backups in Finder", action: model.showBackups)
                 } label: {
-                    Label("Export", systemImage: "square.and.arrow.up")
+                    Label("Data", systemImage: "square.and.arrow.up.on.square")
                 }
-                .help("Export records for Helix or other apps")
+                .help("Update from Helix, export, backups")
+            }
+            ToolbarItem {
+                Button { model.printView(allRecords: false) } label: { Label("Print", systemImage: "printer") }
+                    .disabled(model.exportView == nil)
+                    .help(model.printIsForm ? "Print this record (⌘P) — File ▸ Print All Records for every record" : "Print the list (⌘P)")
             }
             ToolbarItem {
                 Toggle(isOn: $model.showHistory) { Label("History", systemImage: "clock.arrow.circlepath") }

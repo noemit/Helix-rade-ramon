@@ -12,7 +12,7 @@ enum HelpTopic: String, CaseIterable, Identifiable {
         case .form: "Forms (User mode)"
         case .list: "Lists (User mode)"
         case .history: "History and Undo"
-        case .export: "Exporting"
+        case .export: "Printing, exporting and backups"
         case .collection: "Collection window (Design mode)"
         case .relation: "Relation window (Design mode)"
         case .records: "Browse Records"
@@ -57,7 +57,7 @@ enum HelpTopic: String, CaseIterable, Identifiable {
         case .history:
             "Every change — records and design — is logged. You can undo step by step, or put an old version of a record back."
         case .export:
-            "Take your data out of Faulix: back into Helix, into a spreadsheet, or as a database file."
+            "Print your views, bring in a newer Helix file, take your data out of Faulix, and keep backups."
         case .collection:
             "The top window of the collection, like Helix RADE: one icon per relation (table) and user."
         case .relation:
@@ -115,7 +115,10 @@ enum HelpTopic: String, CaseIterable, Identifiable {
             "Restore Previous Version puts that record back as it was before the change (and is logged too).",
         ]
         case .export: [
-            "Export ▸ Export Records… writes the current view as Helix import text or CSV.",
+            "Data ▸ Update from Newer Helix File… brings in records added or changed in Helix since. Records you changed in Faulix are kept; a backup is made first.",
+            "Faulix backs up its database every day (Data ▸ Show Backups in Finder); Back Up Now makes one immediately.",
+            "File ▸ Print (⌘P) prints the open view: forms one record per page (Print All Records for every record), lists with the header on every page. Export View as PDF saves the same pages.",
+            "Data ▸ Export Records… writes the current view as Helix import text or CSV.",
             "For Helix: import the file into the same view — columns follow its tab order.",
             "Export Collection as JSON… writes every relation and record.",
             "Save a Copy of the Database… gives you a SQLite file any database tool can open.",
