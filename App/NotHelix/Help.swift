@@ -98,12 +98,12 @@ enum HelpTopic: String, CaseIterable, Identifiable {
             L("Change the sort order from the ⇅ menu at the bottom right."),
             L("Find (top right) narrows the records to those containing your words — accents, commas and word order don’t matter."),
             L("Opened from a list? Back (⌘[) returns to it."),
-            L("Find (⇧⌘F) blanks the form so you can type what to look for in any fields — e.g. Vigo in Lugar and > 1990 in Data — then press Find. Use = for exact, ≠ for “not”, < > ≤ ≥ for ranges; = alone finds empty fields. Clear with the × on the chip."),
+            L("Find (⇧⌘F) blanks the form so you can type what to look for in any fields — e.g. a town in one field and > 1990 in a year field — then press Find. Use = for exact, ≠ for “not”, < > ≤ ≥ for ranges; = alone finds empty fields. Clear with the × on the chip."),
         ]
         case .list: [
             L("Click any value to see only the records that share it — e.g. click an author to list all their books. Clear the filter with the × on its chip."),
             L("Clicking a value only one record has (usually a title), double-clicking a row, or its › button opens that record on a form. Back (⌘[) returns."),
-            L("Find (top right) ignores accents, commas and word order: “Chao Rego, Xosé” also finds “Xosé Chao Rego”."),
+            L("Find (top right) ignores accents, commas and word order: “Smith, John” also finds “John Smith”."),
             L("Press Edit to type into rows. Changed rows get an orange bar."),
             L("Replace (⌘S) saves every changed row at once; Revert (Esc) discards them."),
             L("New (⇧⌘N) adds a blank row at the top. Delete removes the selected row (after asking)."),
@@ -164,7 +164,7 @@ enum HelpTopic: String, CaseIterable, Identifiable {
             L("Use the Insert menus to add fields, abaci, functions and operators. Apply (⌘S) saves."),
         ]
         case .query: [
-            L("Write a formula that is true for the records you want, e.g. [Clasificación] contains \"Poesía\"."),
+            L("Write a formula that is true for the records you want, e.g. [Genre] contains \"Poetry\"."),
             L("The preview shows how many records match."),
             L("Choose the query in a view’s settings to make that view show only those records."),
         ]
