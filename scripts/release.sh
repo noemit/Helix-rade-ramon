@@ -1,8 +1,10 @@
 #!/bin/bash
 # Builds a signed (and, if credentials exist, notarized + stapled) release of Faulix.
 #
-#   scripts/release.sh               # build, sign, notarize, staple, zip
+#   scripts/release.sh               # build, sign, notarize, staple → dist/Faulix-<v>.dmg and .zip
 #   NOTARIZE=0 scripts/release.sh    # build and sign only
+#
+# The .dmg is what users download: open it and drag Faulix onto the Applications shortcut.
 #
 # Notarization uses APPLE_ID / APPLE_PASSWORD (app-specific) / APPLE_TEAM_ID from the environment if set,
 # otherwise a keychain profile created once with:
@@ -27,6 +29,7 @@ xcodebuild -project NotHelix.xcodeproj -scheme NotHelix -configuration Release \
 VERSION=$(defaults read "$PWD/$APP/Contents/Info" CFBundleShortVersionString)
 BUILD=$(defaults read "$PWD/$APP/Contents/Info" CFBundleVersion)
 ZIP="$DIST/Faulix-$VERSION-$BUILD.zip"
+DMG="$DIST/Faulix-$VERSION.dmg"
 
 echo "==> Verifying signature"
 codesign --verify --deep --strict --verbose=2 "$APP"
@@ -49,4 +52,21 @@ if [ "${NOTARIZE:-1}" = "1" ]; then
   spctl --assess --type execute --verbose=2 "$APP"
 fi
 
+echo "==> Building disk image"
+STAGE="$DERIVED/dmg"
+rm -rf "$STAGE" && mkdir -p "$STAGE"
+ditto "$APP" "$STAGE/Faulix.app"
+ln -s /Applications "$STAGE/Applications"
+hdiutil create -volname "Faulix $VERSION" -srcfolder "$STAGE" -ov -format UDZO -fs HFS+ "$DMG" >/dev/null
+codesign --sign "Developer ID Application" --timestamp "$DMG"
+codesign --verify --verbose=2 "$DMG"
+
+if [ "${NOTARIZE:-1}" = "1" ]; then
+  echo "==> Notarizing disk image"
+  xcrun notarytool submit "$DMG" "${AUTH[@]}" --wait
+  xcrun stapler staple "$DMG"
+  spctl --assess --type open --context context:primary-signature --verbose=2 "$DMG"
+fi
+
+echo "==> $DMG"
 echo "==> $ZIP"
